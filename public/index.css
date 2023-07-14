@@ -1,0 +1,94 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+:root {
+  --primary: white;
+  --secondary: red;
+  --default: #1c1c1c;
+  --canvas: #111;
+  --text-primary: #fff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-disabled: rgba(255, 255, 255, 0.5);
+  --background-default: #121212;
+  --background-paper: #121212;
+}
+
+* {
+  font-family: "Roboto", sans-serif;
+  color: var(--primary);
+}
+
+body {
+  background: var(--default);
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+canvas {
+  background-color: var(--canvas);
+  top: 0;
+  left: 0;
+  position: relative;
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+
+.container {
+  display: flex;
+  flex-flow: row wrap;
+  font-weight: bold;
+  text-align: center;
+}
+
+.container > * {
+  padding: 10px;
+  flex: 1 100%;
+}
+
+.header, .footer {
+  background: var(--background-paper);
+  z-index: 99;
+  border: 1px solid grey;
+  height: 5vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main {
+  text-align: center;
+  background: var(--default);
+  height: 84vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aside {
+  background: var(--background-paper);
+  z-index: 99;
+  border: 1px solid grey;
+}
+
+@media all and (min-width: 600px) {
+  .aside {
+    flex: 3 0 0;
+  }
+}
+
+@media all and (min-width: 800px) {
+  .aside-left {
+    order: 1;
+  }
+  .main {
+    order: 2;
+    flex: 8 0px;
+  }
+  .aside-right {
+    order: 3;
+  }
+  .footer {
+    order: 4;
+  }
+}
