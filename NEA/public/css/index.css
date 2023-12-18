@@ -1,0 +1,437 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+:root {
+  --primary: var(--foreground);
+  --secondary: red;
+  --default: #1c1c1c;
+  --canvas: #111;
+  --text-primary: #fff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-disabled: rgba(255, 255, 255, 0.5);
+  --background-default: #121212;
+  --background-paper: #121212;
+  --border: #4c5067;
+
+  --red: #ff5555;
+  --orange: #ffb86c;
+  --yellow: #f1fa8c;
+  --green: #50fa7b;
+  --cyan: #8be9fd;
+  --blue: hsl(210, 100%, 75%);
+  --pink: #ff79c6;
+  --purple: rgb(189, 147, 249);
+  --fg: #f8f8f2;
+  --bg: #282a36;
+  --bg-dark: #21222c;
+  --bg-darker: #191a21;
+  --bg-light: #343746;
+  --bg-lighter: #424450;
+  --bg-purple: #454158;
+  --border: #44475a;
+  --comment: #6272a4;
+}
+
+/* Turn on custom 8px wide scrollbar */
+::-webkit-scrollbar {
+  width: 10px; /* 1px wider than Lion. */
+  /* This is more usable for users trying to click it. */
+  background-color: rgba(189, 147, 249, 0);
+  -webkit-border-radius: 100px;
+}
+/* hover effect for both scrollbar area, and scrollbar 'thumb' */
+::-webkit-scrollbar:hover {
+  background-color: rgba(189, 147, 249, 0.09);
+}
+
+/* The scrollbar 'thumb' ...that marque oval shape in a scrollbar */
+::-webkit-scrollbar-thumb:horizontal {
+  /* This is the EXACT color of Mac OS scrollbars.
+     Yes, I pulled out digital color meter */
+  background: rgba(189, 147, 249, 0.5);
+  -webkit-border-radius: 100px;
+  background-clip: padding-box;
+  border: 2px solid rgba(189, 147, 249, 0);
+  min-height: 10px; /*Prevent it from getting too small */
+}
+::-webkit-scrollbar-thumb:horizontal:active {
+  background: rgba(189, 147, 249, 0.61); /* Some darker color when you click it */
+  -webkit-border-radius: 100px;
+}
+
+* {
+  font-family: "Roboto", sans-serif;
+  color: var(--fg);
+}
+
+body {
+  background: var(--bg);
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+.container {
+  display: flex;
+  flex-flow: row wrap;
+  font-weight: bold;
+}
+
+.container > * {
+  padding: 10px;
+  flex: 1 100%;
+}
+
+.main canvas {
+  background: var(--bg);
+  top: 0;
+  left: 0;
+  position: relative;
+  image-rendering: pixelated;
+  cursor: pointer;
+  /** Transform needs to be updated for javascript as well */
+  transform: scale(0.4);
+}
+
+#header {
+  background: var(--bg-purple);
+  z-index: 99;
+  border: 1px solid var(--border);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.main {
+  background: var(--bg-darker);
+  height: 100vh;
+  width: 70vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aside {
+  background: var(--bg-dark);
+  z-index: 99;
+  border: 1px solid var(--border);
+  height: 100vh;
+  width: 30vw;
+}
+
+@media all and (min-width: 600px) {
+  .aside {
+    flex: 3 0 0;
+  }
+}
+
+@media all and (min-width: 800px) {
+  .aside-left {
+    order: 1;
+  }
+  .main {
+    order: 2;
+    flex: 8 0px;
+  }
+  .aside-right {
+    order: 3;
+  }
+  .footer {
+    order: 4;
+  }
+}
+button {
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 4px;
+  padding: 0 16px;
+  min-width: 64px;
+  width: 100%;
+  height: 36px;
+  vertical-align: middle;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  background-color: var(--pink);
+  box-shadow:
+    0 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  font-family: var(--pure-material-font, "Roboto", "Segoe UI", BlinkMacSystemFont, system-ui, -apple-system);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 36px;
+  overflow: hidden;
+  outline: none;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+button::-moz-focus-inner {
+  border: none;
+}
+
+/* Overlay */
+button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgb(var(--pure-material-onprimary-rgb, 255, 255, 255));
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+/* Ripple */
+button::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  padding: 50%;
+  width: 32px; /* Safari */
+  height: 32px; /* Safari */
+  background-color: rgb(var(--pure-material-onprimary-rgb, 255, 255, 255));
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1);
+  transition:
+    opacity 1s,
+    transform 0.5s;
+}
+
+/* Hover, Focus */
+button:hover,
+button:focus {
+  box-shadow:
+    0 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0 4px 5px 0 rgba(0, 0, 0, 0.14),
+    0 1px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+button:hover::before {
+  opacity: 0.08;
+}
+
+button:focus::before {
+  opacity: 0.24;
+}
+
+button:hover:focus::before {
+  opacity: 0.3;
+}
+
+/* Active */
+button:active {
+  box-shadow:
+    0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+button:active::after {
+  opacity: 0.32;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0s;
+}
+
+/* Disabled */
+button:disabled {
+  color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.38);
+  background-color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.12);
+  box-shadow: none;
+  cursor: initial;
+}
+
+button:disabled::before {
+  opacity: 0;
+}
+
+button:disabled::after {
+  opacity: 0;
+}
+
+.pc-tab > input,
+.pc-tab section > div {
+  display: none;
+}
+
+#tab1:checked ~ section .tab1,
+#tab2:checked ~ section .tab2,
+#tab3:checked ~ section .tab3,
+#tab4:checked ~ section .tab4 {
+  display: block;
+}
+
+*,
+*:after,
+*:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.pc-tab {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.pc-tab ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  text-align: center;
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
+
+.pc-tab li {
+  flex-grow: 1;
+  width: 100%;
+  border-bottom: 1px solid var(--border);
+}
+
+.pc-tab ul li label {
+  float: left;
+  padding: 15px 25px;
+  border: 1px solid var(--border);
+  border-bottom: 0;
+  background: var(--bg-dark);
+  color: var(--comment);
+  transition: 0.1s;
+  width: 100%;
+}
+
+.pc-tab ul li label:hover,
+.pc-tab ul li label:active {
+  background: var(--bg-light);
+  transition: 0.25s;
+}
+
+.pc-tab ul li:not(:last-child) label {
+  border-right-width: 0;
+}
+
+.pc-tab section {
+  clear: both;
+}
+
+.tab {
+  padding: 15px;
+  border: 1px solid var(--border);
+}
+
+.pc-tab section div {
+  width: 100%;
+  background: var(--bg-light);
+}
+
+#tab1:checked ~ nav .tab1 label,
+#tab2:checked ~ nav .tab2 label,
+#tab3:checked ~ nav .tab3 label,
+#tab4:checked ~ nav .tab4 label {
+  font-weight: bolder;
+  color: var(--fg);
+  background: var(--bg-light);
+  position: relative;
+}
+
+#tab1:checked ~ nav .tab1 label:after,
+#tab2:checked ~ nav .tab2 label:after,
+#tab3:checked ~ nav .tab3 label:after,
+#tab4:checked ~ nav .tab4 label:after {
+  content: "";
+  display: block;
+  position: absolute;
+  height: 4px;
+  width: 100%;
+  background: var(--purple);
+  left: 0;
+  bottom: -1px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  padding: 0px 10px;
+  justify-content: space-between;
+}
+
+.item-first {
+  align-self: flex-start;
+}
+
+.item-center {
+  align-self: center;
+}
+
+.item-last {
+  align-self: flex-end;
+}
+
+.button-actions {
+  display: flex;
+  gap: 5px;
+}
+
+/* CSS styles for the modal window */
+.modal-window {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.75);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s;
+}
+
+.modal-window.visible {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-window > div {
+  width: 75%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2em;
+  background: var(--bg-light);
+}
+
+.modal-close {
+  color: #aaa;
+  line-height: 50px;
+  font-size: 80%;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 0;
+  width: 70px;
+  text-decoration: none;
+}
+
+.disabled_border {
+  background: transparent !important;
+  border: none;
+}
+
+svg {
+  transform: scale(0.7);
+}

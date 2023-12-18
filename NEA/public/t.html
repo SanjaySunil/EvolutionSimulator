@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Live Updating CanvasJS Area Chart</title>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+  </head>
+  <body>
+    <div id="chartContainer" style="height: 300px; width: 100%"></div>
+
+    <script>
+      let ticks = 0;
+      let dataPoints = [];
+
+      const options = {
+        title: {
+          text: "Organism Count",
+        },
+        axisY: {
+          title: "Organisms",
+        },
+        axisX: {
+          title: "Ticks",
+          minimum: 0,
+        },
+        zoomEnabled: true,
+
+        data: [
+          {
+            type: "area", // Change the chart type to "area"
+            color: "rgba(0, 102, 204, 0.5)", // Set the area color with alpha (transparency)
+            markerSize: 0, // Hide data point markers
+            dataPoints: dataPoints,
+          },
+        ],
+      };
+
+      const chart = new CanvasJS.Chart("chartContainer", options);
+
+      function updateChart() {
+        var newDataPoint = {
+          x: ticks,
+          y: Math.floor(Math.random() * 100),
+        };
+
+        dataPoints.push(newDataPoint);
+
+        // if (dataPoints.length > 20) {
+        //   dataPoints.shift();
+        // }
+
+        chart.render();
+
+        ticks += 50;
+      }
+
+      setInterval(updateChart, 1000);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evolution Simulator</title>
+    <link rel="stylesheet" href="./css/index.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="main">
+        <canvas id="canvas"></canvas>
+      </div>
+      <div class="aside aside-right" id="sidebar">
+        <div id="header">
+          <h1>Evolution Simulator</h1>
+          <p>Evolution within the browser.</p>
+        </div>
+
+        <div class="pc-tab">
+          <input checked="checked" id="tab1" type="radio" name="pct" />
+          <input id="tab2" type="radio" name="pct" />
+          <input id="tab3" type="radio" name="pct" />
+          <input id="tab4" type="radio" name="pct" />
+          <nav>
+            <ul>
+              <li class="tab1">
+                <label for="tab1">Simulation</label>
+              </li>
+              <li class="tab2">
+                <label for="tab2">Organism</label>
+              </li>
+              <li class="tab3">
+                <label for="tab3">World</label>
+              </li>
+              <li class="tab4">
+                <label for="tab4">Stats</label>
+              </li>
+            </ul>
+          </nav>
+          <section>
+            <div class="tab tab1">
+              <div class="col">
+                <div class="row">
+                  <p class="item-first">Ticks Count:</p>
+                  <p class="item-last" id="tick_count">0</p>
+                </div>
+                <div class="row">
+                  <p class="item-first">Current Update FPS:</p>
+                  <p class="item-last" id="current_update_fps">0</p>
+                </div>
+                <div class="row">
+                  <p class="item-first">Current Render FPS:</p>
+                  <p class="item-last" id="current_render_fps">0</p>
+                </div>
+                <div class="row">
+                  <p class="item-first">Organism's Alive:</p>
+                  <p class="item-last" id="organism_count">0</p>
+                </div>
+                <div class="row">
+                  <p class="item-first">TUpdate FPS:</p>
+                  <input class="item-center" id="target_update_fps_slider" type="range" min="0" step="1" />
+                  <p class="item-last" id="target_update_fps">0</p>
+                </div>
+                <div class="row">
+                  <p class="item-first">TRender FPS:</p>
+                  <p class="item-last" id="target_render_fps">0</p>
+                </div>
+              </div>
+              <br /><br />
+              <div class="button-actions">
+                <button id="sim_start_stop">START</button>
+                <button id="sim_restart">RESTART</button>
+                <button id="render_on_off">RENDERING ON</button>
+              </div>
+            </div>
+            <div class="tab tab1">
+              <div class="col">
+                <div class="row">
+                  <p class="item-first">Number of Species:</p>
+                  <p class="item-last" id="number_of_species">0</p>
+                </div>
+              </div>
+            </div>
+            <div class="tab tab2">
+              <p>Age: <span id="org_age"></span></p>
+              <p>Energy: <span id="org_energy"></span></p>
+              <p>Step Count: <span id="org_step_count"></span></p>
+              <p>Energy Consumed: <span id="org_energy_consumed"></span></p>
+              <p>Fitness: <span id="org_fitness"></span></p>
+              <div style="width: 100%; display: flex; justify-content: center; align-items: center">
+                <svg width="100%" height="100%" preserveAspectRatio="none" id="neural-network-svg"></svg>
+              </div>
+            </div>
+            <div class="tab tab3">
+              <div class="col"></div>
+            </div>
+            <div class="tab tab4 disabled_border">
+              <select style="color: black; width: 100%" id="switch_graph">
+                <option value="0" disabled>Select a graph:</option>
+                <option value="0">Population</option>
+                <option value="1">Species</option>
+                <option value="2">Dead</option>
+              </select>
+              <div id="organism_chart"></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+    <div id="open-modal" class="modal-window">
+      <div>
+        <a href="#" title="Close" class="modal-close" id="close-modal-btn">Close</a>
+        <h1>Organism Neural Net Brain</h1>
+      </div>
+    </div>
+    <!-- <div id="organismModal" class="modal-window">
+      <div>
+        <a href="#" title="Close" class="modal-close" id="close-organism-modal-btn">Close</a>
+        <h1>Organism Chart</h1>
+        <div id="organismChart"></div>
+      </div>
+    </div> -->
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    window.addEventListener("load", (event) => {
+      var scriptElement = document.createElement("script");
+      scriptElement.type = "text/javascript";
+      scriptElement.src = "js/index.js";
+      document.body.appendChild(scriptElement);
+    });
+  </script>
+</html>
