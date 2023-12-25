@@ -3,6 +3,7 @@ import { SensorNeuronSymbols } from "../constants/SensorNeurons";
 import { Gene } from "../models/Genome";
 import { NeuronTypes } from "../models/Neuron";
 
+/** Neural Network Visualiser Class */
 export default class NeuralNetworkVisualizer {
   public svg: HTMLElement;
   public sensor_neurons: object;

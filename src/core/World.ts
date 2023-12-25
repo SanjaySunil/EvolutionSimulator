@@ -151,7 +151,7 @@ export default class World extends CanvasController {
         if (current_node) {
           /** Perform organism function. */
           current_node.organism.function();
-          current_node.organism.energy -= Math.pow(current_node.organism.coord.x, 0.0095 * current_node.organism.coord.x) - 1;
+          // current_node.organism.energy -= Math.pow(current_node.organism.coord.x, 0.0095 * current_node.organism.coord.x) - 1;
           if (this.ticks % 500 == 0) {
             this.switch_region = !this.switch_region;
           }
@@ -160,14 +160,7 @@ export default class World extends CanvasController {
           } else {
             current_node.organism.energy -= Math.pow(current_node.organism.coord.x, 0.0095 * current_node.organism.coord.x) - 1;
           }
-          // if (this.ticks % 500 == 0) {
-          //   this.switch_region = !this.switch_region;
-          //   if (this.switch_region) {
-          //     current_node.organism.energy -= Math.pow(2, 0.05 * current_node.organism.coord.x) * 10;
-          //   } else {
-          //     current_node.organism.energy -= Math.pow(2, 0.05 * current_node.organism.coord.x) * 10;
-          //   }
-          // }
+
           /** Check if organism is alive, and add to species list. */
           if (current_node.organism.alive) {
             species.add(current_node.organism.genome.colour);

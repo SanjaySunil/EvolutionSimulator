@@ -53,10 +53,10 @@ export default class Grid {
       for (let y = 0; y < this.grid_size; y++) {
         const cell = new GridCell(x, y);
         // Stripe radioactive test (hard)
-        if (y % 42 == 0 || x % 42 == 0) {
-          cell.state = CellStates.RADIOACTIVE;
-          this.renderer.to_fill.add(cell);
-        }
+        // if (y % 42 == 0 || x % 42 == 0) {
+        //   cell.state = CellStates.RADIOACTIVE;
+        //   this.renderer.to_fill.add(cell);
+        // }
         column.push(cell);
       }
       this.grid.push(column);
