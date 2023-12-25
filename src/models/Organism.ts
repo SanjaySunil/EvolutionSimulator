@@ -59,14 +59,6 @@ export default class Organism {
   public is_alive(): boolean {
     /** Condition for alive - energy > 0, age < max age. */
     const is_alive = this.energy > 0 && this.age < this.max_age && this.alive;
-    /** Goal Testing */
-    /** Go to left test. */
-    /** Go to center test */
-    // if (this.coord.x < SimulationConfig.GRID_SIZE / 2) {
-    //   this.energy -= SimulationConfig.GRID_SIZE / 2 * 0.75 - this.coord.x;
-    // } else {
-    //   this.energy -= this.coord.x * 0.75 - SimulationConfig.GRID_SIZE / 2;
-    // }
     if (!is_alive) this.kill();
     return is_alive;
   }
@@ -175,10 +167,15 @@ export default class Organism {
     let move_x = action_levels[ActionNeurons.MOVE_X];
     let move_y = action_levels[ActionNeurons.MOVE_Y];
 
-    // move_x += action_levels[ActionNeurons.MOVE_EAST];
-    // move_x -= action_levels[ActionNeurons.MOVE_WEST];
-    // move_y += action_levels[ActionNeurons.MOVE_NORTH];
-    // move_y -= action_levels[ActionNeurons.MOVE_SOUTH];
+    move_x += action_levels[ActionNeurons.MOVE_EAST];
+    move_x -= action_levels[ActionNeurons.MOVE_WEST];
+    move_y += action_levels[ActionNeurons.MOVE_NORTH];
+    move_y -= action_levels[ActionNeurons.MOVE_SOUTH];
+
+    move_x -= action_levels[ActionNeurons.MOVE_LEFT];
+    move_x += action_levels[ActionNeurons.MOVE_RIGHT];
+    move_y += action_levels[ActionNeurons.MOVE_FORWARD];
+    move_y -= action_levels[ActionNeurons.MOVE_BACKWARD];
 
     /** Hyperbolic tangent function produces an output between -1.0 and 1.0. */
     move_x = Math.tanh(move_x);
@@ -192,24 +189,5 @@ export default class Organism {
 
     const offset = new Vector(prob_x * signum_x, prob_y * signum_y);
     this.organism_move(offset);
-
-    /** Hyperbolic tangent function produces and output between -1.0 and 1.0 */
-    // if (move_x > move_y) {
-    //   /** Urge to move X is greater. */
-    //   move_x = Math.tanh(move_x);
-    //   // The probability of movement along each axis is the absolute value
-    //   /** Probability of movement  */
-    //   const prob_x = +this.prob2bool(Math.abs(move_x));
-    //   const signum_x = move_x < 0.0 ? -1 : 1;
-    //   const offset = new Vector(prob_x * signum_x, 0);
-    //   this.organism_move(offset);
-    // } else if (move_y > move_x) {
-    //   /** Urge to move Y is greater. */
-    //   move_y = Math.tanh(move_y);
-    //   const prob_y = +this.prob2bool(Math.abs(move_y));
-    //   const signum_y = move_y < 0.0 ? -1 : 1;
-    //   const offset = new Vector(0, prob_y * signum_y);
-    //   this.organism_move(offset);
-    // }
   }
 }
