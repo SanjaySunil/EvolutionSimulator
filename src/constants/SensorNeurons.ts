@@ -15,11 +15,3 @@ export const SensorNeurons = {
 
 
 export const SensorNeuronSymbols = ["LN", "LE", "LS", "LW", "XC", "YC", "E", "LF", "LB", "LL", "LR"];
-
-// export const SensorNeurons = {
-//   X_COORD: 0,
-//   Y_COORD: 1,
-// };
-
-
-// export const SensorNeuronSymbols = ["XC", "YC"];

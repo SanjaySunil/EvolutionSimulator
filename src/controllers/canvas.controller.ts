@@ -2,8 +2,8 @@ import { CellStates } from "../constants/CellStates";
 import Grid from "../models/Grid";
 import get_style from "../utils/get_style";
 import MouseController from "./mouse.controller";
-import RendererController from "./renderer.controller";
 import NeuralNetworkVisualizer from "./nn_visualizer.controller";
+import RendererController from "./renderer.controller";
 
 /** Mouse Modes */
 const Modes = {

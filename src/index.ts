@@ -1,5 +1,5 @@
-import SimulationController from "./controllers/simulation.controller";
 import { SimulationConfig } from "./config/simulation.config";
+import SimulationController from "./controllers/simulation.controller";
 import World from "./core/World";
 
 let sidebar_enabled = false;

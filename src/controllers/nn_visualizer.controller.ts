@@ -1,7 +1,7 @@
+import { ActionNeuronSymbols } from "../constants/ActionNeurons";
+import { SensorNeuronSymbols } from "../constants/SensorNeurons";
 import { Gene } from "../models/Genome";
 import { NeuronTypes } from "../models/Neuron";
-import { SensorNeuronSymbols } from "../constants/SensorNeurons";
-import { ActionNeuronSymbols } from "../constants/ActionNeurons";
 
 export default class NeuralNetworkVisualizer {
   public svg: HTMLElement;

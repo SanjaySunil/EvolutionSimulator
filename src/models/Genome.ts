@@ -1,7 +1,7 @@
 import { cloneDeep } from "lodash";
 import { Constants, SimulationConfig } from "../config/simulation.config";
-import Organism from "./Organism";
 import get_random_number from "../utils/get_random_number";
+import Organism from "./Organism";
 
 /** Each gene specifies one synaptic connection in a neural network. */
 export class Gene {

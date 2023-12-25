@@ -3,7 +3,6 @@ import { CellStates } from "../constants/CellStates";
 import RendererController from "../controllers/renderer.controller";
 import Vector from "../math/vector.math";
 import Organism from "./Organism";
-import { SimulationConfig } from "../config/simulation.config";
 
 /** An individual grid cell. */
 export class GridCell {
@@ -53,13 +52,8 @@ export default class Grid {
       const column: GridCell[] = [];
       for (let y = 0; y < this.grid_size; y++) {
         const cell = new GridCell(x, y);
-        // Radioactive border test (medium)
-        // if (y >= (SimulationConfig.GRID_SIZE / 2) - 15 && x >= (SimulationConfig.GRID_SIZE / 2) - 15 && x <= (SimulationConfig.GRID_SIZE / 2) + 15 && y <= (SimulationConfig.GRID_SIZE / 2) + 15) {
-        //   cell.state = CellStates.RADIOACTIVE;
-        //   this.renderer.to_fill.add(cell);
-        // }
-        // // Stripe radioactive test (hard)
-        if (y % 50 == 0 || x % 50 == 0) {
+        // Stripe radioactive test (hard)
+        if (y % 42 == 0 || x % 42 == 0) {
           cell.state = CellStates.RADIOACTIVE;
           this.renderer.to_fill.add(cell);
         }

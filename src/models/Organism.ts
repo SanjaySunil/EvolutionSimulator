@@ -1,5 +1,5 @@
 import { SimulationConfig } from "../config/simulation.config";
-import { ActionNeuronSymbols, ActionNeurons } from "../constants/ActionNeurons";
+import { ActionNeurons } from "../constants/ActionNeurons";
 import { CellStates } from "../constants/CellStates";
 import { Directions } from "../constants/Directions";
 import World from "../core/World";

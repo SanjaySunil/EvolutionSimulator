@@ -1,12 +1,12 @@
 import { cloneDeep } from "lodash";
 import { Constants, SimulationConfig } from "../config/simulation.config";
 import { AllCellStates } from "../constants/CellStates";
+import { Directions } from "../constants/Directions";
 import { SensorNeurons } from "../constants/SensorNeurons";
 import Vector from "../math/vector.math";
 import { Gene, Genome } from "./Genome";
 import { Neuron, NeuronTypes } from "./Neuron";
 import Organism from "./Organism";
-import { Directions } from "../constants/Directions";
 type ConnectionList = Array<Gene>;
 type NodeMap = Map<number, Node>;
 

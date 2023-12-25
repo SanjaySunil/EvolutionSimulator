@@ -4,9 +4,9 @@ import CanvasController from "../controllers/canvas.controller";
 import ChartController from "../controllers/chart.controller";
 import { NodeType, OrganismController } from "../controllers/organism.controller";
 import Vector from "../math/vector.math";
+import { Genome } from "../models/Genome";
 import Organism from "../models/Organism";
 import get_random_vector from "../utils/get_random_vector";
-import { Genome } from "../models/Genome";
 /** World Class */
 export default class World extends CanvasController {
   public organism_manager: OrganismController;
