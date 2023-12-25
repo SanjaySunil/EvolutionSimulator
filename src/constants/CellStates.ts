@@ -1,3 +1,4 @@
+/** Various Cell States. */
 export const CellStates = {
   EMPTY: 0,
   ORGANISM: 1,

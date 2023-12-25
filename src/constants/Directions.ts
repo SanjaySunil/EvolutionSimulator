@@ -1,6 +1,6 @@
 import Vector from "../math/vector.math";
 
-/** Direction Enums */
+/** Direction Constants. */
 class DirectionsConstants {
   public IDLE: Vector;
   public NORTH: Vector;

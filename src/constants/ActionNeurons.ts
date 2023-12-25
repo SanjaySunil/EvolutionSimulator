@@ -1,4 +1,4 @@
-/** These are the available output actions that an Organism can perform. */
+/** Available output action neurons. */
 export const ActionNeurons = {
   MOVE_X: 0,
   MOVE_Y: 1,
@@ -13,12 +13,3 @@ export const ActionNeurons = {
 };
 
 export const ActionNeuronSymbols = ["MX", "MY", "MN", "ME", "MS", "MW", "MF", "MB", "ML", "MR"];
-
-// /** These are the available output actions that an Organism can perform. */
-// export const ActionNeurons = {
-//   MOVE_X: 0,
-//   MOVE_Y: 1,
-// };
-
-// export const ActionNeuronSymbols = ["MX", "MY"];
-

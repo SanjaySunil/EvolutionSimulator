@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
-
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
 :root {
   --primary: var(--foreground);
   --secondary: red;
@@ -54,13 +53,18 @@
   min-height: 10px; /*Prevent it from getting too small */
 }
 ::-webkit-scrollbar-thumb:horizontal:active {
-  background: rgba(189, 147, 249, 0.61); /* Some darker color when you click it */
+  background: rgba(
+    189,
+    147,
+    249,
+    0.61
+  ); /* Some darker color when you click it */
   -webkit-border-radius: 100px;
 }
 
 * {
-  font-family: "Roboto", sans-serif;
   color: var(--fg);
+  font-family: 'Rubik', sans-serif;
 }
 
 body {
@@ -154,11 +158,16 @@ button {
   text-overflow: ellipsis;
   text-transform: uppercase;
   background-color: var(--pink);
-  box-shadow:
-    0 3px 1px -2px rgba(0, 0, 0, 0.2),
-    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
     0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  font-family: var(--pure-material-font, "Roboto", "Segoe UI", BlinkMacSystemFont, system-ui, -apple-system);
+  font-family: var(
+    --pure-material-font,
+    'Roboto',
+    'Segoe UI',
+    BlinkMacSystemFont,
+    system-ui,
+    -apple-system
+  );
   font-size: 14px;
   font-weight: 500;
   line-height: 36px;
@@ -174,7 +183,7 @@ button::-moz-focus-inner {
 
 /* Overlay */
 button::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   bottom: 0;
@@ -187,7 +196,7 @@ button::before {
 
 /* Ripple */
 button::after {
-  content: "";
+  content: '';
   position: absolute;
   left: 50%;
   top: 50%;
@@ -198,17 +207,13 @@ button::after {
   background-color: rgb(var(--pure-material-onprimary-rgb, 255, 255, 255));
   opacity: 0;
   transform: translate(-50%, -50%) scale(1);
-  transition:
-    opacity 1s,
-    transform 0.5s;
+  transition: opacity 1s, transform 0.5s;
 }
 
 /* Hover, Focus */
 button:hover,
 button:focus {
-  box-shadow:
-    0 2px 4px -1px rgba(0, 0, 0, 0.2),
-    0 4px 5px 0 rgba(0, 0, 0, 0.14),
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14),
     0 1px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
@@ -226,10 +231,8 @@ button:hover:focus::before {
 
 /* Active */
 button:active {
-  box-shadow:
-    0 5px 5px -3px rgba(0, 0, 0, 0.2),
-    0 8px 10px 1px rgba(0, 0, 0, 0.14),
-    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 
 button:active::after {
@@ -345,7 +348,7 @@ button:disabled::after {
 #tab2:checked ~ nav .tab2 label:after,
 #tab3:checked ~ nav .tab3 label:after,
 #tab4:checked ~ nav .tab4 label:after {
-  content: "";
+  content: '';
   display: block;
   position: absolute;
   height: 4px;
