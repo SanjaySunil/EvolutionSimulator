@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "canvasjs": "^1.8.3",
-    "lodash": "^4.17.21",
-    "prettier-plugin-jsdoc": "^1.0.1"
-  }
-}
