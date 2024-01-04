@@ -1,5 +1,5 @@
 // Function to render the frames per second (fps) element
-export function render_fps_element(element, fps): void {
+export function render_fps_element(element: HTMLElement, fps: number): void {
   element.innerHTML = Math.round(fps).toString();
 }
 
@@ -16,17 +16,17 @@ export function render_settings(config: object): void {
     const row = document.createElement("tr");
 
     // Create a new table cell for the key
-    const td = document.createElement("td");
-    td.textContent = key.replaceAll("_", " ");
+    const key_cell = document.createElement("td");
+    key_cell.textContent = key.replaceAll("_", " ");
 
     // Append the key cell to the row
-    row.appendChild(td);
+    row.appendChild(key_cell);
 
     // Append the row to the settings div
     settings.appendChild(row);
 
     // Create a new table cell for the input
-    const td2 = document.createElement("td");
+    const input_cell = document.createElement("td");
     const input = document.createElement("input");
 
     // Set the input type based on the value type
@@ -55,8 +55,8 @@ export function render_settings(config: object): void {
     });
 
     // Append the input cell to the row
-    row.appendChild(td2);
-    td2.appendChild(input);
+    row.appendChild(input_cell);
+    input_cell.appendChild(input);
 
     // Append the row to the settings div
     settings.appendChild(row);
