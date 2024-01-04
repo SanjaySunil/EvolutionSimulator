@@ -7,13 +7,14 @@ export default class Genome {
   public data: Gene[];
   public colour: string | undefined;
 
-  /** Builds a new Genome. */
+  // Builds a new genome from a given set of genes.
   constructor(owner: Organism, genome: Gene[]) {
     this.owner = owner;
     this.data = cloneDeep(genome);
     this.colour = this.get_colour();
   }
 
+  // Obtains a colour for the organism based on its genome.
   public get_colour(): string {
     if (this.data) {
       let genomeString = "";

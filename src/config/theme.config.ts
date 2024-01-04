@@ -1,6 +1,6 @@
 type Types = Record<string, string>;
 
-/** Theme pallete for simulation. */
+// Theme pallete for simulation.
 const ThemeConfig: Types = {
   EMPTY: "#000",
   WALL: "#44475a",
