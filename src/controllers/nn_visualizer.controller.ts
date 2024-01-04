@@ -34,7 +34,7 @@ export default class NeuralNetworkVisualizer {
     this.last_internal_y = 0;
   }
 
-  create_text(x, y, text, fill) {
+  create_text(x, y, text, fill): SVGTextElement {
     const textElem = document.createElementNS("http://www.w3.org/2000/svg", "text");
     textElem.setAttribute("x", x);
     textElem.setAttribute("y", y);
@@ -45,7 +45,7 @@ export default class NeuralNetworkVisualizer {
     return textElem;
   }
 
-  connect_nodes(source, sink, weight, isPositive) {
+  connect_nodes(source, sink, weight, isPositive): void {
     const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
     line.setAttribute("x1", source[0]);
     line.setAttribute("y1", source[1]);
@@ -57,7 +57,7 @@ export default class NeuralNetworkVisualizer {
     this.svg.appendChild(line);
   }
 
-  create_circle(x, y, r, fill) {
+  create_circle(x, y, r, fill): SVGCircleElement {
     const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     circle.setAttribute("cx", x.toString());
     circle.setAttribute("cy", y.toString());
@@ -66,7 +66,7 @@ export default class NeuralNetworkVisualizer {
     return circle;
   }
 
-  create_node(node_type, node_id) {
+  create_node(node_type, node_id): void {
     const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
     let circle, textElem;
     if (node_type == "SENSOR") {
@@ -186,11 +186,8 @@ export default class NeuralNetworkVisualizer {
       const max_thickness = 2.5;
       const min_thickness = 0.5;
 
-      if (conn.weight >= 0) {
-        thickness = (conn.weight / 0x7fff) * max_thickness;
-      } else {
-        thickness = (Math.abs(conn.weight) / 0x8000) * max_thickness;
-      }
+      if (conn.weight >= 0) thickness = (conn.weight / 0x7fff) * max_thickness;
+      else thickness = (Math.abs(conn.weight) / 0x8000) * max_thickness;
 
       if (thickness < min_thickness) thickness = min_thickness;
 

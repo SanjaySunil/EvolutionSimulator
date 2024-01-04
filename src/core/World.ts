@@ -146,19 +146,20 @@ export default class World extends CanvasController {
 
       while (next_node) {
         const current_node = next_node;
+        const mult = 0.0050;
         next_node = current_node.next;
 
         if (current_node) {
           /** Perform organism function. */
           current_node.organism.function();
           // current_node.organism.energy -= Math.pow(current_node.organism.coord.x, 0.0095 * current_node.organism.coord.x) - 1;
-          if (this.ticks % 500 == 0) {
+          if (this.ticks % 1000 == 0) {
             this.switch_region = !this.switch_region;
           }
           if (this.switch_region) {
-            current_node.organism.energy -= Math.pow(current_node.organism.coord.x, 0.0095 * current_node.organism.coord.x) - 1;
+            current_node.organism.energy -= Math.pow(current_node.organism.coord.x, mult * current_node.organism.coord.x) - 1;
           } else {
-            current_node.organism.energy -= Math.pow(current_node.organism.coord.x, 0.0095 * current_node.organism.coord.x) - 1;
+            current_node.organism.energy -= Math.pow(-current_node.organism.coord.x + 127, mult * (-current_node.organism.coord.x+127)) - 1;
           }
 
           /** Check if organism is alive, and add to species list. */

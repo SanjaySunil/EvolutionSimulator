@@ -59,7 +59,7 @@ export default class CanvasController {
     this.canvas.addEventListener("wheel", (e) => this.wheel(e));
   }
 
-  public clear_mouse_events(): void {}
+  public clear_mouse_events(): void { }
 
   /** Keyboard event register */
   public register_keyboard_events(): void {
@@ -119,6 +119,7 @@ export default class CanvasController {
         if (cell.state == CellStates.ORGANISM) {
           if (cell.owner?.brain.connections) {
             const NN = new NeuralNetworkVisualizer();
+
             NN.draw(
               cell.owner.brain.sensor_neurons,
               cell.owner.brain.internal_neurons,
@@ -126,11 +127,12 @@ export default class CanvasController {
               cell.owner.brain.neurons.length,
               cell.owner.brain.connections
             );
-            document.getElementById("org_age")?.innerHTML = cell.owner.age;
-            document.getElementById("org_energy")?.innerHTML = cell.owner.energy;
-            document.getElementById("org_step_count")?.innerHTML = cell.owner.step_count;
-            document.getElementById("org_energy_consumed")?.innerHTML = cell.owner.energy_consumed;
-            document.getElementById("org_fitness")?.innerHTML = cell.owner.energy_consumed / 1000000;
+
+            document.getElementById("org_age")!.innerHTML = cell.owner.age.toString();
+            document.getElementById("org_energy")!.innerHTML = cell.owner.energy.toString();
+            document.getElementById("org_step_count")!.innerHTML = cell.owner.step_count.toString();
+            document.getElementById("org_energy_consumed")!.innerHTML = cell.owner.energy_consumed.toString();
+            document.getElementById("org_fitness")!.innerHTML = (cell.owner.energy_consumed / 1000000).toString();
 
             console.log(cell);
           }
@@ -148,28 +150,14 @@ export default class CanvasController {
   public handle_key_down(event: KeyboardEvent): void {
     const canvas_top = parseInt(get_style("canvas", "top"));
     const canvas_left = parseInt(get_style("canvas", "left"));
-    if (event.code == "KeyD") {
-      this.canvas.style.left = canvas_left - this.pan_amount + "px";
-    }
-    if (event.code == "KeyA") {
-      this.canvas.style.left = canvas_left + this.pan_amount + "px";
-    }
-    if (event.code == "KeyS") {
-      this.canvas.style.top = canvas_top - this.pan_amount + "px";
-    }
-    if (event.code == "KeyW") {
-      this.canvas.style.top = canvas_top + this.pan_amount + "px";
-    }
-
-    if (event.code == "Digit1") {
-      this.mode = Modes.IDLE;
-    } else if (event.code == "Digit2") {
-      this.mode = Modes.REMOVE;
-    } else if (event.code == "Digit3") {
-      this.mode = Modes.WALL;
-    } else if (event.code == "Digit4") {
-      this.mode = Modes.RADIOACTIVE;
-    }
+    if (event.code == "KeyD") this.canvas.style.left = canvas_left - this.pan_amount + "px";
+    else if (event.code == "KeyA") this.canvas.style.left = canvas_left + this.pan_amount + "px";
+    else if (event.code == "KeyS") this.canvas.style.top = canvas_top - this.pan_amount + "px";
+    else if (event.code == "KeyW") this.canvas.style.top = canvas_top + this.pan_amount + "px";
+    else if (event.code == "Digit1") this.mode = Modes.IDLE;
+    else if (event.code == "Digit2") this.mode = Modes.REMOVE;
+    else if (event.code == "Digit3") this.mode = Modes.WALL;
+    else if (event.code == "Digit4") this.mode = Modes.RADIOACTIVE;
   }
 
   /** Panning controls */
