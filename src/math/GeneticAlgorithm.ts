@@ -11,6 +11,32 @@ export function calculate_fitness(coord, point): number {
   return euclidean_distance(coord, point);
 }
 
+export function merge(left: Organism[], right: Organism[]): Organism[] {
+  const result: Organism[] = [];
+  let left_index = 0;
+  let right_index = 0;
+
+  while (left_index < left.length && right_index < right.length) {
+    if (left[left_index].fitness! < right[right_index].fitness!) {
+      result.push(left[left_index]);
+      left_index++;
+    } else {
+      result.push(right[right_index]);
+      right_index++;
+    }
+  }
+
+  return result.concat(left.slice(left_index)).concat(right.slice(right_index));
+}
+
+export function merge_sort(arr: Organism[]): Organism[] {
+  if (arr.length <= 1) return arr;
+  const middle = Math.floor(arr.length / 2);
+  const left = merge_sort(arr.slice(0, middle));
+  const right = merge_sort(arr.slice(middle));
+  return merge(left, right);
+}
+
 export function sort_and_calculate_fitness(population: Organism[], coordinate): Organism[] {
   // const point = { x: 64, y: 64 };
   /** Optimise to point test. */
@@ -19,7 +45,8 @@ export function sort_and_calculate_fitness(population: Organism[], coordinate): 
   }
 
   /** TODO: Implement own sort algorithm. */
-  population.sort((a, b) => a.fitness! - b.fitness!);
+  // population.sort((a, b) => a.fitness! - b.fitness!);
+  population = merge_sort(population);
   return population;
 }
 
