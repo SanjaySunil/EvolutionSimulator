@@ -34,7 +34,9 @@
   },
   "dependencies": {
     "@canvasjs/charts": "^3.7.19",
+    "chalk": "^4.1.2",
     "chart.js": "^4.4.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "perlin.js": "^1.0.0"
   }
 }

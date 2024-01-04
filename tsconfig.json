@@ -1,7 +1,27 @@
 {
+  // "ts-node": {
+  //   // these options are overrides used only by ts-node
+  //   // same as the --compilerOptions flag and the TS_NODE_COMPILER_OPTIONS environment variable
+  //   "compilerOptions": {
+  //     "module": "commonjs",
+  //     "target": "es2015",
+  //     "noImplicitAny": false,
+  //     "noImplicitThis": true,
+  //     "noImplicitReturns": true,
+  //     "noUnusedLocals": true,
+  //     "noUnusedParameters": true,
+  //     "strict": true,
+  //     "strictNullChecks": true,
+  //     "pretty": true,
+  //     "sourceMap": true,
+  //     "declaration": false,
+  //     "moduleResolution": "node",
+  //     "allowSyntheticDefaultImports": true
+  //   }
+  // },
   "compilerOptions": {
     "module": "es6",
-    "target": "es2015",
+    "target": "es2022",
     "noImplicitAny": false,
     "noImplicitThis": true,
     "noImplicitReturns": true,

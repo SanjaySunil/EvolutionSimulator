@@ -1,5 +1,5 @@
-import { SimulationConfig } from "../config/simulation.config";
-import Vector from "../math/vector.math";
+import { SimulationConfig } from "../config";
+import { Coordinate, make_vector } from "../math/Coordinate";
 
 /** This controller is used to manage mouse events. */
 export default class MouseController {
@@ -7,16 +7,16 @@ export default class MouseController {
   public left_click: boolean;
   public right_click: boolean;
   public pixel_size: number;
-  public grid_coord: Vector;
-  public prev_grid_coord: Vector;
-  public canvas_coord: Vector;
-  public clicked_coord: Vector;
+  public grid_coord: Coordinate;
+  public prev_grid_coord: Coordinate;
+  public canvas_coord: Coordinate;
+  public clicked_coord: Coordinate;
 
   constructor(pixel_size: number) {
-    this.grid_coord = new Vector();
-    this.prev_grid_coord = new Vector();
-    this.canvas_coord = new Vector();
-    this.clicked_coord = new Vector();
+    this.grid_coord = make_vector(0, 0);
+    this.prev_grid_coord = make_vector(0, 0);
+    this.canvas_coord = make_vector(0, 0);
+    this.clicked_coord = make_vector(0, 0);
     this.middle_click = false;
     this.left_click = false;
     this.right_click = false;
@@ -26,10 +26,11 @@ export default class MouseController {
   /** This event is triggered when the mouse moves in the canvas. */
   public mouse_move(event: MouseEvent): void {
     event.preventDefault();
-
     this.canvas_coord.x = event.offsetX;
     this.canvas_coord.y = event.offsetY;
-    this.prev_grid_coord.copy(this.grid_coord);
+    /** Copy coord */
+    this.prev_grid_coord.x = this.grid_coord.x;
+    this.prev_grid_coord.y = this.grid_coord.y;
 
     this.grid_coord.x = Math.floor(this.canvas_coord.x / this.pixel_size);
     this.grid_coord.y = Math.floor(this.canvas_coord.y / this.pixel_size);
@@ -58,7 +59,9 @@ export default class MouseController {
     this.middle_click = event.button == 1;
     this.right_click = event.button == 2;
 
-    this.clicked_coord.copy(this.canvas_coord);
+    this.clicked_coord.x = this.canvas_coord.x;
+    this.clicked_coord.y = this.canvas_coord.y;
+    // this.clicked_coord.copy(this.canvas_coord);
   }
 
   /** This event is triggered when the mouse enters the canvas. */
@@ -67,7 +70,9 @@ export default class MouseController {
     this.right_click = !!(event.buttons & 2);
     this.middle_click = !!(event.buttons & 4);
 
-    this.clicked_coord.copy(this.canvas_coord);
+    this.clicked_coord.x = this.canvas_coord.x;
+    this.clicked_coord.y = this.canvas_coord.y;
+    // this.clicked_coord.copy(this.canvas_coord);
   }
 
   /** This event is triggered when the mouse leaves the canvas. */

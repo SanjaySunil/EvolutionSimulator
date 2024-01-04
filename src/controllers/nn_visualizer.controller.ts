@@ -1,7 +1,5 @@
-import { ActionNeuronSymbols } from "../constants/ActionNeurons";
-import { SensorNeuronSymbols } from "../constants/SensorNeurons";
-import { Gene } from "../models/Genome";
-import { NeuronTypes } from "../models/Neuron";
+import Gene from "../organism/Gene";
+import { ActionNeuronSymbols, NeuronTypes, SensorNeuronSymbols } from "../organism/Neurons";
 
 /** Neural Network Visualiser Class */
 export default class NeuralNetworkVisualizer {
@@ -9,20 +7,20 @@ export default class NeuralNetworkVisualizer {
   public sensor_neurons: object;
   public action_neurons: object;
   public internal_neurons: object;
-  radius!: number;
-  spacing!: number;
-  total_input_height!: number;
-  inputs!: number;
-  total_internal_height!: number;
-  internal!: number;
-  total_output_height!: number;
-  max_nodes!: number;
-  max_height!: number;
-  group!: SVGGElement;
-  outputs!: number;
-  last_sensor_y: number;
-  last_action_y: number;
-  last_internal_y: number;
+  public radius!: number;
+  public spacing!: number;
+  public total_input_height!: number;
+  public inputs!: number;
+  public total_internal_height!: number;
+  public internal!: number;
+  public total_output_height!: number;
+  public max_nodes!: number;
+  public max_height!: number;
+  public group!: SVGGElement;
+  public outputs!: number;
+  public last_sensor_y: number;
+  public last_action_y: number;
+  public last_internal_y: number;
 
   constructor() {
     this.svg = document.getElementById("neural-network-svg")!;
@@ -194,6 +192,7 @@ export default class NeuralNetworkVisualizer {
       this.connect_nodes(source, sink, thickness, conn.weight >= 0);
     }
 
-    this.svg.setAttribute("height", `${Math.max(this.last_action_y, this.last_internal_y, this.last_sensor_y) + 2 * this.spacing}px`);
+    const height = Math.max(this.last_action_y, this.last_internal_y, this.last_sensor_y) + 2 * this.spacing;
+    this.svg.setAttribute("height", `${height}px`);
   }
 }

@@ -1,366 +1,489 @@
 @import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
 :root {
+  --primary: var(--foreground);
+  --secondary: red;
+  --default: #1c1c1c;
+  --canvas: #111;
+  --text-primary: #fff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-disabled: rgba(255, 255, 255, 0.5);
   --background-default: #121212;
   --background-paper: #121212;
+  --border: #4c5067;
+
+  --red: #ff5555;
+  --orange: #ffb86c;
+  --yellow: #f1fa8c;
+  --green: #50fa7b;
+  --cyan: #8be9fd;
+  --blue: hsl(210, 100%, 75%);
+  --pink: #ff79c6;
+  --purple: rgb(189, 147, 249);
+  --fg: #f8f8f2;
+  --bg: #282a36;
   --bg-dark: #21222c;
   --bg-darker: #191a21;
   --bg-light: #343746;
   --bg-lighter: #424450;
   --bg-purple: #454158;
-  --bg: #282a36;
-  --blue: hsl(210, 100%, 75%);
   --border: #44475a;
-  --border: #4c5067;
-  --canvas: #111;
   --comment: #6272a4;
-  --cyan: #8be9fd;
-  --default: #1c1c1c;
-  --fg: #f8f8f2;
-  --green: #50fa7b;
-  --orange: #ffb86c;
-  --pink: #ff79c6;
-  --primary: var(--foreground);
-  --purple: rgb(189, 147, 249);
-  --red: #ff5555;
-  --secondary: red;
-  --text-disabled: rgba(255, 255, 255, 0.5);
-  --text-primary: #fff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --yellow: #f1fa8c;
 }
+
+/* Turn on custom 8px wide scrollbar */
 ::-webkit-scrollbar {
-  -webkit-border-radius: 100px;
+  width: 10px; /* 1px wider than Lion. */
+  /* This is more usable for users trying to click it. */
   background-color: rgba(189, 147, 249, 0);
-  height: 5px;
-  width: 5px;
+  -webkit-border-radius: 100px;
 }
+/* hover effect for both scrollbar area, and scrollbar 'thumb' */
 ::-webkit-scrollbar:hover {
   background-color: rgba(189, 147, 249, 0.09);
 }
+
+/* The scrollbar 'thumb' ...that marque oval shape in a scrollbar */
 ::-webkit-scrollbar-thumb {
+  /* This is the EXACT color of Mac OS scrollbars.
+     Yes, I pulled out digital color meter */
+  background: rgba(189, 147, 249, 0.5);
   -webkit-border-radius: 100px;
   background-clip: padding-box;
-  background: rgba(189, 147, 249, 0.5);
   border: 2px solid rgba(189, 147, 249, 0);
-  min-height: 10px;
-  min-width: 10px;
+  min-height: 10px; /*Prevent it from getting too small */
 }
 ::-webkit-scrollbar-thumb:active {
+  background: rgba(189, 147, 249, 0.61); /* Some darker color when you click it */
   -webkit-border-radius: 100px;
-  background: rgba(189, 147, 249, 0.61);
 }
+
 * {
   color: var(--fg);
   font-family: "Rubik", sans-serif;
 }
+
 body {
   background: var(--bg);
+  width: 100%;
   height: 100%;
   margin: 0;
   overflow: hidden;
-  width: 100%;
 }
 .container {
   display: flex;
   flex-flow: row wrap;
   font-weight: bold;
 }
+
 .container > * {
-  flex: 1 100%;
   padding: 10px;
+  flex: 1 100%;
 }
+
 .main canvas {
-  background: #000;
-  cursor: pointer;
-  image-rendering: pixelated;
-  left: -300px;
-  position: relative;
+  background: var(--bg);
   top: 0;
+  left: 0;
+  position: relative;
+  image-rendering: pixelated;
+  cursor: pointer;
+  /** Transform needs to be updated for javascript as well */
 }
+
 #header {
-  align-items: center;
   background: var(--bg-purple);
+  z-index: 99;
   border: 1px solid var(--border);
+  align-items: center;
   justify-content: center;
   text-align: center;
-  z-index: 99;
 }
+
 .main {
-  align-items: center;
   background: var(--bg-darker);
-  display: flex;
   height: 100vh;
+  width: 70vw;
+  display: flex;
+  align-items: center;
   justify-content: center;
   position: relative;
-  width: 100vw;
+}
+
+.aside {
+  background: var(--bg-dark);
+  z-index: 99;
+  border: 1px solid var(--border);
+  height: 100vh;
+  width: 100%;
+}
+
+@media all and (min-width: 600px) {
+  .aside {
+    flex: 3 0 0;
+  }
+}
+
+@media all and (min-width: 800px) {
+  .aside-left {
+    order: 1;
+  }
+  .main {
+    order: 2;
+    flex: 8 0px;
+  }
+  .aside-right {
+    order: 3;
+  }
+  .footer {
+    order: 4;
+  }
 }
 button {
-  background-color: var(--bg-lighter);
-  border-radius: 4px;
-  border: none;
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  box-sizing: border-box;
-  cursor: pointer;
-  display: inline-block;
-  font-family: var(--pure-material-font, "Roboto", "Segoe UI", BlinkMacSystemFont, system-ui, -apple-system);
-  font-size: 14px;
-  font-weight: 500;
-  height: 36px;
-  line-height: 36px;
-  margin: 5px;
-  min-width: 64px;
-  outline: none;
-  overflow: hidden;
-  padding: 0 16px;
   position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 4px;
+  padding: 0 16px;
+  min-width: 64px;
+  width: 100%;
+  height: 36px;
+  vertical-align: middle;
   text-align: center;
   text-overflow: ellipsis;
   text-transform: uppercase;
+  background-color: var(--pink);
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  font-family: var(--pure-material-font, "Roboto", "Segoe UI", BlinkMacSystemFont, system-ui, -apple-system);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 36px;
+  overflow: hidden;
+  outline: none;
+  cursor: pointer;
   transition: box-shadow 0.2s;
-  vertical-align: middle;
-  width: 100%;
 }
+
 button::-moz-focus-inner {
   border: none;
 }
+
 /* Overlay */
 button::before {
-  background-color: rgb(var(--pure-material-onprimary-rgb, 255, 255, 255));
-  bottom: 0;
   content: "";
-  left: 0;
-  opacity: 0;
   position: absolute;
-  right: 0;
   top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgb(var(--pure-material-onprimary-rgb, 255, 255, 255));
+  opacity: 0;
   transition: opacity 0.2s;
 }
+
 /* Ripple */
 button::after {
-  background-color: rgb(var(--pure-material-onprimary-rgb, 255, 255, 255));
-  border-radius: 50%;
   content: "";
-  height: 32px;
-  left: 50%;
-  opacity: 0;
-  padding: 50%;
   position: absolute;
+  left: 50%;
   top: 50%;
+  border-radius: 50%;
+  padding: 50%;
+  width: 32px; /* Safari */
+  height: 32px; /* Safari */
+  background-color: rgb(var(--pure-material-onprimary-rgb, 255, 255, 255));
+  opacity: 0;
   transform: translate(-50%, -50%) scale(1);
   transition: opacity 1s, transform 0.5s;
-  width: 32px;
 }
+
 /* Hover, Focus */
 button:hover,
 button:focus {
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
 }
+
 button:hover::before {
   opacity: 0.08;
 }
+
 button:focus::before {
   opacity: 0.24;
 }
+
 button:hover:focus::before {
   opacity: 0.3;
 }
+
 /* Active */
 button:active {
   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
+
 button:active::after {
   opacity: 0.32;
   transform: translate(-50%, -50%) scale(0);
   transition: transform 0s;
 }
+
 /* Disabled */
 button:disabled {
+  color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.38);
   background-color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.12);
   box-shadow: none;
-  color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.38);
   cursor: initial;
 }
+
 button:disabled::before {
   opacity: 0;
 }
+
 button:disabled::after {
   opacity: 0;
 }
+
 .pc-tab > input,
 .pc-tab section > div {
   display: none;
 }
+
 #tab1:checked ~ section .tab1,
 #tab2:checked ~ section .tab2,
 #tab3:checked ~ section .tab3,
 #tab4:checked ~ section .tab4 {
   display: block;
 }
+
 *,
 *:after,
 *:before {
-  -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+
 .pc-tab {
-  margin: 0 auto;
   width: 100%;
+  margin: 0 auto;
 }
+
 .pc-tab ul {
-  display: flex;
   list-style: none;
   margin: 0;
-  overflow-x: scroll;
-  overflow-y: hidden;
   padding: 0;
-  text-align: center;
   width: 100%;
+  display: flex;
+  text-align: center;
+  overflow-y: hidden;
+  overflow-x: scroll;
 }
+
 .pc-tab li {
-  border-bottom: 1px solid var(--border);
   flex-grow: 1;
   width: 100%;
+  border-bottom: 1px solid var(--border);
 }
+
 .pc-tab ul li label {
-  background: var(--bg-dark);
-  border-bottom: 0;
-  border: 1px solid var(--border);
-  color: var(--comment);
   float: left;
   padding: 15px 25px;
+  border: 1px solid var(--border);
+  border-bottom: 0;
+  background: var(--bg-dark);
+  color: var(--comment);
   transition: 0.1s;
   width: 100%;
 }
+
 .pc-tab ul li label:hover,
 .pc-tab ul li label:active {
   background: var(--bg-light);
   transition: 0.25s;
 }
+
 .pc-tab ul li:not(:last-child) label {
   border-right-width: 0;
 }
+
 .pc-tab section {
   clear: both;
 }
+
 .tab {
-  border-radius: 5px;
+  padding: 15px;
   border: 1px solid var(--border);
   height: 70vh;
-  overflow-y: scroll;
-  padding: 15px;
 }
+
 .pc-tab section div {
-  background: var(--bg-light);
   width: 100%;
+  background: var(--bg-light);
 }
+
 #tab1:checked ~ nav .tab1 label,
 #tab2:checked ~ nav .tab2 label,
 #tab3:checked ~ nav .tab3 label,
 #tab4:checked ~ nav .tab4 label {
-  background: var(--bg-light);
-  color: var(--fg);
   font-weight: bolder;
+  color: var(--fg);
+  background: var(--bg-light);
   position: relative;
 }
+
 #tab1:checked ~ nav .tab1 label:after,
 #tab2:checked ~ nav .tab2 label:after,
 #tab3:checked ~ nav .tab3 label:after,
 #tab4:checked ~ nav .tab4 label:after {
-  background: var(--purple);
-  bottom: -1px;
   content: "";
   display: block;
-  height: 4px;
-  left: 0;
   position: absolute;
+  height: 4px;
   width: 100%;
+  background: var(--purple);
+  left: 0;
+  bottom: -1px;
 }
+
 .col {
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow-y: scroll;
 }
+
 .row {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   padding: 0px 10px;
+  justify-content: space-between;
 }
+
 .item-first {
   align-self: flex-start;
 }
+
 .item-center {
   align-self: center;
 }
+
 .item-last {
   align-self: flex-end;
 }
+
 .button-actions {
   display: flex;
-  flex-direction: column;
+  gap: 5px;
 }
+
+/* CSS styles for the modal window */
+.modal-window {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.75);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s;
+}
+
+.modal-window.visible {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-window > div {
+  width: 75%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2em;
+  background: var(--bg-light);
+}
+
+.modal-close {
+  color: #aaa;
+  line-height: 50px;
+  font-size: 80%;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 0;
+  width: 70px;
+  text-decoration: none;
+}
+
+.disabled_border {
+  background: transparent !important;
+  border: none;
+}
+
 svg {
-  display: none;
   transform: scale(1);
+  display: none;
 }
+
 input[type="number"] {
   background-color: transparent;
   border: 1px solid var(--border);
   text-align: right;
+  max-width: 22.5%;
 }
+
 select {
   background-color: var(--bg-lighter);
-  border: 1px solid var(--border);
   color: var(--text-primary);
+  border: 1px solid var(--border);
   text-align: center;
   width: 100%;
 }
+
 .row p {
   margin-right: 10px;
 }
+
 table {
   border-collapse: collapse;
   width: 100%;
 }
+
 td,
 th {
   border: 1px solid var(--border);
-  padding: 5px;
   text-align: left;
+  padding: 5px;
 }
+
 td:first-child,
 th:first-child {
   width: 90%;
 }
+
 td:last-child,
 th:last-child {
   text-align: center;
 }
+
 th {
   background-color: var(--bg-lighter);
 }
+
 #floating-gui {
-  border-radius: 5px;
-  bottom: 10px;
-  max-height: 100vh;
-  overflow-y: hidden;
-  position: fixed;
-  right: 10px;
-  top: 10px;
-  width: 30%;
-}
-#sidebar {
-  border-radius: 5px;
-  border: 1px solid var(--border);
-  display: none;
-  z-index: 999;
-}
-.box {
-  background: transparent;
-  border-radius: 5px;
-  border: 1px solid var(--border);
+  position: absolute;
+  top: 20px; /* Adjust the top position as needed */
+  left: 20px; /* Adjust the left position as needed */
+  background: rgba(255, 255, 255, 0.8); /* Background color with transparency */
   padding: 10px;
-  z-index: 999;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Optional: Add a shadow effect */
 }
+
+#sidebar {
+  display: none;
+}
+

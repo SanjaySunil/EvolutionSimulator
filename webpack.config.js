@@ -1,5 +1,5 @@
 module.exports = {
-  entry: "./src/index.ts",
+  entry: "./src/main.ts",
   devtool: "inline-source-map",
   module: {
     rules: [
@@ -15,7 +15,7 @@ module.exports = {
   },
   output: {
     path: __dirname + "/public",
-    filename: "./js/index.js",
+    filename: "./js/main.js",
   },
   devServer: {
     static: {

@@ -1,48 +1,36 @@
-import Vector from "../math/vector.math";
+import { Coordinate, make_vector, rotate_point } from "../math/Coordinate";
 
-/** Direction Constants. */
-class DirectionsConstants {
-  public IDLE: Vector;
-  public NORTH: Vector;
-  public EAST: Vector;
-  public SOUTH: Vector;
-  public WEST: Vector;
-  public NORTH_EAST: Vector;
-  public NORTH_WEST: Vector;
-  public SOUTH_EAST: Vector;
-  public SOUTH_WEST: Vector;
-  constructor() {
-    this.IDLE = new Vector(0, 0);
-    this.NORTH = new Vector(0, 1);
-    this.EAST = new Vector(1, 0);
-    this.SOUTH = new Vector(0, -1);
-    this.WEST = new Vector(-1, 0);
-    this.NORTH_EAST = new Vector(1, 1);
-    this.NORTH_WEST = new Vector(-1, 1);
-    this.SOUTH_EAST = new Vector(-1, 1);
-    this.SOUTH_WEST = new Vector(-1, -1);
+export default class Directions {
+  public static IDLE = make_vector(0, 0);
+  public static NORTH = make_vector(0, 1);
+  public static EAST = make_vector(1, 0);
+  public static SOUTH = make_vector(0, -1);
+  public static WEST = make_vector(-1, 0);
+  public static NORTH_EAST = make_vector(1, 1);
+  public static NORTH_WEST = make_vector(-1, 1);
+  public static SOUTH_EAST = make_vector(-1, 1);
+  public static SOUTH_WEST = make_vector(-1, -1);
+
+  public static forward(angle): Coordinate {
+    return rotate_point(this.NORTH, make_vector(0, 0), angle);
   }
-  public forward(angle): Vector {
-    return this.NORTH.rotate_around(0, 0, angle);
+
+  public static backward(angle): Coordinate {
+    return rotate_point(this.SOUTH, make_vector(0, 0), angle);
   }
-  public backward(angle): Vector {
-    return this.SOUTH.rotate_around(0, 0, angle);
+
+  public static left(angle): Coordinate {
+    return rotate_point(this.NORTH, make_vector(0, 0), angle - Math.PI / 2);
   }
-  public left(angle): Vector {
-    return this.NORTH.rotate_around(0, 0, angle - Math.PI / 2);
-  }
-  public right(angle): Vector {
-    return this.NORTH.rotate_around(0, 0, angle + Math.PI / 2);
+
+  public static right(angle): Coordinate {
+    return rotate_point(this.NORTH, make_vector(0, 0), angle + Math.PI / 2);
   }
 }
 
-const Directions = new DirectionsConstants();
-
-const Angles = {
+export const Angles = {
   NORTH: 0,
   EAST: 90,
   SOUTH: 180,
   WEST: 270,
 };
-
-export { Directions, Angles };

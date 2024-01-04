@@ -1,12 +1,12 @@
 import { cloneDeep } from "lodash";
-import { Constants, SimulationConfig } from "../config/simulation.config";
-import { AllCellStates } from "../constants/CellStates";
-import { Directions } from "../constants/Directions";
-import { SensorNeurons } from "../constants/SensorNeurons";
-import Vector from "../math/vector.math";
-import { Gene, Genome } from "./Genome";
-import { Neuron, NeuronTypes } from "./Neuron";
-import Organism from "./Organism";
+import Organism from ".";
+import Directions from "../constants/Directions";
+import { Coordinate, add_vector, euclidean_distance } from "../math/Coordinate";
+import Gene from "./Gene";
+import { Neuron, NeuronTypes, SensorNeurons } from "./Neurons";
+import weight_as_float from "../utils/connection2float";
+import { AllCellStates } from "../environment/Grid";
+
 type ConnectionList = Array<Gene>;
 type NodeMap = Map<number, Node>;
 
@@ -25,34 +25,35 @@ export class Node {
   public inputs_from_sensors_or_neurons;
 }
 
-/**
- * The brain is specified by a set of genes where each gene specifies one
- * connection in the neural network.
- */
-export class Brain {
-  /** The organism that the brain belongs to. */
+export default class Brain {
+  /** Owner of the brain. */
   public owner: Organism;
+  /** Used neurons */
+  public sensor_neurons: object;
+  public action_neurons: object;
+  public internal_neurons: object;
   /** All neurons of the organism. */
   public neurons: Neuron[];
   /** All connections. */
   public connections: Gene[];
-  /** Genome */
-  public genome: Genome;
-  /** Used sensor neurons */
-  public sensor_neurons: object;
-  public action_neurons: object;
-  public internal_neurons: object;
+  /** NeuralNet config */
+  public NUMBER_OF_SENSORS: number;
+  public NUMBER_OF_NEURONS: number;
+  public NUMBER_OF_ACTIONS: number;
+
   /** Builds a new brain. */
-  constructor(owner: Organism, genome: Genome) {
+  constructor(owner, NUMBER_OF_SENSORS: number, NUMBER_OF_NEURONS: number, NUMBER_OF_ACTIONS: number) {
     this.owner = owner;
-    // this.genome = cloneDeep(genome);
-    this.genome = genome;
-    /** Neural network */
-    this.connections = [];
-    this.neurons = [];
     this.sensor_neurons = {};
     this.action_neurons = {};
     this.internal_neurons = {};
+    /** Neural network */
+    this.neurons = [];
+    this.connections = [];
+    /** Neural Net config */
+    this.NUMBER_OF_SENSORS = NUMBER_OF_SENSORS;
+    this.NUMBER_OF_NEURONS = NUMBER_OF_NEURONS;
+    this.NUMBER_OF_ACTIONS = NUMBER_OF_ACTIONS;
     this.configure_brain();
   }
   /**
@@ -79,36 +80,23 @@ export class Brain {
     this.create_renumbered_connection_list(connection_list, node_map);
     this.create_neural_node_list(node_map);
   }
-  /** Organism look through with observation distance. */
-  public sensor_look(direction: number): any {
-    /**
-     * Start of object performance test. Test to see whether new object
-     * instantiation is affecting performance of simulation.
-     */
 
-    /** End of object performance test. */
-
-    let current_vector = new Vector().copy(this.owner.coord);
-    let vector: Vector;
-
-    const angle = this.owner.direction.to_angle();
+  public sensor_look(direction: number): number {
+    let current_vector = { x: this.owner.coordinate.x, y: this.owner.coordinate.y };
+    let vector: Coordinate;
 
     if (direction == SensorNeurons.LOOK_NORTH) vector = Directions.NORTH;
     else if (direction == SensorNeurons.LOOK_EAST) vector = Directions.EAST;
     else if (direction == SensorNeurons.LOOK_SOUTH) vector = Directions.SOUTH;
     else if (direction == SensorNeurons.LOOK_WEST) vector = Directions.WEST;
-    else if (direction == SensorNeurons.LOOK_FORWARD) vector = Directions.forward(angle);
-    else if (direction == SensorNeurons.LOOK_BACKWARDS) vector = Directions.backward(angle);
-    else if (direction == SensorNeurons.LOOK_LEFT) vector = Directions.left(angle);
-    else if (direction == SensorNeurons.LOOK_RIGHT) vector = Directions.right(angle);
     else {
       throw Error("Direction not correct.");
     }
 
-    current_vector = current_vector.add(vector);
+    current_vector = add_vector(current_vector, vector);
 
-    if (this.owner.world.grid.is_valid_cell_at(current_vector)) {
-      const cell = this.owner.world.grid.get_cell_at(current_vector);
+    if (this.owner.environment.grid.is_valid_cell_at(current_vector)) {
+      const cell = this.owner.environment.grid.get_cell_at(current_vector);
       return cell.state / AllCellStates.length;
     }
 
@@ -116,11 +104,19 @@ export class Brain {
     return 0.0;
   }
 
-  public sensor_coord(coord: number): number {
-    if (coord == SensorNeurons.X_COORD) {
-      return this.owner.coord.x / SimulationConfig.GRID_SIZE;
-    } else if (coord == SensorNeurons.Y_COORD) {
-      return this.owner.coord.y / SimulationConfig.GRID_SIZE;
+  public sensor_coordinate(sensor: number): number {
+    if (sensor == SensorNeurons.X_COORDINATE && this.owner.environment.grid.grid_size) {
+      return this.owner.coordinate.x / this.owner.environment.grid.grid_size;
+    } else if (sensor == SensorNeurons.Y_COORDINATE && this.owner.environment.grid.grid_size) {
+      return this.owner.coordinate.y / this.owner.environment.grid.grid_size;
+    } else if (sensor == SensorNeurons.BOUNDARY_NORTH) {
+      return euclidean_distance(this.owner.coordinate, { x: this.owner.coordinate.x, y: 0 }) / this.owner.environment.grid.grid_size;
+    } else if (sensor == SensorNeurons.BOUNDARY_WEST) {
+      return euclidean_distance(this.owner.coordinate, { x: 0, y: this.owner.coordinate.y }) / this.owner.environment.grid.grid_size;
+    } else if (sensor == SensorNeurons.BOUNDARY_EAST) {
+      return euclidean_distance(this.owner.coordinate, { x: this.owner.environment.grid.grid_size, y: this.owner.coordinate.y }) / this.owner.environment.grid.grid_size;
+    } else if (sensor == SensorNeurons.BOUNDARY_SOUTH) {
+      return euclidean_distance(this.owner.coordinate, { x: this.owner.coordinate.x, y: this.owner.environment.grid.grid_size }) / this.owner.environment.grid.grid_size;
     } else {
       return 0.0;
     }
@@ -131,24 +127,24 @@ export class Brain {
    * and 1.0.
    */
   public get_sensor(sensor_id: number): number {
-    if (
-      [
-        SensorNeurons.LOOK_NORTH,
-        SensorNeurons.LOOK_EAST,
-        SensorNeurons.LOOK_SOUTH,
-        SensorNeurons.LOOK_WEST,
-        SensorNeurons.LOOK_FORWARD,
-        SensorNeurons.LOOK_BACKWARDS,
-        SensorNeurons.LOOK_LEFT,
-        SensorNeurons.LOOK_RIGHT,
-      ].includes(sensor_id)
+    if ([
+      SensorNeurons.X_COORDINATE,
+      SensorNeurons.Y_COORDINATE,
+      SensorNeurons.BOUNDARY_NORTH,
+      SensorNeurons.BOUNDARY_EAST,
+      SensorNeurons.BOUNDARY_SOUTH,
+      SensorNeurons.BOUNDARY_WEST
+    ].includes(sensor_id)) {
+      return this.sensor_coordinate(sensor_id);
+    } else if ([
+      SensorNeurons.LOOK_NORTH,
+      SensorNeurons.LOOK_EAST,
+      SensorNeurons.LOOK_SOUTH,
+      SensorNeurons.LOOK_WEST,
+    ].includes(sensor_id)
     ) {
       return this.sensor_look(sensor_id);
-    } else if ([SensorNeurons.X_COORD, SensorNeurons.Y_COORD].includes(sensor_id)) {
-      return this.sensor_coord(sensor_id);
-    } else if ([SensorNeurons.ENERGY].includes(sensor_id)) {
-      return this.owner.energy / this.owner.max_energy;
-    } else return 0.0;
+    } return 0.0;
   }
   /**
    * Feed forward from the sensory input neurons through internal neurons and to
@@ -156,7 +152,7 @@ export class Brain {
    */
   public feed_forward(): number[] {
     /** This container is used to return values for all of the action outputs. */
-    const action_levels = new Array(Constants.NUMBER_OF_ACTIONS).fill(0.0);
+    const action_levels = new Array(this.NUMBER_OF_ACTIONS).fill(0.0);
 
     /** Weighted inputs to each neuron are summed in neuron_accumulators. */
     const neuron_accumulators = new Array(this.neurons.length).fill(0.0);
@@ -194,9 +190,9 @@ export class Brain {
        * accumulator.
        */
       if (connection.sink_type == NeuronTypes.ACTION) {
-        action_levels[connection.sink_id] += input_val * connection.weight_as_float();
+        action_levels[connection.sink_id] += input_val * weight_as_float(connection.weight);
       } else {
-        neuron_accumulators[connection.sink_id] += input_val * connection.weight_as_float();
+        neuron_accumulators[connection.sink_id] += input_val * weight_as_float(connection.weight);
       }
     }
     return action_levels;
@@ -211,22 +207,26 @@ export class Brain {
     const connection_list: ConnectionList = [];
 
     /** Release empty connection list if number of neurons is zero. */
-    // if (Constants.NUMBER_OF_NEURONS === 0) return connection_list;
-    for (const gene of this.genome.data) {
-      if (gene.source_type === NeuronTypes.NEURON) {
-        gene.source_id %= Constants.NUMBER_OF_NEURONS;
-      } else {
-        gene.source_id %= Constants.NUMBER_OF_SENSORS;
-      }
+    // if (this.NUMBER_OF_NEURONS === 0) return connection_list;
 
-      if (gene.sink_type === NeuronTypes.NEURON) {
-        gene.sink_id %= Constants.NUMBER_OF_NEURONS;
-      } else {
-        gene.sink_id %= Constants.NUMBER_OF_ACTIONS;
-      }
+    if (this.owner.genome.data) {
+      for (const gene of this.owner.genome.data) {
+        if (gene.source_type === NeuronTypes.NEURON) {
+          gene.source_id %= this.NUMBER_OF_NEURONS;
+        } else {
+          gene.source_id %= this.NUMBER_OF_SENSORS;
+        }
 
-      connection_list.push(gene);
+        if (gene.sink_type === NeuronTypes.NEURON) {
+          gene.sink_id %= this.NUMBER_OF_NEURONS;
+        } else {
+          gene.sink_id %= this.NUMBER_OF_ACTIONS;
+        }
+
+        connection_list.push(gene);
+      }
     }
+
     return connection_list;
   }
   /**
@@ -283,7 +283,7 @@ export class Brain {
    * neuron.
    */
   public remove_connections_to_neuron(connection_list: ConnectionList, node_map: NodeMap, neuron_number: number): void {
-    for (let i = 0; i < connection_list.length; ) {
+    for (let i = 0; i < connection_list.length;) {
       const neuron = connection_list[i];
       if (neuron.sink_type == NeuronTypes.NEURON && neuron.sink_id === neuron_number) {
         /**
@@ -373,8 +373,6 @@ export class Brain {
       if (connection.sink_type == NeuronTypes.ACTION) this.action_neurons[connection.sink_id] = undefined;
       else this.internal_neurons[connection.sink_id] = undefined;
     }
-
-    // console.log("after", this.sensor_neurons, this.action_neurons, this.internal_neurons);
   }
 
   /** [done] Creates the organims's neural node list. */
