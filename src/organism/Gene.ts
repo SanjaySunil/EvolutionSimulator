@@ -25,7 +25,7 @@ export default class Gene {
   // Mutates the gene at index.
   public mutate_gene(): void {
     const bitMask = 1 << get_random_number(0, 15);
-    const chance = Math.random(); // 0..1
+    const chance = Math.random();
 
     if (chance < 0.2) {
       this.source_type ^= 1;
