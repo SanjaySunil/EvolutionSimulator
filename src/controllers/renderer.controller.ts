@@ -22,16 +22,16 @@ export default class RendererController {
     this.ctx.fillRect(cell.coordinate.x * 15 + x, cell.coordinate.y * 15 + y, width, height);
   }
 
-  /** Renders an organism with rotation degrees specified. */
+  // Renders an organism with rotation degrees specified.
   public render_organism_cell(cell, rotationDegrees): void {
     const cell_x = cell.coordinate.x * this.pixel_size;
     const cell_y = cell.coordinate.y * this.pixel_size;
 
     this.ctx.save();
 
-    /** Translate to the center of the cell. */
+    // Translate to the center of the cell.
     this.ctx.translate(cell_x + this.pixel_size / 2, cell_y + this.pixel_size / 2);
-    /** Rotate the entire cell by rotationDegrees. */
+    // Rotate the entire cell by rotationDegrees.
     this.ctx.rotate((rotationDegrees * Math.PI) / 180);
     this.ctx.fillRect(-this.pixel_size / 2, -this.pixel_size / 2, this.pixel_size, this.pixel_size); // Draw a rectangle centered at (0, 0)
     const colour = cell.owner.genome.colour;
@@ -77,10 +77,9 @@ export default class RendererController {
   }
 
   // public render_food_cell(cell: GridCell): void {
-  //   /** Temporary fix: when this if statement is removed, some empty cells on the map have 0 energy.
-  //    * This may be caused due to set_cell_state being set to food in another place other than the
-  //    * organism kill method.
-  //    */
+  //   // Temporary fix: when this if statement is removed, some empty cells on the map have 0 energy.
+  //   // This may be caused due to set_cell_state being set to food in another place other than the
+  //   // organism kill method.
   //   if (cell.energy <= 0) return this.render_empty_cell(cell);
   //   else {
   //     const transparent = "#282a36";
@@ -113,7 +112,7 @@ export default class RendererController {
       if (cell.owner && cell.owner.alive) {
         let rotation = to_angle(cell.owner.direction);
 
-        // /** Ugly solution, needs improvement. */
+        // Ugly solution, needs improvement.
         if (rotation == 315 || rotation == 0 || rotation == 45) rotation = 0;
         else if (rotation == 90) rotation = 90;
         else if (rotation == 135 || rotation == 180 || rotation == 225) rotation = 180;
