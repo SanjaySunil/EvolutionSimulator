@@ -1,16 +1,15 @@
 import RendererController from "../controllers/renderer.controller";
 import { Coordinate } from "../math/Coordinate";
 import PerlinNoise from "../utils/PerlinNoise";
-
 import Organism from "../organism";
 
 // Various Cell States that a GridCell can take.
 export const CellStates = {
-  EMPTY: 0,
-  ORGANISM: 1,
-  WALL: 2,
-  FOOD: 3,
-  RADIOACTIVE: 4,
+  EMPTY: 0, // Represents an empty cell
+  ORGANISM: 1, // Represents a cell occupied by an organism
+  WALL: 2, // Represents a wall cell
+  FOOD: 3, // Represents a cell with food
+  RADIOACTIVE: 4, // Represents a cell with radioactive material
 };
 
 // Create an array of the keys of the CellStates.
@@ -18,11 +17,11 @@ export const AllCellStates = Object.keys(CellStates);
 
 // GridCell class.
 export class GridCell {
-  public coordinate: Coordinate;
-  private _owner: Organism | null;
-  private _state: number;
-  public is_selected: boolean;
-  public is_highlighted: boolean;
+  public coordinate: Coordinate; // The coordinate of the cell
+  private _owner: Organism | null; // The organism that owns the cell, if any
+  private _state: number; // The state of the cell
+  public is_selected: boolean; // Indicates if the cell is selected
+  public is_highlighted: boolean; // Indicates if the cell is highlighted
 
   // Builds a new GridCell.
   constructor(x: number, y: number, state = CellStates.EMPTY) {
@@ -67,9 +66,9 @@ export class GridCell {
 
 // Grid Class.
 export class Grid {
-  private _data: GridCell[][];
-  public grid_size: number;
-  public renderer: RendererController;
+  private _data: GridCell[][]; // The data representing the grid
+  public grid_size: number; // The size of the grid
+  public renderer: RendererController; // The renderer controller
 
   // Builds a new Grid.
   constructor(grid_size: number, renderer: RendererController) {
@@ -96,9 +95,9 @@ export class Grid {
       }
       this._data[x] = column;
     }
-
   }
 
+  // Clears the grid.
   public clear_grid(): void {
     this._data = [];
     this.init();
@@ -148,6 +147,7 @@ export class Grid {
     }
   }
 
+  // Sets the owner of a cell.
   public set_cell_owner(coordinate: Coordinate, owner: any): void {
     if (this.is_valid_cell_at(coordinate)) {
       const cell = this.get_cell_at(coordinate);
@@ -156,6 +156,7 @@ export class Grid {
     }
   }
 
+  // Sets the state of a cell.
   public set_cell_state(coordinate: Coordinate, state: number): void {
     if (this.is_valid_cell_at(coordinate)) {
       const cell = this.get_cell_at(coordinate);
@@ -165,6 +166,7 @@ export class Grid {
     }
   }
 
+  // Sets the selected state of a cell.
   public set_cell_selected(coordinate: Coordinate, selected: boolean): void {
     if (this.is_valid_cell_at(coordinate)) {
       const cell = this.get_cell_at(coordinate);
@@ -173,6 +175,7 @@ export class Grid {
     }
   }
 
+  // Clears the state of a cell.
   public clear_cell_state(coordinate: Coordinate): void {
     if (this.is_valid_cell_at(coordinate)) {
       const cell = this.get_cell_at(coordinate);
@@ -182,6 +185,7 @@ export class Grid {
     }
   }
 
+  // Sets the highlighted state of a cell.
   public set_cell_highlighted(coordinate: Coordinate, highlighted: boolean): void {
     if (this.is_valid_cell_at(coordinate)) {
       const cell = this.get_cell_at(coordinate);
