@@ -17,11 +17,11 @@ export const AllCellStates = Object.keys(CellStates);
 
 // GridCell class.
 export class GridCell {
-  public coordinate: Coordinate; // The coordinate of the cell
-  private _owner: Organism | null; // The organism that owns the cell, if any
-  private _state: number; // The state of the cell
-  public is_selected: boolean; // Indicates if the cell is selected
-  public is_highlighted: boolean; // Indicates if the cell is highlighted
+  public coordinate: Coordinate;
+  private _owner: Organism | null;
+  private _state: number;
+  public is_selected: boolean;
+  public is_highlighted: boolean;
 
   // Builds a new GridCell.
   constructor(x: number, y: number, state = CellStates.EMPTY) {
@@ -66,9 +66,9 @@ export class GridCell {
 
 // Grid Class.
 export class Grid {
-  private _data: GridCell[][]; // The data representing the grid
-  public grid_size: number; // The size of the grid
-  public renderer: RendererController; // The renderer controller
+  private _data: GridCell[][];
+  public grid_size: number;
+  public renderer: RendererController;
 
   // Builds a new Grid.
   constructor(grid_size: number, renderer: RendererController) {
