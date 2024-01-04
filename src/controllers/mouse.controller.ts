@@ -28,7 +28,7 @@ export default class MouseController {
     event.preventDefault();
     this.canvas_coord.x = event.offsetX;
     this.canvas_coord.y = event.offsetY;
-    // Copy coord
+
     this.prev_grid_coord.x = this.grid_coord.x;
     this.prev_grid_coord.y = this.grid_coord.y;
 
@@ -61,7 +61,6 @@ export default class MouseController {
 
     this.clicked_coord.x = this.canvas_coord.x;
     this.clicked_coord.y = this.canvas_coord.y;
-    // this.clicked_coord.copy(this.canvas_coord);
   }
 
   // This event is triggered when the mouse enters the canvas.
@@ -72,7 +71,6 @@ export default class MouseController {
 
     this.clicked_coord.x = this.canvas_coord.x;
     this.clicked_coord.y = this.canvas_coord.y;
-    // this.clicked_coord.copy(this.canvas_coord);
   }
 
   // This event is triggered when the mouse leaves the canvas.
