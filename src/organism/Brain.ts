@@ -148,23 +148,23 @@ export default class Brain {
       return this.sensor_look(sensor_id);
     } return 0.0;
   }
+
+
   /**
-   * Feed forward from the sensory input neurons through internal neurons and to
-   * output action neurons.
+   * Performs a feed-forward computation in the neural network.
+   * Returns an array of output levels for all action neurons.
    */
   public feed_forward(): number[] {
-    /** This array stores the output levels for all of the action neurons. */
+    // This array stores the output levels for all of the action neurons.
     const action_levels = new Array(this.NUMBER_OF_ACTIONS).fill(0.0);
 
-    /** The weighted inputs to each neuron are accumulated in neuron_accumulators. */
+    // The weighted inputs to each neuron are accumulated in neuron_accumulators.
     const neuron_accumulators = new Array(this.neurons.length).fill(0.0);
 
     let neuron_outputs_computed = false;
     for (const connection of this.connections) {
       if (connection.sink_type == NeuronTypes.ACTION && !neuron_outputs_computed) {
-        /**
-         * Compute the output of neurons in the range (-1.0..1.0) using the hyperbolic tangent function.
-         */
+        // Compute the output of neurons in the range (-1.0..1.0) using the hyperbolic tangent function.
         for (let neuron_index = 0; neuron_index < this.neurons.length; neuron_index++) {
           if (this.neurons[neuron_index].driven) {
             this.neurons[neuron_index].output = Math.tanh(neuron_accumulators[neuron_index]);
@@ -173,21 +173,17 @@ export default class Brain {
         neuron_outputs_computed = true;
       }
 
-      /**
-       * Obtain the input value of the connection from a sensor neuron or another neuron.
-       * The values are summed and later passed through a transfer function (hyperbolic tangent function).
-       */
+      // Obtain the input value of the connection from a sensor neuron or another neuron.
+      // The values are summed and later passed through a transfer function (hyperbolic tangent function).
       let input_val = 0.0;
       if (connection.source_type == NeuronTypes.SENSOR) {
-        /** Read the sensor data using the sensor identifier. */
+        // Read the sensor data using the sensor identifier.
         input_val = this.get_sensor(connection.source_id);
       } else {
         input_val = this.neurons[connection.source_id].output;
       }
 
-      /**
-       * Weight the connection's value and add it to the accumulator of the corresponding neuron or action.
-       */
+      // Weight the connection's value and add it to the accumulator of the corresponding neuron or action.
       if (connection.sink_type == NeuronTypes.ACTION) {
         action_levels[connection.sink_id] += input_val * weight_as_float(connection.weight);
       } else {
