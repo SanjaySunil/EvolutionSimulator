@@ -106,7 +106,7 @@ export default class NeuralNetworkVisualizer {
     this.svg.appendChild(group);
   }
 
-  public draw(sensor_neurons: object, internal_neurons: object, action_neurons: object, inc: number, connections: Gene[]): void {
+  public draw(sensor_neurons: object, action_neurons: object, inc: number, connections: Gene[]): void {
     this.svg.innerHTML = "<svg width='400' height='400' id='neural-network-svg'></svg>";
 
     this.inputs = Object.keys(sensor_neurons).length;

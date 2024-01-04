@@ -55,11 +55,25 @@ export function select_and_crossover(population: Organism[], config: typeof Simu
   const elitism_size: number = Math.floor((config.ELITISM_PERCENT * population.length) / 100);
   new_generation.push(...population.slice(0, elitism_size));
 
-  for (let i = 0; i < new_generation.length; i++) {
-    const org = new_generation[i];
-    org.coordinate = get_random_vector(0, 0, config.GRID_SIZE - 1, config.GRID_SIZE - 1);
-
+  for (const organism of new_generation) {
+    let random_coord = get_random_vector(0, 0, config.GRID_SIZE - 1, config.GRID_SIZE - 1);
+    while (!organism.environment.grid.is_cell_empty(random_coord)) {
+      random_coord = get_random_vector(0, 0, config.GRID_SIZE - 1, config.GRID_SIZE - 1);
+    }
+    organism.coordinate = random_coord;
   }
+
+  /*
+    for (let i = 0; i < new_generation.length; i++) {
+    const org = new_generation[i];
+
+    // Keep generating a new coordinate if the current one is not empty.
+    org.coordinate = get_random_vector(0, 0, config.GRID_SIZE - 1, config.GRID_SIZE - 1);
+    while (!org.environment.grid.is_cell_empty(org.coordinate)) {
+      org.coordinate = get_random_vector(0, 0, config.GRID_SIZE - 1, config.GRID_SIZE - 1);
+    }
+  }
+  */
 
   const mating_size: number = Math.floor(((100 - config.ELITISM_PERCENT) * population.length) / 100);
 

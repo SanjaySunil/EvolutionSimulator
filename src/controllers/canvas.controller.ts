@@ -152,7 +152,6 @@ export default class CanvasController {
 
             NN.draw(
               cell.owner.brain.sensor_neurons,
-              cell.owner.brain.internal_neurons,
               cell.owner.brain.action_neurons,
               cell.owner.brain.neurons.length,
               cell.owner.brain.connections

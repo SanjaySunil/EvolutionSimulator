@@ -43,18 +43,21 @@ export class Environment extends CanvasController {
 
   // Initialises a new Environment.
   public init(): void {
-    for (let i = 0; i < this.config.POPULATION;) {
-      const coordinate = get_random_vector(0, 0, this.config.GRID_SIZE - 1, this.config.GRID_SIZE - 1);
-      if (this.grid.is_cell_empty(coordinate)) {
-        const data: Gene[] = [];
-        for (let i = 0; i < this.config.NUMBER_OF_GENES; i++) {
-          data.push(new Gene(this.config.NUMBER_OF_NEURONS));
-        }
-        this.add_organism(coordinate, data);
-        i++;
+    while (this.population.length != this.config.POPULATION) {
+      let random_coord = get_random_vector(0, 0, this.config.GRID_SIZE - 1, this.config.GRID_SIZE - 1);
+
+      while (!this.grid.is_cell_empty(random_coord)) {
+        random_coord = get_random_vector(0, 0, this.config.GRID_SIZE - 1, this.config.GRID_SIZE - 1);
       }
+
+      const data: Gene[] = [];
+      for (let i = 0; i < this.config.NUMBER_OF_GENES; i++) {
+        data.push(new Gene(this.config.NUMBER_OF_NEURONS));
+      }
+      this.add_organism(random_coord, data);
     }
   }
+
   // Updates the Environment.
   public update(): void {
     if (this.ticks > this.config.TICKS_PER_GENERATION) {
