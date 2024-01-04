@@ -5,11 +5,11 @@ import Organism from "../organism";
 
 // Various Cell States that a GridCell can take.
 export const CellStates = {
-  EMPTY: 0, // Represents an empty cell
-  ORGANISM: 1, // Represents a cell occupied by an organism
-  WALL: 2, // Represents a wall cell
-  FOOD: 3, // Represents a cell with food
-  RADIOACTIVE: 4, // Represents a cell with radioactive material
+  EMPTY: 0,
+  ORGANISM: 1,
+  WALL: 2,
+  FOOD: 3,
+  RADIOACTIVE: 4,
 };
 
 // Create an array of the keys of the CellStates.
