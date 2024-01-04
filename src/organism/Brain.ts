@@ -193,10 +193,6 @@ export default class Brain {
     return action_levels;
   }
 
-  /**
-   * [done] Converts the organism's genome into a renumbered connection list.
-   * Neurons are renumbered uniquely using the modulo operator.
-   */
   public create_connection_list(): any[] {
     /** List of synaptic connections, strictly `Constants.NUMBER_OF_GENES`. */
     const connection_list: ConnectionList = [];
@@ -225,9 +221,7 @@ export default class Brain {
     return connection_list;
   }
 
-  /**
-   * Creates a map of neurons and their corresponding input and output counts.
-   */
+  // Creates a map of neurons and their corresponding input and output counts.
   public create_node_map(connection_list: ConnectionList): NodeMap {
     /** List of neurons and their number of inputs and outputs. */
     const node_map: NodeMap = new Map();
@@ -274,35 +268,25 @@ export default class Brain {
     return node_map;
   }
 
-  /**
-   * [done] Find and remove connections from sensors or other neurons to this
-   * neuron.
-   */
+  // Removes connections to a specific neuron from the connection list and updates the node map accordingly.
   public remove_connections_to_neuron(connection_list: ConnectionList, node_map: NodeMap, neuron_number: number): void {
     for (let i = 0; i < connection_list.length;) {
       const neuron = connection_list[i];
       if (neuron.sink_type == NeuronTypes.NEURON && neuron.sink_id === neuron_number) {
-        /**
-         * Remove the connection here. If the connection source is from another
-         * neuron, decrement the other neuron's number of outputs.
-         */
+        // Remove the connection here. If the connection source is from another neuron, decrement the other neuron's number of outputs.
         if (neuron.source_type == NeuronTypes.NEURON) {
           const node = node_map.get(neuron.source_id);
           if (node) node.outputs--;
         }
-        /** Remove element from connection list. */
+        // Remove element from connection list.
         connection_list.splice(i, 1);
       } else {
         i++;
       }
     }
   }
-  /**
-   * [done] Find and remove any neurons that don't feed anything or only feed
-   * themselves. This process is reiterative because after we remove a
-   * connection to a useless neuron, it may result in a different neuron having
-   * no outputs.
-   */
+
+  // Removes useless connections from the connection list and updates the node map accordingly.
   public remove_useless_connections(connection_list: ConnectionList, node_map: NodeMap): any {
     let all_checked = false;
     while (!all_checked) {
@@ -310,7 +294,7 @@ export default class Brain {
 
       for (const node_number of node_map.keys()) {
         const node = node_map.get(node_number);
-        /** Look for neurons with zero outputs, or neurons that feed themselves. */
+        // Look for neurons with zero outputs, or neurons that feed themselves.
         if (node && node.outputs == node.self_inputs) {
           all_checked = false;
           this.remove_connections_to_neuron(connection_list, node_map, node_number);
@@ -320,11 +304,7 @@ export default class Brain {
     }
   }
 
-  /**
-   * [done] Creates the organism's connection list in two passes. First the
-   * connections to neurons, then the connections to the actions. This ordering
-   * optimizes the feed-forward function.
-   */
+  // Creates a renumbered connection list based on the node map.
   public create_renumbered_connection_list(connection_list: ConnectionList, node_map: NodeMap): void {
     let new_number = 0;
     for (const node of node_map.values()) {
@@ -335,11 +315,11 @@ export default class Brain {
       if (connection.sink_type == NeuronTypes.NEURON) {
         const new_conn = cloneDeep(connection);
 
-        /** Fix the destination neuron number. */
+        // Fix the destination neuron number.
         const node = node_map.get(new_conn.sink_id);
         if (node) new_conn.sink_id = node.remapped_number;
 
-        /** If the source is a neuron, fix its number too. */
+        // If the source is a neuron, fix its number too.
         if (new_conn.source_type === NeuronTypes.NEURON) {
           const node = node_map.get(new_conn.source_id);
           if (node) new_conn.source_id = node.remapped_number;
@@ -349,12 +329,12 @@ export default class Brain {
       }
     }
 
-    /** Last the connections from sensor/neuron to an action. */
+    // Last the connections from sensor/neuron to an action.
     for (const connection of connection_list) {
       if (connection.sink_type == NeuronTypes.ACTION) {
         const new_conn = cloneDeep(connection);
 
-        /** If the source is a neuron, fix its number too. */
+        // If the source is a neuron, fix its number too.
         if (new_conn.source_type === NeuronTypes.NEURON) {
           const node = node_map.get(new_conn.source_id);
           if (node) new_conn.source_id = node.remapped_number;
@@ -363,7 +343,7 @@ export default class Brain {
         this.connections.push(new_conn);
       }
 
-      /** Push sensor neurons, internal neurons and action neurons to each set. */
+      // Push sensor neurons, internal neurons, and action neurons to each set.
       if (connection.source_type == NeuronTypes.SENSOR) this.sensor_neurons[connection.source_id] = undefined;
       else this.internal_neurons[connection.source_id] = undefined;
       if (connection.sink_type == NeuronTypes.ACTION) this.action_neurons[connection.sink_id] = undefined;
@@ -371,9 +351,8 @@ export default class Brain {
     }
   }
 
-  /** [done] Creates the organims's neural node list. */
+  // Creates a neural node list based on the node map.
   public create_neural_node_list(node_map: NodeMap): Neuron[] {
-    // const neurons: Neuron[] = [];
     for (const node of node_map.values()) {
       const neuron = new Neuron();
       neuron.output = 0.5;
