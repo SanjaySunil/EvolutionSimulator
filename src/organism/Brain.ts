@@ -153,18 +153,17 @@ export default class Brain {
    * output action neurons.
    */
   public feed_forward(): number[] {
-    /** This container is used to return values for all of the action outputs. */
+    /** This array stores the output levels for all of the action neurons. */
     const action_levels = new Array(this.NUMBER_OF_ACTIONS).fill(0.0);
 
-    /** Weighted inputs to each neuron are summed in neuron_accumulators. */
+    /** The weighted inputs to each neuron are accumulated in neuron_accumulators. */
     const neuron_accumulators = new Array(this.neurons.length).fill(0.0);
 
     let neuron_outputs_computed = false;
     for (const connection of this.connections) {
       if (connection.sink_type == NeuronTypes.ACTION && !neuron_outputs_computed) {
         /**
-         * Make neuron outputs to their proper range (-1.0..1.0) through the use
-         * of the hyperbolic tangent function.
+         * Compute the output of neurons in the range (-1.0..1.0) using the hyperbolic tangent function.
          */
         for (let neuron_index = 0; neuron_index < this.neurons.length; neuron_index++) {
           if (this.neurons[neuron_index].driven) {
@@ -175,21 +174,19 @@ export default class Brain {
       }
 
       /**
-       * Obtain the connection's input value from a sensor neuron or other
-       * neuron. The values are summed for now, later passed through a transfer
-       * function (hyperbolic tangent function).
+       * Obtain the input value of the connection from a sensor neuron or another neuron.
+       * The values are summed and later passed through a transfer function (hyperbolic tangent function).
        */
       let input_val = 0.0;
       if (connection.source_type == NeuronTypes.SENSOR) {
-        /** Read the sensor data using sensor identifier. */
+        /** Read the sensor data using the sensor identifier. */
         input_val = this.get_sensor(connection.source_id);
       } else {
         input_val = this.neurons[connection.source_id].output;
       }
 
       /**
-       * Weight the connection's value and add to neuron accumulator or action
-       * accumulator.
+       * Weight the connection's value and add it to the accumulator of the corresponding neuron or action.
        */
       if (connection.sink_type == NeuronTypes.ACTION) {
         action_levels[connection.sink_id] += input_val * weight_as_float(connection.weight);
