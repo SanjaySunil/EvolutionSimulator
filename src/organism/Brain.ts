@@ -11,34 +11,37 @@ type ConnectionList = Array<Gene>;
 type NodeMap = Map<number, Node>;
 
 /**
- * This structure is used while converting the connection list to the neural
- * network.
+ * This class represents a neuron in the neural network.
  */
 export class Node {
   /** Unique identifier for the neuron. */
   public remapped_number;
   /** Number of output connections from the neuron. */
   public outputs;
-  /** Number of output connections that are fed back into the neuron. */
+  /** Number of input connections that are fed back into the neuron. */
   public self_inputs;
-  /** Number of input connections that are from either sensor/other neurons. */
+  /** Number of input connections that are from either sensors or other neurons. */
   public inputs_from_sensors_or_neurons;
 }
 
 export default class Brain {
-  /** Owner of the brain. */
+  /** The organism that owns the brain. */
   public owner: Organism;
-  /** Used neurons */
+  /** Neurons used for sensing. */
   public sensor_neurons: object;
+  /** Neurons used for taking actions. */
   public action_neurons: object;
+  /** Internal neurons of the organism. */
   public internal_neurons: object;
-  /** All neurons of the organism. */
+  /** All neurons in the organism's neural network. */
   public neurons: Neuron[];
-  /** All connections. */
+  /** All connections in the neural network. */
   public connections: Gene[];
-  /** NeuralNet config */
+  /** Number of sensors in the neural network. */
   public NUMBER_OF_SENSORS: number;
+  /** Number of neurons in the neural network. */
   public NUMBER_OF_NEURONS: number;
+  /** Number of possible actions in the neural network. */
   public NUMBER_OF_ACTIONS: number;
 
   /** Builds a new brain. */
@@ -47,34 +50,33 @@ export default class Brain {
     this.sensor_neurons = {};
     this.action_neurons = {};
     this.internal_neurons = {};
-    /** Neural network */
     this.neurons = [];
     this.connections = [];
-    /** Neural Net config */
     this.NUMBER_OF_SENSORS = NUMBER_OF_SENSORS;
     this.NUMBER_OF_NEURONS = NUMBER_OF_NEURONS;
     this.NUMBER_OF_ACTIONS = NUMBER_OF_ACTIONS;
     this.configure_brain();
   }
+
   /**
-   * When an organism is spawned, this function converts the organism's genome
-   * into the organism's neural network.
+   * This function is called when an organism is spawned.
+   * It converts the organism's genome into its neural network.
    */
   public configure_brain(): void {
     this.connections = [];
     this.neurons = [];
 
-    /** List of synaptic connections, strictly `Constants.NUMBER_OF_GENES`. */
+    /** List of synaptic connections, with a length of `Constants.NUMBER_OF_GENES`. */
     const connection_list: ConnectionList = this.create_connection_list();
 
-    /** List of neurons and their number of inputs and outputs. */
+    /** Map of neurons and their number of inputs and outputs. */
     const node_map: NodeMap = this.create_node_map(connection_list);
 
-    /** Remove any useless connections. */
+    /** Remove any unnecessary connections. */
     this.remove_useless_connections(connection_list, node_map);
 
     /**
-     * Renumber the neurons starting at zero and build the proper connection and
+     * Renumber the neurons starting from zero and build the proper connection and
      * neural node list.
      */
     this.create_renumbered_connection_list(connection_list, node_map);
