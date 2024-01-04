@@ -1,6 +1,8 @@
 import { SimulationConfig } from "../config";
 import Simulation from "../controllers/simulation.controller";
 import export_object from "../utils/export_object";
+
+// Get references to HTML elements
 const sim_start_stop = document.getElementById("sim_start_stop") as HTMLButtonElement;
 const sim_restart = document.getElementById("sim_restart") as HTMLButtonElement;
 const rendering_enabled = document.getElementById("render_on_off") as HTMLButtonElement;
@@ -9,6 +11,7 @@ const export_all_organisms = document.getElementById("export_all_organisms") as 
 const export_simulation = document.getElementById("export_simulation") as HTMLButtonElement;
 const input = document.getElementById("file") as HTMLInputElement;
 
+// Register event listener for the start/stop button
 export function register_sim_start_stop_button(simulation: Simulation): void {
   sim_start_stop.addEventListener("click", () => {
     if (simulation.is_running) {
@@ -21,6 +24,7 @@ export function register_sim_start_stop_button(simulation: Simulation): void {
   });
 }
 
+// Register event listener for the restart button
 export function register_sim_restart_button(): void {
   sim_restart.addEventListener("click", () => {
     const restart = confirm("Are you sure you would like to restart?");
@@ -30,6 +34,7 @@ export function register_sim_restart_button(): void {
   });
 }
 
+// Register event listener for the rendering enabled button
 export function register_rendering_enabled_button(simulation: Simulation): void {
   rendering_enabled.addEventListener("click", () => {
     simulation.rendering_enabled = !simulation.rendering_enabled;
@@ -41,16 +46,19 @@ export function register_rendering_enabled_button(simulation: Simulation): void 
   });
 }
 
+// Register event listeners for the simulation
 export function register_event_listeners(simulation: Simulation): void {
   sim_start_stop.addEventListener("click", () => register_sim_start_stop_button(simulation));
   sim_restart.addEventListener("click", () => register_sim_restart_button());
 }
 
+// Remove event listeners for the simulation
 export function remove_event_listeners(simulation: Simulation): void {
   sim_start_stop.removeEventListener("click", () => register_sim_start_stop_button(simulation));
   sim_restart.removeEventListener("click", () => register_sim_restart_button());
 }
 
+// Register event listener for downloading the neural network as SVG
 export function register_download_neuralnet_button(): void {
   export_neuralnet.addEventListener("click", () => {
     const svg = document.querySelector("svg");
@@ -64,6 +72,7 @@ export function register_download_neuralnet_button(): void {
   });
 }
 
+// Register event listener for exporting all organisms
 export function register_export_all_organisms_button(simulation: Simulation): void {
   export_all_organisms.addEventListener("click", () => {
     const population = simulation.environment.population;
@@ -81,6 +90,7 @@ export function register_export_all_organisms_button(simulation: Simulation): vo
   });
 }
 
+// Register event listener for exporting the simulation
 export function register_export_simulation_button(simulation: Simulation, config: typeof SimulationConfig): void {
   export_simulation.addEventListener("click", () => {
     const obj: any = { population: [], simulation_config: [], simulation_frames: [] };
@@ -95,6 +105,7 @@ export function register_export_simulation_button(simulation: Simulation, config
   });
 }
 
+// Register event listener for importing a file
 export function register_import_button(simulation: Simulation): void {
   input.addEventListener("change", (event: Event) => {
     const input = event.target as HTMLInputElement;
@@ -131,4 +142,3 @@ export function register_import_button(simulation: Simulation): void {
     }
   });
 }
-

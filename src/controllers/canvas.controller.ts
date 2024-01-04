@@ -8,8 +8,7 @@ import RendererController from "./renderer.controller";
 
 const mode = document.getElementById("mode") as HTMLSpanElement;
 
-/** Mouse Modes */
-
+// Define the different modes for mouse interaction.
 const Modes = ["IDLE", "PAN", "GOAL", "WALL"];
 const ModesEnum = {
   IDLE: 0,
@@ -41,8 +40,11 @@ export default class CanvasController {
   constructor(canvas_id: string, config: typeof SimulationConfig) {
     this.config = config;
 
+    // Get the canvas element and its 2D rendering context
     this.canvas = document.getElementById(canvas_id) as HTMLCanvasElement;
     this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
+
+    // Set the canvas dimensions based on the grid size
     this.canvas.width = this.canvas.height = this.config.GRID_SIZE * 15;
     this.grid_size = this.config.GRID_SIZE;
     this.pixel_size = (this.config.GRID_SIZE * 15) / this.grid_size;
@@ -59,8 +61,10 @@ export default class CanvasController {
     this.cell_selected = { x: 0, y: 0 };
     this.grid.set_cell_selected(this.goal_coordinates, true);
 
+    // Set the initial zoom level and transform the canvas accordingly
     this.canvas.style.transform = `scale(${this.zoom_level})`;
 
+    // Register mouse and keyboard events
     this.register_mouse_events();
     this.register_keyboard_events();
     this.renderer.clear_canvas();
@@ -68,6 +72,7 @@ export default class CanvasController {
 
   /** Mouse event register */
   public register_mouse_events(): void {
+    // Register mouse events on the canvas
     this.canvas.addEventListener("mousemove", (e) => this.mouse_move(e));
     this.canvas.addEventListener("mouseup", (e) => this.mouse_up(e));
     this.canvas.addEventListener("mousedown", (e) => this.mouse_down(e));
@@ -77,6 +82,7 @@ export default class CanvasController {
   }
 
   public clear_mouse_events(): void {
+    // Clear registered mouse events on the canvas
     this.canvas.removeEventListener("mousemove", (e) => this.mouse_move(e));
     this.canvas.removeEventListener("mouseup", (e) => this.mouse_up(e));
     this.canvas.removeEventListener("mousedown", (e) => this.mouse_down(e));
@@ -87,42 +93,50 @@ export default class CanvasController {
 
   /** Keyboard event register */
   public register_keyboard_events(): void {
+    // Register keyboard events on the window
     window.addEventListener("keydown", (e) => {
       this.handle_key_down(e);
     });
   }
 
   public mouse_move(event: MouseEvent): void {
+    // Handle mouse move event
     this.mouse.mouse_move(event);
     this.handle_mouse_move();
     this.check_mouse_events();
   }
 
   public mouse_up(event: MouseEvent): void {
+    // Handle mouse up event
     this.mouse.mouse_up(event);
   }
 
   public mouse_down(event: MouseEvent): void {
+    // Handle mouse down event
     this.mouse.mouse_down(event);
     this.check_mouse_events();
   }
 
   public mouse_enter(event: MouseEvent): void {
+    // Handle mouse enter event
     this.mouse.mouse_enter(event);
     this.handle_mouse_move();
   }
 
   public mouse_leave(): void {
+    // Handle mouse leave event
     this.mouse.mouse_leave();
     this.handle_mouse_leave();
   }
 
   public wheel(event: WheelEvent): void {
+    // Handle mouse wheel event
     this.handle_mouse_wheel(event);
   }
 
   // Read Mouse Events
   public check_mouse_events(): void {
+    // Check mouse events based on the current mode
     if (this.mouse.left_click) {
       const cell = this.grid.get_cell_at(this.mouse.grid_coord);
       if (this.mode == Modes[ModesEnum.GOAL]) {
@@ -164,6 +178,7 @@ export default class CanvasController {
 
   /** Handle key press. */
   public handle_key_down(event: KeyboardEvent): void {
+    // Handle key press events
     const canvas_top = parseInt(get_style("canvas", "top"));
     const canvas_left = parseInt(get_style("canvas", "left"));
     if (event.code == "KeyD") this.canvas.style.left = canvas_left - this.pan_amount + "px";
@@ -180,6 +195,7 @@ export default class CanvasController {
 
   /** Panning controls */
   public handle_mouse_wheel(event: WheelEvent): void {
+    // Handle mouse wheel event for zooming and panning
     const sign = -Math.sign(event.deltaY);
     const scale = Math.max(this.min_zoom, this.zoom_level + sign * this.zoom_speed);
 
@@ -198,15 +214,17 @@ export default class CanvasController {
 
   /** Highlight cell action. */
   public handle_mouse_move(): void {
+    // Handle mouse move event to highlight cells
     this.grid.set_cell_highlighted(this.mouse.prev_grid_coord, false);
     this.grid.set_cell_highlighted(this.mouse.grid_coord, true);
   }
 
   /** Handle mouse leave canvas. */
   public handle_mouse_leave(): void {
-    // const cell = this.grid.get_cell_at(this.mouse.grid_coord);
-    // if (cell.is_highlighted) {
-    //   this.grid.set_cell_highlighted_at(this.mouse.grid_coord, false);
-    // }
+    // Handle mouse leave event
+    const cell = this.grid.get_cell_at(this.mouse.grid_coord);
+    if (cell.is_highlighted) {
+      this.grid.set_cell_highlighted(this.mouse.grid_coord, false);
+    }
   }
 }
