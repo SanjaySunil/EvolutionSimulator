@@ -4,7 +4,7 @@ import PerlinNoise from "../utils/PerlinNoise";
 
 import Organism from "../organism";
 
-/** Various Cell States that a GridCell can take. */
+// Various Cell States that a GridCell can take.
 export const CellStates = {
   EMPTY: 0,
   ORGANISM: 1,
@@ -13,10 +13,10 @@ export const CellStates = {
   RADIOACTIVE: 4,
 };
 
-/** Create an array of the keys of the CellStates. */
+// Create an array of the keys of the CellStates.
 export const AllCellStates = Object.keys(CellStates);
 
-/** GridCell class. */
+// GridCell class.
 export class GridCell {
   public coordinate: Coordinate;
   private _owner: Organism | null;
@@ -24,7 +24,7 @@ export class GridCell {
   public is_selected: boolean;
   public is_highlighted: boolean;
 
-  /** Builds a new GridCell. */
+  // Builds a new GridCell.
   constructor(x: number, y: number, state = CellStates.EMPTY) {
     this.coordinate = { x, y };
     this._owner = null;
@@ -33,18 +33,18 @@ export class GridCell {
     this.is_highlighted = false;
   }
 
-  /** Clears the GridCell. */
+  // Clears the GridCell.
   public clear(): void {
     this._owner = null;
     this._state = CellStates.EMPTY;
   }
 
-  /** Returns owner of GridCell. */
+  // Returns owner of GridCell.
   public get owner(): Organism | null {
     return this._owner;
   }
 
-  /** Sets owner to specified Organism, and changes state of GridCell. */
+  // Sets owner to specified Organism, and changes state of GridCell.
   public set owner(owner: Organism | null) {
     if (owner) {
       this._owner = owner;
@@ -54,24 +54,24 @@ export class GridCell {
     }
   }
 
-  /** Returns state of GridCell. */
+  // Returns state of GridCell.
   public get state(): number {
     return this._state;
   }
 
-  /** Sets the state of GridCell. */
+  // Sets the state of GridCell.
   public set state(state: number) {
     this._state = state;
   }
 }
 
-/** Grid Class. */
+// Grid Class.
 export class Grid {
   private _data: GridCell[][];
   public grid_size: number;
   public renderer: RendererController;
 
-  /** Builds a new Grid. */
+  // Builds a new Grid.
   constructor(grid_size: number, renderer: RendererController) {
     this._data = new Array(grid_size);
     this.renderer = renderer;
@@ -79,7 +79,7 @@ export class Grid {
     this.init();
   }
 
-  /** Initializes the grid. */
+  // Initializes the grid.
   public init(): void {
     const perlin = new PerlinNoise();
     // const grid = this.generateMaze(this.grid_size, this.grid_size);
@@ -104,33 +104,33 @@ export class Grid {
     this.init();
   }
 
-  /** Creates walls using Perlin Noise. */
+  // Creates walls using Perlin Noise.
   public create_perlin_barrier(cell: GridCell, perlin): void {
     const WALL_THRESHOLD = 0.85;
     const value = perlin.noise(cell.coordinate.x * 0.1, cell.coordinate.y * 0.1); // Adjust the scale as needed
     cell.state = value > WALL_THRESHOLD ? CellStates.WALL : CellStates.EMPTY;
   }
 
-  /** Creates a radioactive barrier depending on specified conditions. */
+  // Creates a radioactive barrier depending on specified conditions.
   public create_radioactive_barrier(cell: GridCell): void {
     const center = this.grid_size / 2;
     const size = 7.5;
     if (cell.coordinate.x >= center - size && cell.coordinate.x <= center + size && cell.coordinate.y >= center - size && cell.coordinate.y <= center + size) cell.state = CellStates.RADIOACTIVE;
   }
 
-  /** Creates a barrier depending on specified conditions. */
+  // Creates a barrier depending on specified conditions.
   public create_barrier(cell: GridCell): void {
     const center = this.grid_size / 2;
     const size = 7.5;
     if (cell.coordinate.x >= center - size && cell.coordinate.x <= center + size && cell.coordinate.y >= center - size && cell.coordinate.y <= center + size) cell.state = CellStates.WALL;
   }
 
-  /** Checks if specified cell is valid. */
+  // Checks if specified cell is valid.
   public is_valid_cell_at(coordinate: Coordinate): boolean {
     return coordinate.x >= 0 && coordinate.y >= 0 && coordinate.x < this.grid_size && coordinate.y < this.grid_size;
   }
 
-  /** Checks if specified cell is empty. */
+  // Checks if specified cell is empty.
   public is_cell_empty(coordinate: Coordinate): boolean {
     if (this.is_valid_cell_at(coordinate)) {
       return this._data[coordinate.x][coordinate.y].state == CellStates.EMPTY;
@@ -139,7 +139,7 @@ export class Grid {
     }
   }
 
-  /** Returns cell at specified Coordinateinate. */
+  // Returns cell at specified Coordinateinate.
   public get_cell_at(coordinate: Coordinate): GridCell {
     if (this.is_valid_cell_at(coordinate)) {
       return this._data[coordinate.x][coordinate.y];
