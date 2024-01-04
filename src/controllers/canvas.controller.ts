@@ -157,10 +157,6 @@ export default class CanvasController {
               cell.owner.brain.neurons.length,
               cell.owner.brain.connections
             );
-
-            const fitness_element = document.getElementById("org_fitness") as HTMLTableCellElement;
-            if (cell.owner && cell.owner.fitness) fitness_element.innerHTML = cell.owner.fitness?.toPrecision(3).toString();
-            else document.getElementById("org_fitness")!.innerHTML = "N/A";
           }
         }
       } else if (this.mode == Modes[ModesEnum.PAN]) {
