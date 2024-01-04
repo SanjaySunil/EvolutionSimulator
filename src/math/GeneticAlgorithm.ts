@@ -47,8 +47,9 @@ export function sort_and_calculate_fitness(population: Organism[], coordinate): 
     organism.fitness = calculate_fitness(organism.coordinate, coordinate);
   }
 
-  // Sort the population based on fitness using merge sort
   // population.sort((a, b) => a.fitness! - b.fitness!);
+
+  // Sort the population based on fitness using merge sort
   population = merge_sort(population);
   return population;
 }
