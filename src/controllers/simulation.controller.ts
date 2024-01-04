@@ -2,83 +2,89 @@ import { SimulationConfig } from "../config";
 import { Environment } from "../environment";
 import { render_fps_element } from "./ui.controller";
 
+// Get references to HTML elements
 const target_update_fps = document.getElementById("target_update_fps") as HTMLSpanElement;
 const target_render_fps = document.getElementById("target_render_fps") as HTMLSpanElement;
 const current_update_fps = document.getElementById("current_update_fps") as HTMLSpanElement;
 const current_render_fps = document.getElementById("current_render_fps") as HTMLSpanElement;
-
 const tick_count = document.getElementById("tick_count") as HTMLSpanElement;
 const generation = document.getElementById("generation") as HTMLSpanElement;
-
 const best_fitness = document.getElementById("best_fitness") as HTMLSpanElement;
 const overall_fitness = document.getElementById("overall_fitness") as HTMLSpanElement;
 const organisms_alive = document.getElementById("organisms_alive") as HTMLSpanElement;
 const organisms_dead = document.getElementById("organisms_dead") as HTMLSpanElement;
 
-
+// Define the Simulation class
 export default class Simulation {
+  // Define properties for update loop
   public target_update_fps: number;
   public current_update_fps: number;
   public last_update_time: number;
   public last_update_dt: number;
 
+  // Define properties for render loop
   public target_render_fps: number;
   public current_render_fps: number;
   public last_render_time: number;
   public last_render_dt: number;
 
+  // Define other properties
   public is_running: boolean;
   public rendering_enabled: boolean;
   public started_simulation: boolean;
   public first_simulation: boolean;
 
+  // Define configuration and loop variables
   public config: typeof SimulationConfig;
   public update_loop: NodeJS.Timeout | undefined;
   public render_loop: NodeJS.Timeout | undefined;
 
+  // Define environment and population variables
   public environment: Environment;
   public cached_population: any[];
 
+  // Constructor for the Simulation class
   constructor(config: typeof SimulationConfig = SimulationConfig) {
     this.config = config;
 
-    /** Update */
+    // Initialize update loop properties
     this.target_update_fps = this.config.TARGET_UPDATE_FPS;
     this.current_update_fps = 0;
     this.last_update_time = window.performance.now();
     this.last_update_dt = 0;
 
-    /** Render */
+    // Initialize render loop properties
     this.target_render_fps = this.config.TARGET_RENDER_FPS;
     this.current_render_fps = 0;
     this.last_render_time = window.performance.now();
     this.last_render_dt = 0;
 
+    // Initialize other properties
     this.is_running = false;
     this.rendering_enabled = true;
     this.started_simulation = false;
     this.first_simulation = true;
 
-    /** Loops */
+    // Initialize loop variables
     this.update_loop = undefined;
     this.render_loop = undefined;
 
+    // Initialize population and environment
     this.cached_population = [];
     this.environment = new Environment("canvas", this.config);
 
+    // Setup render loop
     this.setup_render_loop();
 
-    /** */
+    // Render target update and render FPS elements
     render_fps_element(target_update_fps, this.config.TARGET_UPDATE_FPS);
     render_fps_element(target_render_fps, this.config.TARGET_RENDER_FPS);
   }
 
+  // Initialize the simulation
   public init(): void {
     if (!this.started_simulation) {
-      /** Clone and place new canvas, in case changes have been made to Grid size.
-       * Cloning is necessary to delete all previous canvas event listeners such as
-       * zoom and panning. */
-
+      // Clone and replace canvas if changes have been made to Grid size
       if (!this.first_simulation) {
         const old_canvas = document.getElementById("canvas")!;
         const new_canvas = old_canvas.cloneNode(true);
@@ -86,6 +92,7 @@ export default class Simulation {
         this.environment = new Environment("canvas", this.config);
       }
 
+      // Add cached organisms to the environment
       if (this.cached_population.length > 0) {
         for (const org of this.cached_population) {
           this.environment.add_organism(org.coordinate, org.genome);
@@ -93,19 +100,20 @@ export default class Simulation {
         console.log(this.cached_population);
       } else {
         this.environment.init();
-
       }
 
       this.started_simulation = true;
     }
   }
 
+  // Setup the render loop
   public setup_render_loop(): void {
     if (this.rendering_enabled) {
       this.render_loop = setInterval(() => { this.render_simulation(); }, 1000 / this.config.TARGET_RENDER_FPS);
     }
   }
 
+  // Start the simulation
   public start(): void {
     this.init();
     if (this.render_loop != undefined) {
@@ -115,11 +123,12 @@ export default class Simulation {
     if (!this.is_running) {
       this.is_running = true;
 
-      /** Boot up the update loop. */
+      // Start the update loop
       this.update_loop = setInterval(() => {
-        /** Update the simulation. */
+        // Update the simulation
         this.update_simulation();
 
+        // Update HTML elements with simulation data
         tick_count.innerHTML = this.environment.ticks.toString();
         generation.innerHTML = this.environment.generation.toString();
         best_fitness.innerHTML = this.environment.best_fitness.toPrecision(3).toString();
@@ -127,7 +136,7 @@ export default class Simulation {
         organisms_alive.innerHTML = this.environment.alive.toString();
         organisms_dead.innerHTML = (this.environment.population.length - this.environment.alive).toString();
 
-        /** Check if current FPS can handle rendering too. */
+        // Check if current FPS can handle rendering too
         if (this.current_update_fps >= this.config.TARGET_RENDER_FPS && this.render_loop != undefined) {
           clearInterval(this.render_loop);
           this.render_loop = undefined;
@@ -140,6 +149,7 @@ export default class Simulation {
     }
   }
 
+  // Stop the simulation
   public stop(): void {
     if (this.is_running) {
       this.is_running = false;
@@ -149,11 +159,13 @@ export default class Simulation {
     }
   }
 
+  // Restart the simulation
   public restart(): void {
     this.stop();
     this.start();
   }
 
+  // Update the simulation
   public update_simulation(): void {
     this.last_update_dt = window.performance.now() - this.last_update_time;
     this.last_update_time = window.performance.now();
@@ -163,11 +175,12 @@ export default class Simulation {
     if (this.render_loop === undefined && this.rendering_enabled) {
       this.render_simulation();
     } else {
-      /** Update current FPS. */
+      // Update current FPS
       render_fps_element(current_update_fps, this.current_update_fps);
     }
   }
 
+  // Render the simulation
   public render_simulation(): void {
     if (this.render_loop) {
       this.last_render_dt = window.performance.now() - this.last_render_time;
@@ -177,7 +190,8 @@ export default class Simulation {
     }
     this.current_render_fps = 1000 / this.last_render_dt;
     this.environment.render();
-    /** Update Current FPS */
+
+    // Update current FPS
     render_fps_element(current_update_fps, this.current_update_fps);
     render_fps_element(current_render_fps, this.current_render_fps);
   }
