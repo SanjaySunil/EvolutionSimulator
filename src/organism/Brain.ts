@@ -201,40 +201,39 @@ export default class Brain {
     /** List of synaptic connections, strictly `Constants.NUMBER_OF_GENES`. */
     const connection_list: ConnectionList = [];
 
-    /** Release empty connection list if number of neurons is zero. */
-    // if (this.NUMBER_OF_NEURONS === 0) return connection_list;
-
     if (this.owner.genome.data) {
       for (const gene of this.owner.genome.data) {
+        // Renumber the source neuron or sensor using modulo operator.
         if (gene.source_type === NeuronTypes.NEURON) {
           gene.source_id %= this.NUMBER_OF_NEURONS;
         } else {
           gene.source_id %= this.NUMBER_OF_SENSORS;
         }
 
+        // Renumber the sink neuron or action using modulo operator.
         if (gene.sink_type === NeuronTypes.NEURON) {
           gene.sink_id %= this.NUMBER_OF_NEURONS;
         } else {
           gene.sink_id %= this.NUMBER_OF_ACTIONS;
         }
 
+        // Add the renumbered gene to the connection list.
         connection_list.push(gene);
       }
     }
 
     return connection_list;
   }
+
   /**
-   * [done] Scan each of the connections and make a list of all the neuron
-   * numbers mentioned in the connections. Also keep track of how many input and
-   * outputs each neuron has.
+   * Creates a map of neurons and their corresponding input and output counts.
    */
   public create_node_map(connection_list: ConnectionList): NodeMap {
     /** List of neurons and their number of inputs and outputs. */
     const node_map: NodeMap = new Map();
 
     for (const gene of connection_list) {
-      /** If sink type is a neuron. */
+      /** If the sink type is a neuron. */
       if (gene.sink_type === NeuronTypes.NEURON) {
         const self_input = gene.source_type == NeuronTypes.NEURON && gene.source_id == gene.sink_id;
 
@@ -244,6 +243,7 @@ export default class Brain {
             if (self_input) node.self_inputs++;
             else node.inputs_from_sensors_or_neurons++;
           } else {
+            // If the neuron is not in the node map, add it with the appropriate input/output values.
             node_map.set(gene.sink_id, {
               remapped_number: 0,
               outputs: 0,
@@ -254,12 +254,13 @@ export default class Brain {
         }
       }
 
-      /** If source type is a neuron. */
+      /** If the source type is a neuron. */
       if (gene.source_type === NeuronTypes.NEURON) {
         if (node_map.has(gene.source_id)) {
           const node = node_map.get(gene.source_id);
           if (node) node.outputs++;
         } else {
+          // If the neuron is not in the node map, add it with the appropriate input/output values.
           node_map.set(gene.source_id, {
             remapped_number: 0,
             outputs: 1,
