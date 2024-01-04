@@ -9,7 +9,7 @@ import { CellStates } from "./Grid";
 
 type Frame = { org_positions: Coordinate[] };
 
-/** Environment Class. */
+// Environment Class.
 export class Environment extends CanvasController {
   public population: Organism[];
   public frames: Frame[];
@@ -20,7 +20,7 @@ export class Environment extends CanvasController {
   public alive: number;
   public oldest_organism: number;
 
-  /** Builds a new Environment. */
+  // Builds a new Environment.
   constructor(canvas_id: string, config: typeof SimulationConfig) {
     super(canvas_id, config);
     this.population = [];
@@ -33,7 +33,7 @@ export class Environment extends CanvasController {
     this.oldest_organism = 0;
   }
 
-  /** Adds an Organism to the environment and configures knowledge. */
+  // Adds an Organism to the environment and configures knowledge.
   public add_organism(coordinate: Coordinate, gene_data: Gene[]): void {
     const org = new Organism(coordinate, gene_data, this);
     this.grid.get_cell_at(coordinate).owner = org;
@@ -41,7 +41,7 @@ export class Environment extends CanvasController {
     this.renderer.to_fill.add(this.grid.get_cell_at(coordinate));
   }
 
-  /** Initialises a new Environment. */
+  // Initialises a new Environment.
   public init(): void {
     for (let i = 0; i < this.config.POPULATION;) {
       const coordinate = get_random_vector(0, 0, this.config.GRID_SIZE - 1, this.config.GRID_SIZE - 1);
@@ -55,10 +55,10 @@ export class Environment extends CanvasController {
       }
     }
   }
-  /** Updates the Environment. */
+  // Updates the Environment.
   public update(): void {
     if (this.ticks > this.config.TICKS_PER_GENERATION) {
-      /** Calculate fitness of all individuals. */
+      // Calculate fitness of all individuals.
       this.population = sort_and_calculate_fitness(this.population, this.goal_coordinates);
 
       let best_found = false;
@@ -75,14 +75,14 @@ export class Environment extends CanvasController {
 
       this.overall_fitness = this.alive > 0 ? fitness_sum / this.alive : 0;
 
-      /** Select and Crossover individuals. */
+      // Select and Crossover individuals.
       this.population = select_and_crossover(this.population, this.config);
 
-      /** Reset tick count and increment generation count. */
+      // Reset tick count and increment generation count.
       this.ticks = 0;
       this.generation++;
     } else {
-      /** Iterate through Organism list and perform action. */
+      // Iterate through Organism list and perform action.
       this.alive = 0;
       const org_positions: any = [];
 
@@ -94,12 +94,12 @@ export class Environment extends CanvasController {
           const offset = org.action();
           const new_coordinate = add_vector(org.coordinate, offset);
           if (this.grid.is_valid_cell_at(new_coordinate) && this.grid.is_cell_empty(new_coordinate)) {
-            /** Update direction */
+            // Update direction
             org.direction = offset;
             org.coordinate = new_coordinate;
             org_positions.push({ coordinate: org.coordinate, colour: org.genome.colour });
           } else if (this.grid.is_valid_cell_at(new_coordinate) && this.grid.get_cell_at(new_coordinate).state == CellStates.RADIOACTIVE) {
-            /** Clear Cell. */
+            // Clear Cell.
             this.grid.clear_cell_state(org.coordinate);
             org.alive = false;
             this.alive--;
