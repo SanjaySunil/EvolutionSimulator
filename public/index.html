@@ -1,177 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Evolution Simulator</title>
-    <link rel="stylesheet" href="./css/index.css" />
-  </head>
-  <body>
-    <div class="container">
-      <div class="main">
-        <canvas id="canvas"></canvas>
-        <div id="floating-gui">
-          <div class="box">
-            <p style="text-align: center">MODE: <span id="mode">IDLE</span></p>
-            <div class="button-actions">
-              <button id="open_sidebar">Controls</button>
-              <div style="display: flex">
-                <button id="sim_start_stop">Start Simulation</button>
-                <button id="sim_restart">Reset Simulation</button>
-              </div>
-              <button id="render_on_off">RENDERING ON</button>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evolution Simulator</title>
+  <link rel="stylesheet" href="./css/index.css" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="main">
+      <canvas id="canvas"></canvas>
+      <div id="floating-gui">
+        <div class="box">
+          <p style="text-align: center">MODE: <span id="mode">IDLE</span></p>
+          <div class="button-actions">
+            <button id="open_sidebar">Controls</button>
+            <div style="display: flex">
+              <button id="sim_start_stop">Start Simulation</button>
+              <button id="sim_restart">Reset Simulation</button>
             </div>
+            <button id="render_on_off">RENDERING ON</button>
           </div>
-          <div class="aside aside-right" id="sidebar">
-            <div class="pc-tab">
-              <input checked="checked" id="tab1" type="radio" name="pct" />
-              <input id="tab2" type="radio" name="pct" />
-              <nav>
-                <ul>
-                  <li class="tab1">
-                    <label for="tab1">Simulation</label>
-                  </li>
-                  <li class="tab2">
-                    <label for="tab2">Settings</label>
-                  </li>
-                  <li class="tab3">
-                    <label for="tab3">Simulations</label>
-                  </li>
-                </ul>
-              </nav>
-              <section>
-                <!--Simulation Page-->
-                <div class="tab tab1">
-                  <table>
-                    <!-- <tr>
-                        <th>Company</th>
-                        <th>Contact</th>
-                        <th>Country</th>
-                      </tr> -->
-                    <tr>
-                      <th colspan="2">Simulation</th>
-                    </tr>
-                    <tr>
-                      <td>Generation</td>
-                      <td id="generation"></td>
-                    </tr>
-                    <tr>
-                      <td>Simulation Steps</td>
-                      <td id="tick_count"></td>
-                    </tr>
-                    <tr>
-                      <td>Current Update FPS</td>
-                      <td id="current_update_fps"></td>
-                    </tr>
-                    <tr>
-                      <td>Current Render FPS</td>
-                      <td id="current_render_fps"></td>
-                    </tr>
-                    <tr>
-                      <td>Target Update FPS</td>
-                      <td>
-                        <span id="target_update_fps"></span>
-                        <input class="item-center" id="target_update_fps_slider" type="range" min="0" step="1" />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Target Render FPS</td>
-                      <td id="target_render_fps"></td>
-                    </tr>
-                  </table>
-                  <br />
-                  <table>
-                    <tr>
-                      <th colspan="2">Statistics</th>
-                    </tr>
-                    <tr>
-                      <td>Best Fitness</td>
-                      <td id="best_fitness"></td>
-                    </tr>
-                    <tr>
-                      <td>Overall Fitness</td>
-                      <td id="overall_fitness"></td>
-                    </tr>
-                    <tr>
-                      <td>Organisms Alive</td>
-                      <td id="organisms_alive"></td>
-                    </tr>
-                    <tr>
-                      <td>Organisms Dead</td>
-                      <td id="organisms_dead"></td>
-                    </tr>
-                  </table>
-                  <br />
-                  <table>
-                    <tr>
-                      <th colspan="2">Selected Organism</th>
-                    </tr>
-                    <tr>
-                      <td colspan="2"><button id="export_neuralnet">DOWNLOAD SVG</button></td>
-                    </tr>
-                  </table>
-                  <br />
-                  <table>
-                    <tr>
-                      <th colspan="2">Import</th>
-                    </tr>
-                    <tr>
-                      <td colspan="2" id="import_selected_organism">
-                        <input id="file" type="file" />
-                      </td>
-                    </tr>
-                    <!-- <tr>
-                        <td colspan="2" id="import_all_organisms"><button>Import all Organisms</button></td>
-                      </tr> -->
-                  </table>
-                  <br />
-                  <table>
-                    <tr>
-                      <th colspan="2">Export</th>
-                    </tr>
-                    <tr>
-                      <td colspan="2" id="export_all_organisms"><button>Export all Organisms</button></td>
-                    </tr>
-                    <tr>
-                      <td colspan="2" id="export_simulation"><button>Export Simulation</button></td>
-                    </tr>
-                  </table>
-                  <br />
-                  <select style="color: black; width: 100%" id="switch_graph">
-                    <option value="0" disabled>Select a graph:</option>
-                    <option value="0">Population</option>
-                    <option value="1">Species</option>
-                    <option value="2">Dead</option></select
-                  ><br />
-                  <div>
-                    <div id="organism_chart"></div>
-                  </div>
+        </div>
+        <div class="aside aside-right" id="sidebar">
+          <div class="pc-tab">
+            <input checked="checked" id="tab1" type="radio" name="pct" />
+            <input id="tab2" type="radio" name="pct" />
+            <input id="tab3" type="radio" name="pct" />
+            <nav>
+              <ul>
+                <li class="tab1">
+                  <label for="tab1">Simulation</label>
+                </li>
+                <li class="tab2">
+                  <label for="tab2">Settings</label>
+                </li>
+                <li class="tab3">
+                  <label for="tab3">Database</label>
+                </li>
+              </ul>
+            </nav>
+            <section>
+              <!--Simulation Page-->
+              <div class="tab tab1">
+                <table>
+                  <tr>
+                    <th colspan="2">Simulation</th>
+                  </tr>
+                  <tr>
+                    <td>Generation</td>
+                    <td id="generation"></td>
+                  </tr>
+                  <tr>
+                    <td>Simulation Steps</td>
+                    <td id="tick_count"></td>
+                  </tr>
+                  <tr>
+                    <td>Current Update FPS</td>
+                    <td id="current_update_fps"></td>
+                  </tr>
+                  <tr>
+                    <td>Current Render FPS</td>
+                    <td id="current_render_fps"></td>
+                  </tr>
+                  <tr>
+                    <td>Target Update FPS</td>
+                    <td>
+                      <span id="target_update_fps"></span>
+                      <input class="item-center" id="target_update_fps_slider" type="range" min="0" step="1" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Target Render FPS</td>
+                    <td id="target_render_fps"></td>
+                  </tr>
+                </table>
+                <br />
+                <table>
+                  <tr>
+                    <th colspan="2">Statistics</th>
+                  </tr>
+                  <tr>
+                    <td>Best Fitness</td>
+                    <td id="best_fitness"></td>
+                  </tr>
+                  <tr>
+                    <td>Overall Fitness</td>
+                    <td id="overall_fitness"></td>
+                  </tr>
+                  <tr>
+                    <td>Organisms Alive</td>
+                    <td id="organisms_alive"></td>
+                  </tr>
+                  <tr>
+                    <td>Organisms Dead</td>
+                    <td id="organisms_dead"></td>
+                  </tr>
+                </table>
+                <br />
+                <table>
+                  <tr>
+                    <th colspan="2">Selected Organism</th>
+                  </tr>
+                  <tr>
+                    <td colspan="2"><button id="export_neuralnet">DOWNLOAD SVG</button></td>
+                  </tr>
+                </table>
+                <br />
+                <table>
+                  <tr>
+                    <th colspan="2">Import</th>
+                  </tr>
+                  <tr>
+                    <td colspan="2" id="import_selected_organism">
+                      <input id="file" type="file" />
+                    </td>
+                  </tr>
+                </table>
+                <br />
+                <table>
+                  <tr>
+                    <th colspan="2">Export</th>
+                  </tr>
+                  <tr>
+                    <td colspan="2" id="export_all_organisms"><button>Export all Organisms</button></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" id="export_simulation"><button>Export Simulation</button></td>
+                  </tr>
+                </table>
+                <br />
+                <select style="color: black; width: 100%" id="switch_graph">
+                  <option value="0" disabled>Select a graph:</option>
+                  <option value="0">Population</option>
+                  <option value="1">Species</option>
+                  <option value="2">Dead</option>
+                </select><br />
+                <div>
+                  <div id="organism_chart"></div>
                 </div>
-                <!--World Settings-->
-                <div class="tab tab2">
-                  <div class="col">
-                    <table id="settings">
-                      <tr>
-                        <th colspan="2">Settings</th>
-                      </tr>
-                    </table>
-                  </div>
-                </div>
-              </section>
-            </div>
+              </div>
+              <!--World Settings-->
+              <div class="tab tab2">
+                <table id="settings">
+                  <tr>
+                    <th colspan="2">Settings</th>
+                  </tr>
+                </table>
+              </div>
+              <!--World Settings-->
+              <div class="tab tab3">
+                <table id="database">
+                  <tr>
+                    <th colspan="2">Database</th>
+                  </tr>
+                </table>
+              </div>
+            </section>
           </div>
         </div>
       </div>
     </div>
-    <svg width="100%" height="100%" preserveAspectRatio="none" id="neural-network-svg"></svg>
-  </body>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>
-    window.addEventListener("load", (event) => {
-      var scriptElement = document.createElement("script");
-      scriptElement.type = "text/javascript";
-      scriptElement.src = "js/main.js";
-      document.body.appendChild(scriptElement);
-    });
-  </script>
+  </div>
+  <svg width="100%" height="100%" preserveAspectRatio="none" id="neural-network-svg"></svg>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  window.addEventListener("load", (event) => {
+    var scriptElement = document.createElement("script");
+    scriptElement.type = "text/javascript";
+    scriptElement.src = "js/main.js";
+    document.body.appendChild(scriptElement);
+  });
+</script>
+
 </html>
