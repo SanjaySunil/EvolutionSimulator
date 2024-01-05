@@ -12,7 +12,7 @@ type Frame = { org_positions: Coordinate[] };
 // Environment Class.
 export class Environment extends CanvasController {
   public population: Organism[];
-  public frames: Frame[];
+  public simulation_frames: Frame[];
   public ticks: number;
   public generation: number;
   public overall_fitness: number;
@@ -24,7 +24,7 @@ export class Environment extends CanvasController {
   constructor(canvas_id: string, config: typeof SimulationConfig) {
     super(canvas_id, config);
     this.population = [];
-    this.frames = [];
+    this.simulation_frames = [];
     this.ticks = 0;
     this.generation = 1;
     this.best_fitness = config.GRID_SIZE;
@@ -109,10 +109,9 @@ export class Environment extends CanvasController {
           }
         }
       }
-      this.frames.push({ org_positions });
+      this.simulation_frames.push({ org_positions });
     }
     this.ticks++;
-    // this.terminal_render();
   }
 
   public render(): void {
