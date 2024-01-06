@@ -1,16 +1,17 @@
-import { SimulationConfig } from "../config/index";
-import CanvasController from "../controllers/canvas.controller";
-import { Coordinate, add_vector } from "../math/Coordinate";
+import { SimulationConfig } from "../config/simulation.config";
+import Canvas from "../controllers/canvas.controller";
+import { Coordinate } from "../models/types/Coordinate";
+import { add_vector } from "../utils/geometry";
 import { select_and_crossover, sort_and_calculate_fitness } from "../math/GeneticAlgorithm";
-import Organism from "../organism";
-import Gene from "../organism/Gene";
+import Gene from "../models/Gene";
+import Organism from "../models/Organism";
 import get_random_vector from "../utils/get_random_vector";
 import { CellStates } from "./Grid";
 
 type Frame = { org_positions: Coordinate[] };
 
 // Environment Class.
-export class Environment extends CanvasController {
+export class Environment extends Canvas {
   public population: Organism[];
   public simulation_frames: Frame[];
   public ticks: number;

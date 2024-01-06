@@ -1,11 +1,12 @@
-import { cloneDeep } from "lodash";
-import Organism from ".";
 import Directions from "../constants/Directions";
-import { Coordinate, add_vector, euclidean_distance } from "../math/Coordinate";
-import Gene from "./Gene";
-import { Neuron, NeuronTypes, SensorNeurons } from "./Neurons";
-import weight_as_float from "../utils/connection2float";
+import { InputNeurons } from "../constants/InputNeurons";
 import { AllCellStates } from "../environment/Grid";
+import { Coordinate } from "./types/Coordinate";
+import { add_vector, euclidean_distance } from "../utils/geometry";
+import weight_as_float from "../utils/connection2float";
+import Gene from "./Gene";
+import { Neuron, NeuronTypes } from "./Neurons";
+import Organism from "./Organism";
 
 type ConnectionList = Array<Gene>;
 type NodeMap = Map<number, Node>;
@@ -87,10 +88,10 @@ export default class Brain {
     let current_vector = { x: this.owner.coordinate.x, y: this.owner.coordinate.y };
     let vector: Coordinate;
 
-    if (direction == SensorNeurons.LOOK_NORTH) vector = Directions.NORTH;
-    else if (direction == SensorNeurons.LOOK_EAST) vector = Directions.EAST;
-    else if (direction == SensorNeurons.LOOK_SOUTH) vector = Directions.SOUTH;
-    else if (direction == SensorNeurons.LOOK_WEST) vector = Directions.WEST;
+    if (direction == InputNeurons.LOOK_NORTH) vector = Directions.NORTH;
+    else if (direction == InputNeurons.LOOK_EAST) vector = Directions.EAST;
+    else if (direction == InputNeurons.LOOK_SOUTH) vector = Directions.SOUTH;
+    else if (direction == InputNeurons.LOOK_WEST) vector = Directions.WEST;
     else {
       throw Error("Direction not correct.");
     }
@@ -107,17 +108,17 @@ export default class Brain {
   }
 
   public sensor_coordinate(sensor: number): number {
-    if (sensor == SensorNeurons.X_COORDINATE && this.owner.environment.grid.grid_size) {
+    if (sensor == InputNeurons.X_COORDINATE && this.owner.environment.grid.grid_size) {
       return this.owner.coordinate.x / this.owner.environment.grid.grid_size;
-    } else if (sensor == SensorNeurons.Y_COORDINATE && this.owner.environment.grid.grid_size) {
+    } else if (sensor == InputNeurons.Y_COORDINATE && this.owner.environment.grid.grid_size) {
       return this.owner.coordinate.y / this.owner.environment.grid.grid_size;
-    } else if (sensor == SensorNeurons.BOUNDARY_NORTH) {
+    } else if (sensor == InputNeurons.BOUNDARY_NORTH) {
       return euclidean_distance(this.owner.coordinate, { x: this.owner.coordinate.x, y: 0 }) / this.owner.environment.grid.grid_size;
-    } else if (sensor == SensorNeurons.BOUNDARY_WEST) {
+    } else if (sensor == InputNeurons.BOUNDARY_WEST) {
       return euclidean_distance(this.owner.coordinate, { x: 0, y: this.owner.coordinate.y }) / this.owner.environment.grid.grid_size;
-    } else if (sensor == SensorNeurons.BOUNDARY_EAST) {
+    } else if (sensor == InputNeurons.BOUNDARY_EAST) {
       return euclidean_distance(this.owner.coordinate, { x: this.owner.environment.grid.grid_size, y: this.owner.coordinate.y }) / this.owner.environment.grid.grid_size;
-    } else if (sensor == SensorNeurons.BOUNDARY_SOUTH) {
+    } else if (sensor == InputNeurons.BOUNDARY_SOUTH) {
       return euclidean_distance(this.owner.coordinate, { x: this.owner.coordinate.x, y: this.owner.environment.grid.grid_size }) / this.owner.environment.grid.grid_size;
     } else {
       return 0.0;
@@ -130,19 +131,19 @@ export default class Brain {
    */
   public get_sensor(sensor_id: number): number {
     if ([
-      SensorNeurons.X_COORDINATE,
-      SensorNeurons.Y_COORDINATE,
-      SensorNeurons.BOUNDARY_NORTH,
-      SensorNeurons.BOUNDARY_EAST,
-      SensorNeurons.BOUNDARY_SOUTH,
-      SensorNeurons.BOUNDARY_WEST
+      InputNeurons.X_COORDINATE,
+      InputNeurons.Y_COORDINATE,
+      InputNeurons.BOUNDARY_NORTH,
+      InputNeurons.BOUNDARY_EAST,
+      InputNeurons.BOUNDARY_SOUTH,
+      InputNeurons.BOUNDARY_WEST
     ].includes(sensor_id)) {
       return this.sensor_coordinate(sensor_id);
     } else if ([
-      SensorNeurons.LOOK_NORTH,
-      SensorNeurons.LOOK_EAST,
-      SensorNeurons.LOOK_SOUTH,
-      SensorNeurons.LOOK_WEST,
+      InputNeurons.LOOK_NORTH,
+      InputNeurons.LOOK_EAST,
+      InputNeurons.LOOK_SOUTH,
+      InputNeurons.LOOK_WEST,
     ].includes(sensor_id)
     ) {
       return this.sensor_look(sensor_id);

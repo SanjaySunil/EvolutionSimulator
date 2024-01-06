@@ -1,8 +1,9 @@
-import { SimulationConfig } from "../config";
-import { Coordinate, make_vector } from "../math/Coordinate";
+import { SimulationConfig } from "../config/simulation.config";
+import { Coordinate } from "../models/types/Coordinate";
+import { make_vector } from "../utils/geometry";
 
 // This controller is used to manage mouse events.
-export default class MouseController {
+export default class Mouse {
   public middle_click: boolean;
   public left_click: boolean;
   public right_click: boolean;

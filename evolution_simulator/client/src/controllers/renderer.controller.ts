@@ -1,8 +1,8 @@
 import ThemeConfig from "../config/theme.config";
 import { CellStates, GridCell } from "../environment/Grid";
-import { to_angle } from "../math/Coordinate";
+import { to_angle } from "../utils/geometry";
 
-export default class RendererController {
+export default class Renderer {
   public canvas;
   public ctx;
   public pixel_size;

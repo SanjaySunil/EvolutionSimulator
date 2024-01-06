@@ -1,7 +1,7 @@
-import RendererController from "../controllers/renderer.controller";
-import { Coordinate } from "../math/Coordinate";
+import Renderer from "../controllers/renderer.controller";
+import Organism from "../models/Organism";
 import PerlinNoise from "../utils/PerlinNoise";
-import Organism from "../organism";
+import { Coordinate } from "../models/types/Coordinate";
 
 // Various Cell States that a GridCell can take.
 export const CellStates = {
@@ -68,10 +68,10 @@ export class GridCell {
 export class Grid {
   private _data: GridCell[][];
   public grid_size: number;
-  public renderer: RendererController;
+  public renderer: Renderer;
 
   // Builds a new Grid.
-  constructor(grid_size: number, renderer: RendererController) {
+  constructor(grid_size: number, renderer: Renderer) {
     this._data = new Array(grid_size);
     this.renderer = renderer;
     this.grid_size = grid_size;

@@ -1,10 +1,10 @@
-import { SimulationConfig } from "../config";
+import { SimulationConfig } from "../config/simulation.config";
 import { CellStates, Grid } from "../environment/Grid";
-import { Coordinate } from "../math/Coordinate";
+import { Coordinate } from "../models/types/Coordinate";
 import get_style from "../utils/get_style";
-import MouseController from "./mouse.controller";
+import Mouse from "./mouse.controller";
 import NeuralNetworkVisualizer from "./nn_visualizer.controller";
-import RendererController from "./renderer.controller";
+import Renderer from "./renderer.controller";
 
 const mode = document.getElementById("mode") as HTMLSpanElement;
 const organism_selected = document.getElementById("organism_selected") as HTMLParagraphElement;
@@ -19,7 +19,7 @@ const ModesEnum = {
 };
 
 // Controller used to manage canvas events.
-export default class CanvasController {
+export default class Canvas {
   public canvas: HTMLCanvasElement;
   public ctx: CanvasRenderingContext2D;
   public grid_size: number;
@@ -28,8 +28,8 @@ export default class CanvasController {
   public zoom_speed: number;
   public min_zoom: number;
   public pan_amount: number;
-  public mouse: MouseController;
-  public renderer: RendererController;
+  public mouse: Mouse;
+  public renderer: Renderer;
   public grid: Grid;
   public mode: string;
 
@@ -52,8 +52,8 @@ export default class CanvasController {
     this.zoom_speed = 0.01;
     this.min_zoom = 0.1;
     this.pan_amount = 50;
-    this.mouse = new MouseController(this.pixel_size);
-    this.renderer = new RendererController(this.canvas, this.ctx, this.pixel_size);
+    this.mouse = new Mouse(this.pixel_size);
+    this.renderer = new Renderer(this.canvas, this.ctx, this.pixel_size);
     this.grid = new Grid(this.grid_size, this.renderer);
     this.mode = Modes[0];
 

@@ -1,4 +1,4 @@
-import { SimulationConfig } from "./config";
+import { SimulationConfig } from "./config/simulation.config";
 import {
   register_download_neuralnet_button,
   register_export_all_organisms_button,
@@ -7,9 +7,9 @@ import {
   register_rendering_enabled_button,
   register_sim_restart_button,
   register_sim_start_stop_button
-} from "./controllers/button.controller";
+} from "./components/Buttons";
 import Simulation from "./controllers/simulation.controller";
-import { render_settings } from "./controllers/ui.controller";
+import { render_settings } from "./components/Settings";
 
 function read_fps_slider(config, slider, label): void {
   const slider_label = document.getElementById(label) as HTMLSpanElement;

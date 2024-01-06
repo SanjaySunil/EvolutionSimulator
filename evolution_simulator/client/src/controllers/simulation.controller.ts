@@ -1,6 +1,6 @@
-import { SimulationConfig } from "../config";
+import { SimulationConfig } from "../config/simulation.config";
 import { Environment } from "../environment";
-import { render_fps_element } from "./ui.controller";
+import { render_fps_element } from "../components/Settings";
 
 // Get references to HTML elements
 const target_update_fps = document.getElementById("target_update_fps") as HTMLSpanElement;

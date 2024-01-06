@@ -1,5 +1,7 @@
-import Gene from "../organism/Gene";
-import { ActionNeuronSymbols, NeuronTypes, SensorNeuronSymbols } from "../organism/Neurons";
+import Gene from "../models/Gene";
+import { OutputNeuronSymbols } from "../constants/OutputNeurons";
+import { InputNeuronSymbols } from "../constants/InputNeurons";
+import { NeuronTypes } from "../models/Neurons";
 
 /** Neural Network Visualiser Class */
 export default class NeuralNetworkVisualizer {
@@ -85,13 +87,13 @@ export default class NeuralNetworkVisualizer {
       this.sensor_neurons[node_id] = [50, prev];
       this.last_sensor_y = prev;
       circle = this.create_circle(50, prev, this.radius, "black");
-      text_elem = this.create_text(50, prev, SensorNeuronSymbols[node_id], "white");
+      text_elem = this.create_text(50, prev, InputNeuronSymbols[node_id], "white");
     } else if (node_type == "ACTION") {
       const prev = Object.keys(this.action_neurons).length == 0 ? this.spacing + this.radius : this.last_action_y + (this.spacing + 2 * this.radius);
       this.action_neurons[node_id] = [350, prev];
       this.last_action_y = prev;
       circle = this.create_circle(350, prev, this.radius, "black");
-      text_elem = this.create_text(350, prev, ActionNeuronSymbols[node_id], "white");
+      text_elem = this.create_text(350, prev, OutputNeuronSymbols[node_id], "white");
     } else if (node_type == "NEURON") {
       const prev = Object.keys(this.internal_neurons).length == 0 ? this.spacing + this.radius : this.last_internal_y + (this.spacing + 2 * this.radius);
       this.internal_neurons[node_id] = [200, prev];

@@ -1,5 +1,5 @@
-import { SimulationConfig } from "../config";
-import Simulation from "./simulation.controller";
+import { SimulationConfig } from "../config/simulation.config";
+import Simulation from "../controllers/simulation.controller";
 import export_object from "../utils/export_object";
 
 // Get references to HTML elements

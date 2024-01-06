@@ -1,7 +1,7 @@
-import { SimulationConfig } from "../config";
-import Organism from "../organism";
+import { SimulationConfig } from "../config/simulation.config";
+import Organism from "../models/Organism";
+import { euclidean_distance } from "../utils/geometry";
 import get_random_vector from "../utils/get_random_vector";
-import { euclidean_distance } from "./Coordinate";
 
 // Function to calculate the absolute difference between two values
 export function optimise_to_side(organism_coord_component, point_component): number {

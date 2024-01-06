@@ -1,4 +1,6 @@
+import { SimulationConfig } from "../config/simulation.config";
 import Directions from "../constants/Directions";
+import { OutputNeurons } from "../constants/OutputNeurons";
 import { Environment } from "../environment";
 import { Coordinate, make_vector } from "../math/Coordinate";
 import get_random_vector from "../utils/get_random_vector";
@@ -6,8 +8,6 @@ import prob2bool from "../utils/prob2bool";
 import Brain from "./Brain";
 import Gene from "./Gene";
 import Genome from "./Genome";
-import { ActionNeurons } from "./Neurons";
-import { SimulationConfig } from "../config";
 
 // Represents an organism in the simulation.
 export default class Organism {
@@ -93,13 +93,13 @@ export default class Organism {
   // Computes the action based on the action levels.
   public compute_action(action_levels: number[]): Coordinate {
     // Move x and Move y is the urge to move in the X and Y direction.
-    let move_x = action_levels[ActionNeurons.MOVE_X];
-    let move_y = action_levels[ActionNeurons.MOVE_Y];
+    let move_x = action_levels[OutputNeurons.MOVE_X];
+    let move_y = action_levels[OutputNeurons.MOVE_Y];
 
-    move_x += action_levels[ActionNeurons.MOVE_EAST];
-    move_x -= action_levels[ActionNeurons.MOVE_WEST];
-    move_y += action_levels[ActionNeurons.MOVE_NORTH];
-    move_y -= action_levels[ActionNeurons.MOVE_SOUTH];
+    move_x += action_levels[OutputNeurons.MOVE_EAST];
+    move_x -= action_levels[OutputNeurons.MOVE_WEST];
+    move_y += action_levels[OutputNeurons.MOVE_NORTH];
+    move_y -= action_levels[OutputNeurons.MOVE_SOUTH];
 
     // Hyperbolic tangent function produces an output between -1.0 and 1.0.
     move_x = Math.tanh(move_x);

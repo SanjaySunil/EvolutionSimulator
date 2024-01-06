@@ -1,4 +1,5 @@
-import { SensorNeurons, ActionNeurons } from "../organism/Neurons";
+import { OutputNeurons } from './../constants/OutputNeurons';
+import { InputNeurons } from "../constants/InputNeurons";
 
 // SimulationConfig Types
 type Types = Record<string, any>;
@@ -12,14 +13,16 @@ const SimulationConfig: Types = {
   POPULATION: 1500,
   TICKS_PER_GENERATION: 300,
   ELITISM_PERCENT: 10,
-  MUTATION_PERCENT: 0, // 5
+  // DEFAULT: 5
+  MUTATION_PERCENT: 0,
   SEXUAL_REPRODUCTION: true,
   NUMBER_OF_NEURONS: 127,
-  NUMBER_OF_GENES: 25, // 50
+  // DEFAULT: 25
+  NUMBER_OF_GENES: 25,
 
   // DO NOT CHANGE THE FOLLOWING.
-  NUMBER_OF_SENSORS: Object.keys(SensorNeurons).length,
-  NUMBER_OF_ACTIONS: Object.keys(ActionNeurons).length,
+  NUMBER_OF_SENSORS: Object.keys(InputNeurons).length,
+  NUMBER_OF_ACTIONS: Object.keys(OutputNeurons).length,
 };
 
 export { SimulationConfig };

@@ -1,8 +1,4 @@
-// Coordinate type.
-export type Coordinate = {
-  x: number;
-  y: number;
-};
+import { Coordinate } from "../models/types/Coordinate";
 
 // Converts an angle to radians.
 export function to_radians(angle): number {

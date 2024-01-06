@@ -1,4 +1,5 @@
-import { Coordinate, make_vector, rotate_point } from "../math/Coordinate";
+import { Coordinate } from "../models/types/Coordinate";
+import { make_vector, rotate_point } from "../utils/geometry";
 
 export default class Directions {
   // Define static vectors representing different directions
