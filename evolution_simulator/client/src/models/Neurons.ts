@@ -10,7 +10,6 @@ export class Neuron {
   public output: number;
   // Undriven neurons have fixed output values.
   public driven: boolean;
-
   // Builds a new neuron.
   constructor() {
     this.output = 0.0;

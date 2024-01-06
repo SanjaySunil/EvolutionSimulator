@@ -14,13 +14,11 @@ export default class Organism {
   private _coordinate: Coordinate;
   public genome: Genome;
   public brain: Brain;
-
   public fitness: number | null;
   public alive: boolean;
   public age: number;
   public direction: Coordinate;
   public environment: Environment;
-
   public config: typeof SimulationConfig;
 
   // Constructs a new Organism object.

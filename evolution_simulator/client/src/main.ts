@@ -44,7 +44,6 @@ const sidebar = document.getElementById("sidebar") as HTMLDivElement;
 
 button.addEventListener("click", () => {
   shown = !shown;
-
   if (shown == true) {
     sidebar.style.display = "block";
   } else {
