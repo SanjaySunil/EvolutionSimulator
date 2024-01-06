@@ -11,9 +11,7 @@ import Organism from "./Organism";
 type ConnectionList = Array<Gene>;
 type NodeMap = Map<number, Node>;
 
-/**
- * This class represents a neuron in the neural network.
- */
+// This class represents a neuron in the neural network.
 export class Node {
   /** Unique identifier for the neuron. */
   public remapped_number;
@@ -26,13 +24,9 @@ export class Node {
 }
 
 export default class Brain {
-  /** The organism that owns the brain. */
   public owner: Organism;
-  /** Neurons used for sensing. */
   public sensor_neurons: object;
-  /** Neurons used for taking actions. */
   public action_neurons: object;
-  /** Internal neurons of the organism. */
   public internal_neurons: object;
   /** All neurons in the organism's neural network. */
   public neurons: Neuron[];
