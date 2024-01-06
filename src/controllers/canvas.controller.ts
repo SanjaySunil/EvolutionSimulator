@@ -17,7 +17,7 @@ const ModesEnum = {
   WALL: 3,
 };
 
-/** Controller used to manage canvas events. */
+// Controller used to manage canvas events.
 export default class CanvasController {
   public canvas: HTMLCanvasElement;
   public ctx: CanvasRenderingContext2D;
@@ -35,7 +35,7 @@ export default class CanvasController {
   public config: typeof SimulationConfig;
   public goal_coordinates: Coordinate[];
 
-  /** Build a new canvas. */
+  // Build a new canvas.
   constructor(canvas_id: string, config: typeof SimulationConfig) {
     this.config = config;
 
@@ -71,7 +71,7 @@ export default class CanvasController {
     this.renderer.clear_canvas();
   }
 
-  /** Mouse event register */
+  // Mouse event register
   public register_mouse_events(): void {
     // Register mouse events on the canvas
     this.canvas.addEventListener("mousemove", (e) => this.mouse_move(e));
@@ -169,7 +169,7 @@ export default class CanvasController {
     }
   }
 
-  /** Handle key press. */
+  // Handle key press.
   public handle_key_down(event: KeyboardEvent): void {
     // Handle key press events
     const canvas_top = parseInt(get_style("canvas", "top"));
@@ -186,7 +186,7 @@ export default class CanvasController {
     mode.innerHTML = this.mode;
   }
 
-  /** Panning controls */
+  // Panning controls
   public handle_mouse_wheel(event: WheelEvent): void {
     // Handle mouse wheel event for zooming and panning
     const sign = -Math.sign(event.deltaY);
@@ -205,14 +205,14 @@ export default class CanvasController {
     this.canvas.style.transform = `scale(${this.zoom_level})`;
   }
 
-  /** Highlight cell action. */
+  // Highlight cell action.
   public handle_mouse_move(): void {
     // Handle mouse move event to highlight cells
     this.grid.set_cell_highlighted(this.mouse.prev_grid_coord, false);
     this.grid.set_cell_highlighted(this.mouse.grid_coord, true);
   }
 
-  /** Handle mouse leave canvas. */
+  // Handle mouse leave canvas.
   public handle_mouse_leave(): void {
     // Handle mouse leave event
     // const cell = this.grid.get_cell_at(this.mouse.grid_coord);
