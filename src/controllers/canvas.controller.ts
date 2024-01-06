@@ -7,6 +7,7 @@ import NeuralNetworkVisualizer from "./nn_visualizer.controller";
 import RendererController from "./renderer.controller";
 
 const mode = document.getElementById("mode") as HTMLSpanElement;
+const organism_selected = document.getElementById("organism_selected") as HTMLParagraphElement;
 
 // Define the different modes for mouse interaction.
 const Modes = ["IDLE", "PAN", "GOAL", "WALL"];
@@ -146,6 +147,7 @@ export default class CanvasController {
       } else if (this.mode == Modes[ModesEnum.IDLE]) {
         if (cell.state == CellStates.ORGANISM) {
           if (cell.owner?.brain.connections) {
+            organism_selected.innerHTML = "Organism selected";
             const NN = new NeuralNetworkVisualizer();
 
             NN.draw(
@@ -155,6 +157,8 @@ export default class CanvasController {
               cell.owner.brain.connections
             );
           }
+        } else {
+          organism_selected.innerHTML = "";
         }
       } else if (this.mode == Modes[ModesEnum.PAN]) {
         const canvas_top = parseInt(get_style("canvas", "top"));

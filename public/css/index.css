@@ -364,3 +364,6 @@ th {
   padding: 10px;
   z-index: 999;
 }
+#organism_selected {
+  color: var(--red)
+}
