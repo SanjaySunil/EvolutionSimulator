@@ -33,8 +33,7 @@ export default class CanvasController {
   public mode: string;
 
   public config: typeof SimulationConfig;
-  public goal_coordinates: Coordinate;
-  public cell_selected: Coordinate;
+  public goal_coordinates: Coordinate[];
 
   /** Build a new canvas. */
   constructor(canvas_id: string, config: typeof SimulationConfig) {
@@ -57,9 +56,11 @@ export default class CanvasController {
     this.grid = new Grid(this.grid_size, this.renderer);
     this.mode = Modes[0];
 
-    this.goal_coordinates = { x: 0, y: 0 };
-    this.cell_selected = { x: 0, y: 0 };
-    this.grid.set_cell_selected(this.goal_coordinates, true);
+    this.goal_coordinates = [{ x: 0, y: 0 }, {x: this.grid_size - 1, y: this.grid_size - 1}];
+
+    for (const coordinate of this.goal_coordinates) {
+      this.grid.set_cell_selected(coordinate, true);
+    }
 
     // Set the initial zoom level and transform the canvas accordingly
     this.canvas.style.transform = `scale(${this.zoom_level})`;
@@ -91,7 +92,7 @@ export default class CanvasController {
     this.canvas.removeEventListener("wheel", (e) => this.wheel(e));
   }
 
-  /** Keyboard event register */
+  // Keyboard event register
   public register_keyboard_events(): void {
     // Register keyboard events on the window
     window.addEventListener("keydown", (e) => {
@@ -140,11 +141,8 @@ export default class CanvasController {
     if (this.mouse.left_click) {
       const cell = this.grid.get_cell_at(this.mouse.grid_coord);
       if (this.mode == Modes[ModesEnum.GOAL]) {
-        if (this.goal_coordinates) {
-          this.grid.set_cell_selected(this.goal_coordinates, false);
-        }
-        this.goal_coordinates = cell.coordinate;
-        this.grid.set_cell_selected(this.goal_coordinates, true);
+        this.goal_coordinates.push(cell.coordinate);
+        this.grid.set_cell_selected(cell.coordinate, true);
       } else if (this.mode == Modes[ModesEnum.IDLE]) {
         if (cell.state == CellStates.ORGANISM) {
           if (cell.owner?.brain.connections) {

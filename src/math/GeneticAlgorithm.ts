@@ -42,9 +42,14 @@ export function merge_sort(arr: Organism[]): Organism[] {
 }
 
 // Function to sort the population of organisms based on their fitness and calculate their fitness values
-export function sort_and_calculate_fitness(population: Organism[], coordinate): Organism[] {
+export function sort_and_calculate_fitness(population: Organism[], coordinates): Organism[] {
   for (const organism of population) {
-    organism.fitness = calculate_fitness(organism.coordinate, coordinate);
+    const results: number[] = [];
+
+    for (const coordinate of coordinates) {
+      results.push(calculate_fitness(organism.coordinate, coordinate));
+    }
+    organism.fitness = Math.min(...results);
   }
 
   // population.sort((a, b) => a.fitness! - b.fitness!);

@@ -90,6 +90,7 @@ export class Grid {
         // this.create_barrier(cell);
         // this.create_radioactive_barrier(cell);
         // this.create_perlin_barrier(cell, perlin);
+        this.renderer.to_fill.add(cell);
         // this.renderer.to_clear.add(cell);
         column[y] = cell;
       }
@@ -105,7 +106,8 @@ export class Grid {
 
   // Creates walls using Perlin Noise.
   public create_perlin_barrier(cell: GridCell, perlin): void {
-    const WALL_THRESHOLD = 0.85;
+    const WALL_THRESHOLD = 0.85; // 0.85
+    // 0.1
     const value = perlin.noise(cell.coordinate.x * 0.1, cell.coordinate.y * 0.1); // Adjust the scale as needed
     cell.state = value > WALL_THRESHOLD ? CellStates.WALL : CellStates.EMPTY;
   }
