@@ -9,73 +9,66 @@ import { Neuron, Neurons } from "./Neurons";
 import Organism from "./Organism";
 import { Coordinate } from "./types/Coordinate";
 
-type ConnectionList = Array<Gene>;
-type NodeMap = Map<number, Node>;
+type ConnectionArray = Array<Gene>;
+type HiddenNeuronMap = Map<number, HiddenNeuron>;
 
-export class Node {
-  /** Unique identifier for the neuron. */
-  public remapped_number;
-  /** Number of output connections from the neuron. */
+export class HiddenNeuron {
+  // Unique identifier for the hidden neuron.
+  public identifer;
+  // Number of incoming connections that are from either sensors or other neurons.
+  public inputs;
+  // Number of outcoming connections from the neuron.
   public outputs;
-  /** Number of input connections that are fed back into the neuron. */
+  // Number of input connections that go back into the neuron.
   public self_inputs;
-  /** Number of input connections that are from either sensors or other neurons. */
-  public inputs_from_sensors_or_neurons;
 }
 
 export default class Brain {
   public owner: Organism;
+  // Used temporarily to store the neural network's inputs, outputs, and hidden neurons.
   public inputs: object;
   public outputs: object;
   public hidden: object;
-  /** All neurons in the organism's neural network. */
+  // Complete list of hidden neurons.
   public hidden_neurons: Neuron[];
-  /** All connections in the neural network. */
+  // All neural network connections.
   public connections: Gene[];
-  /** Number of sensors in the neural network. */
-  public NUMBER_OF_SENSORS: number;
-  /** Number of neurons in the neural network. */
-  public NUMBER_OF_NEURONS: number;
-  /** Number of possible actions in the neural network. */
-  public NUMBER_OF_ACTIONS: number;
+  // Number of sensors, neurons and actions.
+  public num_input_neurons: number;
+  public num_hidden_neurons: number;
+  public num_output_neurons: number;
 
-  /** Builds a new brain. */
-  constructor(owner, NUMBER_OF_SENSORS: number, NUMBER_OF_NEURONS: number, NUMBER_OF_ACTIONS: number) {
+  constructor(owner, num_input_neurons: number, num_hidden_neurons: number, num_output_neurons: number) {
     this.owner = owner;
     this.inputs = {};
     this.outputs = {};
     this.hidden = {};
     this.hidden_neurons = [];
     this.connections = [];
-    this.NUMBER_OF_SENSORS = NUMBER_OF_SENSORS;
-    this.NUMBER_OF_NEURONS = NUMBER_OF_NEURONS;
-    this.NUMBER_OF_ACTIONS = NUMBER_OF_ACTIONS;
+    this.num_input_neurons = num_input_neurons;
+    this.num_hidden_neurons = num_hidden_neurons;
+    this.num_output_neurons = num_output_neurons;
     this.wire_brain();
   }
 
   // Converts an organism's genome into a neural network brain.
   public wire_brain(): void {
-    this.connections = [];
-    this.hidden_neurons = [];
+    // List to store neural network connections.
+    const connections: ConnectionArray = this.obtain_connections();
 
-    // List of all connections in the neural network.
-    const connection_list: ConnectionList = this.create_connection_list();
+    // Map of neurons and their number of inputs and outputs.
+    const hidden_neuron_map: HiddenNeuronMap = this.create_hidden_neuron_map(connections);
 
-    /** Map of neurons and their number of inputs and outputs. */
-    const node_map: NodeMap = this.create_node_map(connection_list);
+    // Remove connections to neurons with no outputs or neurons that feed themselves.
+    this.prune_connections(connections, hidden_neuron_map);
 
-    /** Remove any unnecessary connections. */
-    this.remove_useless_connections(connection_list, node_map);
-
-    /**
-     * Renumber the neurons starting from zero and build the proper connection and
-     * neural node list.
-     */
-    this.create_renumbered_connection_list(connection_list, node_map);
-    this.create_neural_node_list(node_map);
+    // Create a renumbered connection array based on the node map.
+    this.create_connections(connections, hidden_neuron_map);
+    this.create_hidden_neuron_array(hidden_neuron_map);
   }
 
-  public sensor_look(direction: number): number {
+  // Allows the organism to look in a specific direction and return the state of the cell.
+  public observation_sensor(direction: number): number {
     let current_vector = { x: this.owner.coordinate.x, y: this.owner.coordinate.y };
     let vector: Coordinate;
 
@@ -98,7 +91,8 @@ export default class Brain {
     return 0.0;
   }
 
-  public sensor_coordinate(sensor: number): number {
+  // Allows the organism to obtain information about its current coordinates.
+  public coordinate_sensor(sensor: number): number {
     if (sensor == InputNeurons.X_COORDINATE && this.owner.environment.grid.grid_size) {
       return this.owner.coordinate.x / this.owner.environment.grid.grid_size;
     } else if (sensor == InputNeurons.Y_COORDINATE && this.owner.environment.grid.grid_size) {
@@ -122,10 +116,7 @@ export default class Brain {
     }
   }
 
-  /**
-   * Obtain value from a specific sensor. Sensors produce a value between 0.0
-   * and 1.0.
-   */
+  // Obtain value from a specific sensor. Sensors produce a value between 0.0 and 1.0.
   public get_sensor(sensor_id: number): number {
     if (
       [
@@ -137,20 +128,17 @@ export default class Brain {
         InputNeurons.BOUNDARY_WEST,
       ].includes(sensor_id)
     ) {
-      return this.sensor_coordinate(sensor_id);
+      return this.coordinate_sensor(sensor_id);
     } else if ([InputNeurons.LOOK_NORTH, InputNeurons.LOOK_EAST, InputNeurons.LOOK_SOUTH, InputNeurons.LOOK_WEST].includes(sensor_id)) {
-      return this.sensor_look(sensor_id);
+      return this.observation_sensor(sensor_id);
     }
     return 0.0;
   }
 
-  /**
-   * Performs a feed-forward computation in the neural network.
-   * Returns an array of output levels for all action neurons.
-   */
+  // Performs a feed-forward computation in the neural network. Returns an array of output levels for all action neurons.
   public feed_forward(): number[] {
     // This array stores the output levels for all of the action neurons.
-    const action_levels = new Array(this.NUMBER_OF_ACTIONS).fill(0.0);
+    const action_levels = new Array(this.num_output_neurons).fill(0.0);
 
     // The weighted inputs to each neuron are accumulated in neuron_accumulators.
     const neuron_accumulators = new Array(this.hidden_neurons.length).fill(0.0);
@@ -187,92 +175,92 @@ export default class Brain {
     return action_levels;
   }
 
-  public create_connection_list(): any[] {
-    const connection_list: ConnectionList = [];
+  // Obtain a list of connections from the genome.
+  public obtain_connections(): any[] {
+    const connection_array: ConnectionArray = [];
 
     if (this.owner.genome.data) {
       for (const gene of this.owner.genome.data) {
         // Renumber the source neuron or sensor using modulo operator.
         if (gene.source_type === Neurons.HIDDEN) {
-          gene.source_id %= this.NUMBER_OF_NEURONS;
+          gene.source_id %= this.num_hidden_neurons;
         } else {
-          gene.source_id %= this.NUMBER_OF_SENSORS;
+          gene.source_id %= this.num_input_neurons;
         }
 
         // Renumber the sink neuron or action using modulo operator.
         if (gene.sink_type === Neurons.HIDDEN) {
-          gene.sink_id %= this.NUMBER_OF_NEURONS;
+          gene.sink_id %= this.num_hidden_neurons;
         } else {
-          gene.sink_id %= this.NUMBER_OF_ACTIONS;
+          gene.sink_id %= this.num_output_neurons;
         }
 
         // Add the renumbered gene to the connection list.
-        connection_list.push(gene);
+        connection_array.push(gene);
       }
     }
 
-    return connection_list;
+    return connection_array;
   }
 
   // Creates a map of neurons and their corresponding input and output counts.
-  public create_node_map(connection_list: ConnectionList): NodeMap {
-    /** List of neurons and their number of inputs and outputs. */
-    const node_map: NodeMap = new Map();
+  public create_hidden_neuron_map(connection_array: ConnectionArray): HiddenNeuronMap {
+    // List of neurons and their number of inputs and outputs.
+    const hidden_neuron_map: HiddenNeuronMap = new Map();
 
-    for (const connection of connection_list) {
-      /** If the sink type is a neuron. */
+    for (const connection of connection_array) {
+      // If the sink type is a hidden neuron.
       if (connection.sink_type === Neurons.HIDDEN) {
         const self_input = connection.source_type == Neurons.HIDDEN && connection.source_id == connection.sink_id;
-
-        if (node_map.has(connection.sink_id)) {
-          const node = node_map.get(connection.sink_id);
+        if (hidden_neuron_map.has(connection.sink_id)) {
+          const node = hidden_neuron_map.get(connection.sink_id);
           if (node) {
             if (self_input) node.self_inputs++;
-            else node.inputs_from_sensors_or_neurons++;
+            else node.inputs++;
           } else {
             // If the neuron is not in the node map, add it with the appropriate input/output values.
-            node_map.set(connection.sink_id, {
-              remapped_number: 0,
+            hidden_neuron_map.set(connection.sink_id, {
+              identifer: 0,
               outputs: 0,
               self_inputs: self_input ? 1 : 0,
-              inputs_from_sensors_or_neurons: self_input ? 0 : 1,
+              inputs: self_input ? 0 : 1,
             });
           }
         }
       }
 
-      /** If the source type is a neuron. */
+      // If the source type is a hidden neuron.
       if (connection.source_type === Neurons.HIDDEN) {
-        if (node_map.has(connection.source_id)) {
-          const node = node_map.get(connection.source_id);
+        if (hidden_neuron_map.has(connection.source_id)) {
+          const node = hidden_neuron_map.get(connection.source_id);
           if (node) node.outputs++;
         } else {
           // If the neuron is not in the node map, add it with the appropriate input/output values.
-          node_map.set(connection.source_id, {
-            remapped_number: 0,
+          hidden_neuron_map.set(connection.source_id, {
+            identifer: 0,
             outputs: 1,
             self_inputs: 0,
-            inputs_from_sensors_or_neurons: 0,
+            inputs: 0,
           });
         }
       }
     }
 
-    return node_map;
+    return hidden_neuron_map;
   }
 
   // Removes connections to a specific neuron from the connection list and updates the node map accordingly.
-  public remove_connections_to_neuron(connection_list: ConnectionList, node_map: NodeMap, neuron_number: number): void {
-    for (let i = 0; i < connection_list.length; ) {
-      const neuron = connection_list[i];
+  public remove_connections_to_neuron(connection_array: ConnectionArray, hidden_neuron_map: HiddenNeuronMap, neuron_number: number): void {
+    for (let i = 0; i < connection_array.length; ) {
+      const neuron = connection_array[i];
       if (neuron.sink_type == Neurons.HIDDEN && neuron.sink_id === neuron_number) {
         // Remove the connection here. If the connection source is from another neuron, decrement the other neuron's number of outputs.
         if (neuron.source_type == Neurons.HIDDEN) {
-          const node = node_map.get(neuron.source_id);
+          const node = hidden_neuron_map.get(neuron.source_id);
           if (node) node.outputs--;
         }
         // Remove element from connection list.
-        connection_list.splice(i, 1);
+        connection_array.splice(i, 1);
       } else {
         i++;
       }
@@ -280,42 +268,42 @@ export default class Brain {
   }
 
   // Removes useless connections from the connection list and updates the node map accordingly.
-  public remove_useless_connections(connection_list: ConnectionList, node_map: NodeMap): any {
-    let all_checked = false;
-    while (!all_checked) {
-      all_checked = true;
+  public prune_connections(connections: ConnectionArray, hidden_neuron_map: HiddenNeuronMap): any {
+    let connections_pruned = false;
+    while (!connections_pruned) {
+      connections_pruned = true;
 
-      for (const node_number of node_map.keys()) {
-        const node = node_map.get(node_number);
+      for (const node_number of hidden_neuron_map.keys()) {
+        const node = hidden_neuron_map.get(node_number);
         // Look for neurons with zero outputs, or neurons that feed themselves.
         if (node && node.outputs == node.self_inputs) {
-          all_checked = false;
-          this.remove_connections_to_neuron(connection_list, node_map, node_number);
-          node_map.delete(node_number);
+          connections_pruned = false;
+          this.remove_connections_to_neuron(connections, hidden_neuron_map, node_number);
+          hidden_neuron_map.delete(node_number);
         }
       }
     }
   }
 
   // Creates a renumbered connection list based on the node map.
-  public create_renumbered_connection_list(connection_list: ConnectionList, node_map: NodeMap): void {
+  public create_connections(connection_array: ConnectionArray, hidden_neuron_map: HiddenNeuronMap): void {
     let new_number = 0;
-    for (const node of node_map.values()) {
-      node.remapped_number = new_number++;
+    for (const node of hidden_neuron_map.values()) {
+      node.identifer = new_number++;
     }
 
-    for (const connection of connection_list) {
+    for (const connection of connection_array) {
       if (connection.sink_type == Neurons.HIDDEN) {
         const new_connection = cloneDeep(connection);
 
         // Fix the destination neuron number.
-        const node = node_map.get(new_connection.sink_id);
-        if (node) new_connection.sink_id = node.remapped_number;
+        const node = hidden_neuron_map.get(new_connection.sink_id);
+        if (node) new_connection.sink_id = node.identifer;
 
         // If the source is a neuron, fix its number too.
         if (new_connection.source_type === Neurons.HIDDEN) {
-          const node = node_map.get(new_connection.source_id);
-          if (node) new_connection.source_id = node.remapped_number;
+          const node = hidden_neuron_map.get(new_connection.source_id);
+          if (node) new_connection.source_id = node.identifer;
         }
 
         this.connections.push(new_connection);
@@ -323,14 +311,14 @@ export default class Brain {
     }
 
     // Last the connections from sensor/neuron to an action.
-    for (const connection of connection_list) {
+    for (const connection of connection_array) {
       if (connection.sink_type == Neurons.OUTPUT) {
         const new_conn = cloneDeep(connection);
 
         // If the source is a neuron, fix its number too.
         if (new_conn.source_type === Neurons.HIDDEN) {
-          const node = node_map.get(new_conn.source_id);
-          if (node) new_conn.source_id = node.remapped_number;
+          const node = hidden_neuron_map.get(new_conn.source_id);
+          if (node) new_conn.source_id = node.identifer;
         }
 
         this.connections.push(new_conn);
@@ -339,17 +327,18 @@ export default class Brain {
       // Push sensor neurons, internal neurons, and action neurons to each set.
       if (connection.source_type == Neurons.INPUT) this.inputs[connection.source_id] = undefined;
       else this.hidden[connection.source_id] = undefined;
+
       if (connection.sink_type == Neurons.OUTPUT) this.outputs[connection.sink_id] = undefined;
       else this.hidden[connection.sink_id] = undefined;
     }
   }
 
-  // Creates a neural node list based on the node map.
-  public create_neural_node_list(node_map: NodeMap): Neuron[] {
-    for (const node of node_map.values()) {
+  // Creates a hidden neuron array based on the node map.
+  public create_hidden_neuron_array(hidden_neuron_map: HiddenNeuronMap): Neuron[] {
+    for (const node of hidden_neuron_map.values()) {
       const neuron = new Neuron();
       neuron.output = 0.5;
-      neuron.driven = node.inputs_from_sensors_or_neurons !== 0;
+      neuron.driven = node.inputs !== 0;
       this.hidden_neurons.push(neuron);
     }
     return this.hidden_neurons;
