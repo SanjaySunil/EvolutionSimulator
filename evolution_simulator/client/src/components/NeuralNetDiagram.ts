@@ -10,10 +10,10 @@ export default class NeuralNetDiagram {
   public svg = document.getElementById("neural-network-svg")!;
   public input_neurons: object = {};
   public output_neurons: object = {};
-  public internal_neurons: object = {};
+  public hidden_neurons: object = {};
   public last_input_neuron_coord: number = 0;
   public last_output_neuron_coord: number = 0;
-  public last_internal_neuron_coord: number = 0;
+  public last_hidden_neuron_coord: number = 0;
 
   private create_element_ns(element_type: string, attributes: Record<string, string>): SVGElement {
     const element = document.createElementNS("http://www.w3.org/2000/svg", element_type);
@@ -94,13 +94,13 @@ export default class NeuralNetDiagram {
       text_elem = this.create_text(350, prev, OutputNeuronSymbols[node_id], "white");
     } else if (node_type == "NEURON") {
       let prev;
-      if (Object.keys(this.internal_neurons).length == 0) {
+      if (Object.keys(this.hidden_neurons).length == 0) {
         prev = this.spacing + this.radius;
       } else {
-        prev = this.last_internal_neuron_coord + (this.spacing + 2 * this.radius);
+        prev = this.last_hidden_neuron_coord + (this.spacing + 2 * this.radius);
       }
-      this.internal_neurons[node_id] = [200, prev];
-      this.last_internal_neuron_coord = prev;
+      this.hidden_neurons[node_id] = [200, prev];
+      this.last_hidden_neuron_coord = prev;
       circle = this.create_circle(200, prev, this.radius, "black");
       text_elem = this.create_text(200, prev, node_id.toString(), "white");
     }
@@ -113,7 +113,7 @@ export default class NeuralNetDiagram {
 
   public draw(connections: Gene[]): void {
     const height =
-      (Object.keys(this.input_neurons).length + Object.keys(this.output_neurons).length + Object.keys(this.internal_neurons).length) *
+      (Object.keys(this.input_neurons).length + Object.keys(this.output_neurons).length + Object.keys(this.hidden_neurons).length) *
         (this.spacing + 2 * this.radius) +
       this.spacing +
       this.radius;
@@ -131,11 +131,11 @@ export default class NeuralNetDiagram {
           source = this.input_neurons[connection.source_id];
         }
       } else if (connection.source_type == Neurons.HIDDEN) {
-        if (this.internal_neurons[connection.source_id]) {
-          source = this.internal_neurons[connection.source_id];
+        if (this.hidden_neurons[connection.source_id]) {
+          source = this.hidden_neurons[connection.source_id];
         } else {
           this.create_node(connection.source_type == 0 ? "NEURON" : "SENSOR", connection.source_id);
-          source = this.internal_neurons[connection.source_id];
+          source = this.hidden_neurons[connection.source_id];
         }
       }
 
@@ -147,11 +147,11 @@ export default class NeuralNetDiagram {
           sink = this.output_neurons[connection.sink_id];
         }
       } else if (connection.sink_type == Neurons.HIDDEN) {
-        if (this.internal_neurons[connection.sink_id]) {
-          sink = this.internal_neurons[connection.sink_id];
+        if (this.hidden_neurons[connection.sink_id]) {
+          sink = this.hidden_neurons[connection.sink_id];
         } else {
           this.create_node(connection.sink_type == 0 ? "NEURON" : "ACTION", connection.sink_id);
-          sink = this.internal_neurons[connection.sink_id];
+          sink = this.hidden_neurons[connection.sink_id];
         }
       }
 

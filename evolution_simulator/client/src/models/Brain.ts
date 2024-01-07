@@ -25,9 +25,9 @@ export class Node {
 
 export default class Brain {
   public owner: Organism;
-  public in: object;
-  public on: object;
-  public hn: object;
+  public inputs: object;
+  public outputs: object;
+  public hidden: object;
   /** All neurons in the organism's neural network. */
   public hidden_neurons: Neuron[];
   /** All connections in the neural network. */
@@ -42,9 +42,9 @@ export default class Brain {
   /** Builds a new brain. */
   constructor(owner, NUMBER_OF_SENSORS: number, NUMBER_OF_NEURONS: number, NUMBER_OF_ACTIONS: number) {
     this.owner = owner;
-    this.in = {};
-    this.on = {};
-    this.hn = {};
+    this.inputs = {};
+    this.outputs = {};
+    this.hidden = {};
     this.hidden_neurons = [];
     this.connections = [];
     this.NUMBER_OF_SENSORS = NUMBER_OF_SENSORS;
@@ -73,8 +73,6 @@ export default class Brain {
      */
     this.create_renumbered_connection_list(connection_list, node_map);
     this.create_neural_node_list(node_map);
-
-    console.log(this.in);
   }
 
   public sensor_look(direction: number): number {
@@ -340,10 +338,10 @@ export default class Brain {
       }
 
       // Push sensor neurons, internal neurons, and action neurons to each set.
-      if (connection.source_type == Neurons.INPUT) this.in[connection.source_id] = undefined;
-      else this.hn[connection.source_id] = undefined;
-      if (connection.sink_type == Neurons.OUTPUT) this.on[connection.sink_id] = undefined;
-      else this.hn[connection.sink_id] = undefined;
+      if (connection.source_type == Neurons.INPUT) this.inputs[connection.source_id] = undefined;
+      else this.hidden[connection.source_id] = undefined;
+      if (connection.sink_type == Neurons.OUTPUT) this.outputs[connection.sink_id] = undefined;
+      else this.hidden[connection.sink_id] = undefined;
     }
   }
 
