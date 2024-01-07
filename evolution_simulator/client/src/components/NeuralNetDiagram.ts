@@ -8,24 +8,12 @@ export default class NeuralNetDiagram {
   public radius = 20;
   public spacing = 10;
   public svg = document.getElementById("neural-network-svg")!;
-  public input_neurons: object;
-  public output_neurons: object;
-  public internal_neurons: object;
-  public last_input_neuron_coord: number;
-  public last_output_neuron_coord: number;
-  public last_internal_neuron_coord: number;
-
-  constructor() {
-    // Used to store the coordinates of each neuron.
-    this.input_neurons = {};
-    this.output_neurons = {};
-    this.internal_neurons = {};
-
-    // Used to fetch the last y coordinate of each type of neuron.
-    this.last_input_neuron_coord = 0;
-    this.last_output_neuron_coord = 0;
-    this.last_internal_neuron_coord = 0;
-  }
+  public input_neurons: object = {};
+  public output_neurons: object = {};
+  public internal_neurons: object = {};
+  public last_input_neuron_coord: number = 0;
+  public last_output_neuron_coord: number = 0;
+  public last_internal_neuron_coord: number = 0;
 
   private create_element_ns(element_type: string, attributes: Record<string, string>): SVGElement {
     const element = document.createElementNS("http://www.w3.org/2000/svg", element_type);
@@ -83,28 +71,34 @@ export default class NeuralNetDiagram {
     const group = this.create_element_ns("g", {});
     let circle, text_elem;
     if (node_type == "SENSOR") {
-      const prev =
-        Object.keys(this.input_neurons).length == 0
-          ? this.spacing + this.radius
-          : this.last_input_neuron_coord + (this.spacing + 2 * this.radius);
+      let prev;
+      if (Object.keys(this.input_neurons).length == 0) {
+        prev = this.spacing + this.radius;
+      } else {
+        prev = this.last_input_neuron_coord + (this.spacing + 2 * this.radius);
+      }
       this.input_neurons[node_id] = [50, prev];
       this.last_input_neuron_coord = prev;
       circle = this.create_circle(50, prev, this.radius, "black");
       text_elem = this.create_text(50, prev, InputNeuronSymbols[node_id], "white");
     } else if (node_type == "ACTION") {
-      const prev =
-        Object.keys(this.output_neurons).length == 0
-          ? this.spacing + this.radius
-          : this.last_output_neuron_coord + (this.spacing + 2 * this.radius);
+      let prev;
+      if (Object.keys(this.output_neurons).length == 0) {
+        prev = this.spacing + this.radius;
+      } else {
+        prev = this.last_output_neuron_coord + (this.spacing + 2 * this.radius);
+      }
       this.output_neurons[node_id] = [350, prev];
       this.last_output_neuron_coord = prev;
       circle = this.create_circle(350, prev, this.radius, "black");
       text_elem = this.create_text(350, prev, OutputNeuronSymbols[node_id], "white");
     } else if (node_type == "NEURON") {
-      const prev =
-        Object.keys(this.internal_neurons).length == 0
-          ? this.spacing + this.radius
-          : this.last_internal_neuron_coord + (this.spacing + 2 * this.radius);
+      let prev;
+      if (Object.keys(this.internal_neurons).length == 0) {
+        prev = this.spacing + this.radius;
+      } else {
+        prev = this.last_internal_neuron_coord + (this.spacing + 2 * this.radius);
+      }
       this.internal_neurons[node_id] = [200, prev];
       this.last_internal_neuron_coord = prev;
       circle = this.create_circle(200, prev, this.radius, "black");
@@ -118,7 +112,8 @@ export default class NeuralNetDiagram {
   }
 
   public draw(connections: Gene[]): void {
-    this.svg.innerHTML = "<svg width='400' height='400' id='neural-network-svg'></svg>";
+    const height = (Object.keys(this.input_neurons).length + Object.keys(this.output_neurons).length + Object.keys(this.internal_neurons).length) * (this.spacing + 2 * this.radius) + this.spacing + this.radius;
+    this.svg.innerHTML = `<svg width='400' height='${height}' id='neural-network-svg'></svg>`;
 
     for (const connection of connections) {
       let source;
