@@ -1,7 +1,6 @@
 import { SimulationConfig } from "../config/simulation.config";
 import Organism from "../models/Organism";
 import { euclidean_distance } from "../utils/geometry";
-import get_random_vector from "../utils/get_random_vector";
 
 // Function to calculate the absolute difference between two values
 export function optimise_to_side(organism_coord_component, point_component): number {
@@ -45,15 +44,12 @@ export function sort_and_calculate_fitness(population: Organism[], goal_coordina
       results.push(euclidean_distance(organism.coordinate, coordinate));
     }
 
-    // Get the index of the minimum fitness value
     const index = results.indexOf(Math.min(...results));
     const distance = Math.min(...results);
     const max_distance = max_distances_to_goal[index];
-    const normalized_distance = 1 - (distance / max_distance);
+    const normalized_distance = 1 - distance / max_distance;
     const normalized_energy = organism.energy / organism.config.MAX_ENERGY;
     organism.fitness = 1 - (0.5 * normalized_distance + 0.5 * normalized_energy);
-
-    if (organism.fitness == 0) console.log(distance, max_distance, normalized_distance, normalized_energy);
   }
 
   // population.sort((a, b) => a.fitness! - b.fitness!);
