@@ -1,6 +1,5 @@
-import { cloneDeep } from "lodash";
-import Organism from "./Organism";
 import Gene from "./Gene";
+import Organism from "./Organism";
 
 export default class Genome {
   public owner: Organism;

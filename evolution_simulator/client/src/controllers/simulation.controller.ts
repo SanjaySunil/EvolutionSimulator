@@ -44,7 +44,7 @@ export default class Simulation {
   public cached_organisms: [];
 
   // Constructor for the Simulation class
-  constructor(config: typeof SimulationConfig = SimulationConfig) {
+  constructor(config: typeof SimulationConfig) {
     this.config = config;
 
     // Initialize update loop properties
@@ -81,10 +81,15 @@ export default class Simulation {
     render_fps_element(target_render_fps, this.config.TARGET_RENDER_FPS);
   }
 
-  public is_config_valid(): boolean {
+  public run_prechecks(): boolean {
     if (this.cached_organisms.length > this.config.GRID_SIZE ** 2 || this.config.POPULATION > this.config.GRID_SIZE ** 2) {
       let error = "Population size cannot be greater than Grid size squared.";
       alert(error);
+      return false;
+    }
+
+    if (this.environment.goal_coordinates.length == 0) {
+      alert("No goal coordinates have been set.");
       return false;
     }
     return true;
@@ -92,7 +97,7 @@ export default class Simulation {
 
   // Initialize the simulation
   public init(): void {
-    this.environment.init()
+    this.environment.init();
     this.started_simulation = true;
   }
 
@@ -107,7 +112,7 @@ export default class Simulation {
 
   // Start the simulation
   public start_engine(): boolean {
-    if (!this.is_config_valid()) return false;
+    if (!this.run_prechecks()) return false;
     // Check if simulation has been started before.
     if (!this.started_simulation) this.init();
 

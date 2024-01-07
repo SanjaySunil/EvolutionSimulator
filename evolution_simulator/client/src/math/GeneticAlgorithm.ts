@@ -1,7 +1,7 @@
 import { SimulationConfig } from "../config/simulation.config";
 import Organism from "../models/Organism";
 import { euclidean_distance } from "../utils/geometry";
-
+import Gene from "../models/Gene";
 // Function to calculate the absolute difference between two values
 export function optimise_to_side(organism_coord_component, point_component): number {
   return Math.max(organism_coord_component, point_component) - Math.min(organism_coord_component, point_component);
@@ -69,7 +69,7 @@ export function select_and_crossover(population: Organism[], config: typeof Simu
 
   // Generate new coordinates for the selected organisms
   for (const organism of new_generation) {
-    let random_coord = organism.environment.grid.fetch_empty_cell();
+    let random_coord = organism.grid.fetch_empty_cell();
     organism.coordinate = random_coord;
   }
 
@@ -79,9 +79,33 @@ export function select_and_crossover(population: Organism[], config: typeof Simu
   for (let i = 0; i < mating_size; i++) {
     const parent1: Organism = population[Math.floor(Math.random() * 50)];
     const parent2: Organism = population[Math.floor(Math.random() * 50)];
-    const child: Organism = parent1.mate(parent2);
+    const child: Organism = mate(parent1, parent2, population.length);
     new_generation.push(child);
   }
 
   return new_generation;
+}
+
+// Mates with another organism to produce a child organism.
+function mate(parent, partner: Organism, id): Organism {
+  const child_genome: Gene[] = new Array(parent.genome.data.length);
+
+  for (let i = 0; i < parent.genome.data.length; i++) {
+    const organism_gene: Gene = parent.genome.data[i];
+    const partner_gene: Gene = partner.genome.data![i];
+    const random_probability: number = Math.random();
+
+    const selection_probability = (100 - parent.config.MUTATION_PERCENT) / 2 / 100;
+    if (random_probability < selection_probability) {
+      child_genome[i] = organism_gene;
+    } else if (random_probability < selection_probability * 2) {
+      child_genome[i] = partner_gene;
+    } else {
+      child_genome[i] = new Gene(parent.config.NUMBER_OF_NEURONS);
+    }
+  }
+
+  let random_coord = parent.grid.fetch_empty_cell();
+
+  return new Organism(random_coord, child_genome, parent.grid, parent.config, id);
 }

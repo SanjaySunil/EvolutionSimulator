@@ -34,7 +34,6 @@ export default class Canvas {
   public renderer: Renderer;
   public grid: Grid;
   public mode: string;
-
   public config: typeof SimulationConfig;
   public goal_coordinates: Coordinate[];
   public max_distances_to_goal: number[];

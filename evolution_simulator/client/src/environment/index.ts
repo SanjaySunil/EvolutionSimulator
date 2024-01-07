@@ -37,7 +37,7 @@ export class Environment extends Canvas {
       return false;
     }
     if (!coordinate) coordinate = this.grid.fetch_empty_cell();
-    const organism = new Organism(coordinate, gene_data, this);
+    const organism = new Organism(coordinate, gene_data, this.grid, this.config, this.population.length);
     this.grid.set_cell_owner(coordinate, organism);
     this.population.push(organism);
     return true;

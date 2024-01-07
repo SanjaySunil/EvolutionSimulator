@@ -82,8 +82,8 @@ export default class Brain {
 
     current_vector = add_vector(current_vector, vector);
 
-    if (this.owner.environment.grid.is_valid_cell_at(current_vector)) {
-      const cell = this.owner.environment.grid.get_cell_at(current_vector);
+    if (this.owner.grid.is_valid_cell_at(current_vector)) {
+      const cell = this.owner.grid.get_cell_at(current_vector);
       return cell.state / AllCellStates.length;
     }
 
@@ -93,23 +93,23 @@ export default class Brain {
 
   // Allows the organism to obtain information about its current coordinates.
   public coordinate_sensor(sensor: number): number {
-    if (sensor == InputNeurons.X_COORDINATE && this.owner.environment.grid.grid_size) {
-      return this.owner.coordinate.x / this.owner.environment.grid.grid_size;
-    } else if (sensor == InputNeurons.Y_COORDINATE && this.owner.environment.grid.grid_size) {
-      return this.owner.coordinate.y / this.owner.environment.grid.grid_size;
+    if (sensor == InputNeurons.X_COORDINATE && this.owner.grid.grid_size) {
+      return this.owner.coordinate.x / this.owner.grid.grid_size;
+    } else if (sensor == InputNeurons.Y_COORDINATE && this.owner.grid.grid_size) {
+      return this.owner.coordinate.y / this.owner.grid.grid_size;
     } else if (sensor == InputNeurons.BOUNDARY_NORTH) {
-      return euclidean_distance(this.owner.coordinate, { x: this.owner.coordinate.x, y: 0 }) / this.owner.environment.grid.grid_size;
+      return euclidean_distance(this.owner.coordinate, { x: this.owner.coordinate.x, y: 0 }) / this.owner.grid.grid_size;
     } else if (sensor == InputNeurons.BOUNDARY_WEST) {
-      return euclidean_distance(this.owner.coordinate, { x: 0, y: this.owner.coordinate.y }) / this.owner.environment.grid.grid_size;
+      return euclidean_distance(this.owner.coordinate, { x: 0, y: this.owner.coordinate.y }) / this.owner.grid.grid_size;
     } else if (sensor == InputNeurons.BOUNDARY_EAST) {
       return (
-        euclidean_distance(this.owner.coordinate, { x: this.owner.environment.grid.grid_size, y: this.owner.coordinate.y }) /
-        this.owner.environment.grid.grid_size
+        euclidean_distance(this.owner.coordinate, { x: this.owner.grid.grid_size, y: this.owner.coordinate.y }) /
+        this.owner.grid.grid_size
       );
     } else if (sensor == InputNeurons.BOUNDARY_SOUTH) {
       return (
-        euclidean_distance(this.owner.coordinate, { x: this.owner.coordinate.x, y: this.owner.environment.grid.grid_size }) /
-        this.owner.environment.grid.grid_size
+        euclidean_distance(this.owner.coordinate, { x: this.owner.coordinate.x, y: this.owner.grid.grid_size }) /
+        this.owner.grid.grid_size
       );
     } else {
       return 0.0;
