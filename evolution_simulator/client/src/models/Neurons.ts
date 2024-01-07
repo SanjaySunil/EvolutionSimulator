@@ -1,5 +1,5 @@
 // Identifiers for each type of neuron.
-export const NeuronTypes = {
+export const Neurons = {
   INPUT: 1,
   OUTPUT: 1,
   HIDDEN: 0,

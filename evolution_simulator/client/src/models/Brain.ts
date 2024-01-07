@@ -5,14 +5,13 @@ import { AllCellStates } from "../environment/Grid";
 import weight_as_float from "../utils/connection2float";
 import { add_vector, euclidean_distance } from "../utils/geometry";
 import Gene from "./Gene";
-import { Neuron, NeuronTypes } from "./Neurons";
+import { Neuron, Neurons } from "./Neurons";
 import Organism from "./Organism";
 import { Coordinate } from "./types/Coordinate";
 
 type ConnectionList = Array<Gene>;
 type NodeMap = Map<number, Node>;
 
-// This class represents a neuron in the neural network.
 export class Node {
   /** Unique identifier for the neuron. */
   public remapped_number;
@@ -161,7 +160,7 @@ export default class Brain {
 
     let neuron_outputs_computed = false;
     for (const connection of this.connections) {
-      if (connection.sink_type == NeuronTypes.OUTPUT && !neuron_outputs_computed) {
+      if (connection.sink_type == Neurons.OUTPUT && !neuron_outputs_computed) {
         // Compute the output of neurons in the range (-1.0..1.0) using the hyperbolic tangent function.
         for (let neuron_index = 0; neuron_index < this.neurons.length; neuron_index++) {
           if (this.neurons[neuron_index].driven) {
@@ -174,7 +173,7 @@ export default class Brain {
       // Obtain the input value of the connection from a sensor neuron or another neuron.
       // The values are summed and later passed through a transfer function (hyperbolic tangent function).
       let input_val = 0.0;
-      if (connection.source_type == NeuronTypes.INPUT) {
+      if (connection.source_type == Neurons.INPUT) {
         // Read the sensor data using the sensor identifier.
         input_val = this.get_sensor(connection.source_id);
       } else {
@@ -182,7 +181,7 @@ export default class Brain {
       }
 
       // Weight the connection's value and add it to the accumulator of the corresponding neuron or action.
-      if (connection.sink_type == NeuronTypes.OUTPUT) {
+      if (connection.sink_type == Neurons.OUTPUT) {
         action_levels[connection.sink_id] += input_val * weight_as_float(connection.weight);
       } else {
         neuron_accumulators[connection.sink_id] += input_val * weight_as_float(connection.weight);
@@ -198,14 +197,14 @@ export default class Brain {
     if (this.owner.genome.data) {
       for (const gene of this.owner.genome.data) {
         // Renumber the source neuron or sensor using modulo operator.
-        if (gene.source_type === NeuronTypes.HIDDEN) {
+        if (gene.source_type === Neurons.HIDDEN) {
           gene.source_id %= this.NUMBER_OF_NEURONS;
         } else {
           gene.source_id %= this.NUMBER_OF_SENSORS;
         }
 
         // Renumber the sink neuron or action using modulo operator.
-        if (gene.sink_type === NeuronTypes.HIDDEN) {
+        if (gene.sink_type === Neurons.HIDDEN) {
           gene.sink_id %= this.NUMBER_OF_NEURONS;
         } else {
           gene.sink_id %= this.NUMBER_OF_ACTIONS;
@@ -226,8 +225,8 @@ export default class Brain {
 
     for (const gene of connection_list) {
       /** If the sink type is a neuron. */
-      if (gene.sink_type === NeuronTypes.HIDDEN) {
-        const self_input = gene.source_type == NeuronTypes.HIDDEN && gene.source_id == gene.sink_id;
+      if (gene.sink_type === Neurons.HIDDEN) {
+        const self_input = gene.source_type == Neurons.HIDDEN && gene.source_id == gene.sink_id;
 
         if (node_map.has(gene.sink_id)) {
           const node = node_map.get(gene.sink_id);
@@ -247,7 +246,7 @@ export default class Brain {
       }
 
       /** If the source type is a neuron. */
-      if (gene.source_type === NeuronTypes.HIDDEN) {
+      if (gene.source_type === Neurons.HIDDEN) {
         if (node_map.has(gene.source_id)) {
           const node = node_map.get(gene.source_id);
           if (node) node.outputs++;
@@ -270,9 +269,9 @@ export default class Brain {
   public remove_connections_to_neuron(connection_list: ConnectionList, node_map: NodeMap, neuron_number: number): void {
     for (let i = 0; i < connection_list.length; ) {
       const neuron = connection_list[i];
-      if (neuron.sink_type == NeuronTypes.HIDDEN && neuron.sink_id === neuron_number) {
+      if (neuron.sink_type == Neurons.HIDDEN && neuron.sink_id === neuron_number) {
         // Remove the connection here. If the connection source is from another neuron, decrement the other neuron's number of outputs.
-        if (neuron.source_type == NeuronTypes.HIDDEN) {
+        if (neuron.source_type == Neurons.HIDDEN) {
           const node = node_map.get(neuron.source_id);
           if (node) node.outputs--;
         }
@@ -310,7 +309,7 @@ export default class Brain {
     }
 
     for (const connection of connection_list) {
-      if (connection.sink_type == NeuronTypes.HIDDEN) {
+      if (connection.sink_type == Neurons.HIDDEN) {
         const new_conn = cloneDeep(connection);
 
         // Fix the destination neuron number.
@@ -318,7 +317,7 @@ export default class Brain {
         if (node) new_conn.sink_id = node.remapped_number;
 
         // If the source is a neuron, fix its number too.
-        if (new_conn.source_type === NeuronTypes.HIDDEN) {
+        if (new_conn.source_type === Neurons.HIDDEN) {
           const node = node_map.get(new_conn.source_id);
           if (node) new_conn.source_id = node.remapped_number;
         }
@@ -329,11 +328,11 @@ export default class Brain {
 
     // Last the connections from sensor/neuron to an action.
     for (const connection of connection_list) {
-      if (connection.sink_type == NeuronTypes.OUTPUT) {
+      if (connection.sink_type == Neurons.OUTPUT) {
         const new_conn = cloneDeep(connection);
 
         // If the source is a neuron, fix its number too.
-        if (new_conn.source_type === NeuronTypes.HIDDEN) {
+        if (new_conn.source_type === Neurons.HIDDEN) {
           const node = node_map.get(new_conn.source_id);
           if (node) new_conn.source_id = node.remapped_number;
         }
@@ -342,9 +341,9 @@ export default class Brain {
       }
 
       // Push sensor neurons, internal neurons, and action neurons to each set.
-      if (connection.source_type == NeuronTypes.INPUT) this.sensor_neurons[connection.source_id] = undefined;
+      if (connection.source_type == Neurons.INPUT) this.sensor_neurons[connection.source_id] = undefined;
       else this.internal_neurons[connection.source_id] = undefined;
-      if (connection.sink_type == NeuronTypes.OUTPUT) this.action_neurons[connection.sink_id] = undefined;
+      if (connection.sink_type == Neurons.OUTPUT) this.action_neurons[connection.sink_id] = undefined;
       else this.internal_neurons[connection.sink_id] = undefined;
     }
   }

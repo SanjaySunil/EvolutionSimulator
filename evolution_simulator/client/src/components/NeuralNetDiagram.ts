@@ -1,7 +1,7 @@
 import Gene from "../models/Gene";
 import { OutputNeuronSymbols } from "../constants/OutputNeurons";
 import { InputNeuronSymbols } from "../constants/InputNeurons";
-import { NeuronTypes } from "../models/Neurons";
+import { Neurons } from "../models/Neurons";
 
 /** Neural Network Visualiser Class */
 export default class NeuralNetDiagram {
@@ -123,14 +123,14 @@ export default class NeuralNetDiagram {
       let source;
       let sink;
 
-      if (connection.source_type == NeuronTypes.INPUT) {
+      if (connection.source_type == Neurons.INPUT) {
         if (this.input_neurons[connection.source_id]) {
           source = this.input_neurons[connection.source_id];
         } else {
           this.create_node(connection.source_type == 0 ? "NEURON" : "SENSOR", connection.source_id);
           source = this.input_neurons[connection.source_id];
         }
-      } else if (connection.source_type == NeuronTypes.HIDDEN) {
+      } else if (connection.source_type == Neurons.HIDDEN) {
         if (this.internal_neurons[connection.source_id]) {
           source = this.internal_neurons[connection.source_id];
         } else {
@@ -139,14 +139,14 @@ export default class NeuralNetDiagram {
         }
       }
 
-      if (connection.sink_type == NeuronTypes.OUTPUT) {
+      if (connection.sink_type == Neurons.OUTPUT) {
         if (this.output_neurons[connection.sink_id]) {
           sink = this.output_neurons[connection.sink_id];
         } else {
           this.create_node(connection.sink_type == 0 ? "NEURON" : "ACTION", connection.sink_id);
           sink = this.output_neurons[connection.sink_id];
         }
-      } else if (connection.sink_type == NeuronTypes.HIDDEN) {
+      } else if (connection.sink_type == Neurons.HIDDEN) {
         if (this.internal_neurons[connection.sink_id]) {
           sink = this.internal_neurons[connection.sink_id];
         } else {
