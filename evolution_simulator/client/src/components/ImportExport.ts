@@ -5,14 +5,17 @@ import Organism from "../models/Organism";
 import export_object from "../utils/export_object";
 import { render_settings } from "./Settings";
 import { read_file } from "./FileReader";
+import { CellStates } from "../environment/Grid";
 
 // Get references to HTML elements
 const export_all_organisms = document.getElementById("export_all_organisms") as HTMLButtonElement;
 const export_config = document.getElementById("export_config") as HTMLButtonElement;
 const export_simulation = document.getElementById("export_simulation") as HTMLButtonElement;
+const export_environment = document.getElementById("export_environment") as HTMLButtonElement;
 const import_config = document.getElementById("import_config") as HTMLInputElement;
 const import_organisms = document.getElementById("import_organisms") as HTMLInputElement;
 const import_simulation = document.getElementById("import_simulation") as HTMLInputElement;
+const import_environment = document.getElementById("import_environment") as HTMLInputElement;
 
 // Export all organisms
 export function export_population(population: Organism[], with_coordinates: boolean): object {
@@ -43,7 +46,7 @@ export function register_export_all_organisms_button(simulation: Simulation): vo
 }
 
 // Register event listener for exporting the config
-export function register_export_config(config: typeof SimulationConfig): void {
+export function register_export_config_button(config: typeof SimulationConfig): void {
   export_config.addEventListener("click", () => {
     export_object({ file_type: "config_export", config: config }, "config");
   });
@@ -65,17 +68,30 @@ export function register_export_simulation_button(simulation: Simulation, config
 
     obj["generation"] = simulation.environment.generation;
     obj["ticks"] = simulation.environment.ticks;
-
     obj["file_type"] = "simulation_export";
     export_object(obj, "simulation");
   });
 }
 
+export function register_export_environment_button(simulation: Simulation): void {
+  export_environment.addEventListener("click", () => {
+    let arr: number[][] = [];
+    for (let i = 0; i < simulation.environment.grid_size; i++) {
+      for (let j = 0; j < simulation.environment.grid_size; j++) {
+        if (simulation.environment.grid.get_cell_at({ x: i, y: j }).state == CellStates.WALL) {
+          arr.push([i, j]);
+        }
+      }
+    }
+    export_object({ file_type: 'obstacles', obstacles: arr }, "obstacles");
+  });
+}
+
 // Register event listener for importing the config
-export function register_import_config(simulation: Simulation) {
+export function register_import_config_button(simulation: Simulation) {
   import_config.addEventListener("change", (event: Event) => {
     read_file(event).then((data) => {
-      if (data.config) {
+      if (data.config && data.file_type == "config_export") {
         simulation.config = data.config;
         render_settings(simulation, simulation.config);
         alert("Successfully imported config.");
@@ -88,10 +104,10 @@ export function register_import_config(simulation: Simulation) {
 }
 
 // Register event listener for importing organisms
-export function register_import_organisms(simulation: Simulation) {
+export function register_import_organisms_button(simulation: Simulation) {
   import_organisms.addEventListener("change", (event: Event) => {
     read_file(event).then((data) => {
-      if (data) {
+      if (data && data.file_type == "organism_export") {
         for (const genome of data) {
           let result = simulation.environment.add_organism(genome);
           if (!result) {
@@ -109,10 +125,10 @@ export function register_import_organisms(simulation: Simulation) {
 }
 
 // Register event listener for importing the simulation
-export function register_import_simulation(simulation: Simulation) {
+export function register_import_simulation_button(simulation: Simulation) {
   import_simulation.addEventListener("change", (event: Event) => {
     read_file(event).then((data) => {
-      if (data) {
+      if (data && data.file_type == "simulation_export") {
         if (data.simulation_config) {
           simulation.config = data.simulation_config;
           render_settings(simulation, simulation.config);
@@ -139,6 +155,21 @@ export function register_import_simulation(simulation: Simulation) {
         alert("Invalid file.");
       }
       import_simulation.value = "";
+    });
+  });
+}
+
+export function register_import_environment_button(simulation) {
+  import_environment.addEventListener("change", (event: Event) => {
+    read_file(event).then((data) => {
+      if (data.obstacles && data.file_type == "obstacles") {
+        for (const obstacle of data.obstacles) {
+          simulation.environment.grid.set_cell_state({ x: obstacle[0], y: obstacle[1] }, CellStates.WALL);
+        }
+        alert("Successfully imported environment.");
+      } else alert("Failed to read obstacles from file.");
+
+      import_environment.value = "";
     });
   });
 }

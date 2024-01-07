@@ -371,3 +371,6 @@ th {
 input[type="file"] {
   display: none;
 }
+#export_neuralnet {
+  display: none;
+}

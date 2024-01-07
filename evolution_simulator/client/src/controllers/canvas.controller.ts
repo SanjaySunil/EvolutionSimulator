@@ -8,6 +8,7 @@ import Renderer from "./renderer.controller";
 
 const mode = document.getElementById("mode") as HTMLSpanElement;
 const organism_selected = document.getElementById("organism_selected") as HTMLParagraphElement;
+const organism_selected_table = document.getElementById("export_neuralnet") as HTMLTableElement;
 
 // Define the different modes for mouse interaction.
 const Modes = ["IDLE", "PAN", "GOAL", "WALL"];
@@ -56,7 +57,7 @@ export default class Canvas {
     this.renderer = new Renderer(this.canvas, this.ctx, this.pixel_size);
     this.grid = new Grid(this.grid_size, this.renderer);
     this.mode = Modes[0];
-    
+
     this.goal_coordinates = [
       { x: 0, y: 0 },
       { x: this.grid_size - 1, y: this.grid_size - 1 },
@@ -155,6 +156,7 @@ export default class Canvas {
         if (cell.state == CellStates.ORGANISM) {
           if (cell.owner?.brain.connections) {
             organism_selected.innerHTML = "Organism selected";
+            organism_selected_table.style.display = "block";
             const NN = new NeuralNetworkVisualizer();
 
             NN.draw(
@@ -166,6 +168,7 @@ export default class Canvas {
           }
         } else {
           organism_selected.innerHTML = "";
+          organism_selected_table.style.display = "none";
         }
       } else if (this.mode == Modes[ModesEnum.PAN]) {
         const canvas_top = parseInt(get_style("canvas", "top"));
