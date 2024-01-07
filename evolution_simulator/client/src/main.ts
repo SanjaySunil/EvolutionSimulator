@@ -3,6 +3,7 @@ import {
   register_export_all_organisms_button,
   register_export_config_button,
   register_export_environment_button,
+  register_export_simulation_button,
   register_import_environment_button,
 } from "./components/ImportExport";
 import { register_fps_sliders } from "./components/Buttons";
@@ -27,12 +28,13 @@ register_sim_restart_button();
 register_sim_start_stop_button(simulation);
 register_download_neuralnet_button();
 register_fps_sliders(simulation, config);
+// Import Buttons
 register_import_organisms_button(simulation);
 register_import_simulation_button(simulation);
 register_import_config_button(simulation);
 register_import_environment_button(simulation);
-register_export_config_button(simulation);
+// Export Buttons
+register_export_config_button(config);
 register_export_environment_button(simulation);
 register_export_all_organisms_button(simulation);
-register_export_environment_button(simulation);
-
+register_export_simulation_button(simulation, config);

@@ -297,7 +297,7 @@ body {
 .item-last {
   align-self: flex-end;
 }
-.button-actions {
+.button_actions {
   display: flex;
   flex-direction: column;
 }

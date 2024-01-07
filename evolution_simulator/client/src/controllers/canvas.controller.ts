@@ -58,13 +58,7 @@ export default class Canvas {
     this.grid = new Grid(this.grid_size, this.renderer);
     this.mode = Modes[0];
 
-    this.goal_coordinates = [
-      { x: 0, y: 0 },
-      { x: this.grid_size - 1, y: this.grid_size - 1 },
-    ];
-    for (const coordinate of this.goal_coordinates) {
-      this.grid.set_cell_selected(coordinate, true);
-    }
+    this.goal_coordinates = [];
 
     // Set the initial zoom level and transform the canvas accordingly
     this.canvas.style.transform = `scale(${this.zoom_level})`;

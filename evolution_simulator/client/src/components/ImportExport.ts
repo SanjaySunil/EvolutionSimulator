@@ -36,11 +36,10 @@ export function export_population(population: Organism[], with_coordinates: bool
 // Register event listener for exporting all organisms
 export function register_export_all_organisms_button(simulation: Simulation): void {
   export_all_organisms.addEventListener("click", () => {
-    const population = simulation.environment.population;
-    if (population) {
-      const obj = export_population(population, false);
-      obj["file_type"] = "organism_export";
-      export_object(obj, "population");
+    const organisms = simulation.environment.population;
+    if (organisms) {
+      const population = export_population(organisms, false);
+      export_object({ file_type: "organism_export", population }, "population");
     } else window.alert("No organisms available to export.");
   });
 }
@@ -83,7 +82,7 @@ export function register_export_environment_button(simulation: Simulation): void
         }
       }
     }
-    export_object({ file_type: 'obstacles', obstacles: arr }, "obstacles");
+    export_object({ file_type: "obstacles", obstacles: arr }, "obstacles");
   });
 }
 
@@ -108,7 +107,7 @@ export function register_import_organisms_button(simulation: Simulation) {
   import_organisms.addEventListener("change", (event: Event) => {
     read_file(event).then((data) => {
       if (data && data.file_type == "organism_export") {
-        for (const genome of data) {
+        for (const genome of data.population) {
           let result = simulation.environment.add_organism(genome);
           if (!result) {
             alert("Failed to import all organisms.");
