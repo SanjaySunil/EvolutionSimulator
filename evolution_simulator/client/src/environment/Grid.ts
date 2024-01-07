@@ -1,7 +1,8 @@
 import Renderer from "../controllers/renderer.controller";
 import Organism from "../models/Organism";
-import PerlinNoise from "../utils/PerlinNoise";
 import { Coordinate } from "../models/types/Coordinate";
+import PerlinNoise from "../utils/PerlinNoise";
+import get_random_vector from "../utils/get_random_vector";
 
 // Various Cell States that a GridCell can take.
 export const CellStates = {
@@ -69,12 +70,14 @@ export class Grid {
   private _data: GridCell[][];
   public grid_size: number;
   public renderer: Renderer;
+  public occupied: number;
 
   // Builds a new Grid.
   constructor(grid_size: number, renderer: Renderer) {
     this._data = new Array(grid_size);
     this.renderer = renderer;
     this.grid_size = grid_size;
+    this.occupied = 0;
     this.init();
   }
 
@@ -90,7 +93,6 @@ export class Grid {
         // this.create_barrier(cell);
         // this.create_radioactive_barrier(cell);
         // this.create_perlin_barrier(cell, perlin);
-        this.renderer.to_fill.add(cell);
         // this.renderer.to_clear.add(cell);
         column[y] = cell;
       }
@@ -102,28 +104,6 @@ export class Grid {
   public clear_grid(): void {
     this._data = [];
     this.init();
-  }
-
-  // Creates walls using Perlin Noise.
-  public create_perlin_barrier(cell: GridCell, perlin): void {
-    const WALL_THRESHOLD = 0.85; // 0.85
-    // 0.1
-    const value = perlin.noise(cell.coordinate.x * 0.1, cell.coordinate.y * 0.1); // Adjust the scale as needed
-    cell.state = value > WALL_THRESHOLD ? CellStates.WALL : CellStates.EMPTY;
-  }
-
-  // Creates a radioactive barrier depending on specified conditions.
-  public create_radioactive_barrier(cell: GridCell): void {
-    const center = this.grid_size / 2;
-    const size = 7.5;
-    if (cell.coordinate.x >= center - size && cell.coordinate.x <= center + size && cell.coordinate.y >= center - size && cell.coordinate.y <= center + size) cell.state = CellStates.RADIOACTIVE;
-  }
-
-  // Creates a barrier depending on specified conditions.
-  public create_barrier(cell: GridCell): void {
-    const center = this.grid_size / 2;
-    const size = 7.5;
-    if (cell.coordinate.x >= center - size && cell.coordinate.x <= center + size && cell.coordinate.y >= center - size && cell.coordinate.y <= center + size) cell.state = CellStates.WALL;
   }
 
   // Checks if specified cell is valid.
@@ -150,11 +130,12 @@ export class Grid {
   }
 
   // Sets the owner of a cell.
-  public set_cell_owner(coordinate: Coordinate, owner: any): void {
+  public set_cell_owner(coordinate: Coordinate, owner: Organism): void {
     if (this.is_valid_cell_at(coordinate)) {
       const cell = this.get_cell_at(coordinate);
       cell.owner = owner;
       this.renderer.to_fill.add(cell);
+      this.occupied += 1;
     }
   }
 
@@ -165,6 +146,7 @@ export class Grid {
       cell.state = state;
       cell.owner = null;
       this.renderer.to_fill.add(cell);
+      this.occupied += 1;
     }
   }
 
@@ -177,16 +159,6 @@ export class Grid {
     }
   }
 
-  // Clears the state of a cell.
-  public clear_cell_state(coordinate: Coordinate): void {
-    if (this.is_valid_cell_at(coordinate)) {
-      const cell = this.get_cell_at(coordinate);
-      cell.state = CellStates.EMPTY;
-      cell.owner = null;
-      this.renderer.to_clear.add(cell);
-    }
-  }
-
   // Sets the highlighted state of a cell.
   public set_cell_highlighted(coordinate: Coordinate, highlighted: boolean): void {
     if (this.is_valid_cell_at(coordinate)) {
@@ -194,5 +166,71 @@ export class Grid {
       cell.is_highlighted = highlighted;
       this.renderer.to_fill.add(cell);
     }
+  }
+
+  // Clears the state of a cell.
+  public clear_cell_state(coordinate: Coordinate): void {
+    if (this.is_valid_cell_at(coordinate)) {
+      const cell = this.get_cell_at(coordinate);
+      cell.state = CellStates.EMPTY;
+      cell.owner = null;
+      this.renderer.to_clear.add(cell);
+      this.occupied -= 1;
+    }
+  }
+
+  // Creates walls using Perlin Noise.
+  public create_perlin_barrier(cell: GridCell, perlin): void {
+    const WALL_THRESHOLD = 0.85; // 0.85
+    // 0.1
+    const value = perlin.noise(cell.coordinate.x * 0.1, cell.coordinate.y * 0.1); // Adjust the scale as needed
+    cell.state = value > WALL_THRESHOLD ? CellStates.WALL : CellStates.EMPTY;
+    this.renderer.to_fill.add(cell);
+    this.occupied += 1;
+  }
+
+  // Creates a radioactive barrier depending on specified conditions.
+  public create_radioactive_barrier(cell: GridCell): void {
+    const center = this.grid_size / 2;
+    const size = 7.5;
+    if (
+      cell.coordinate.x >= center - size &&
+      cell.coordinate.x <= center + size &&
+      cell.coordinate.y >= center - size &&
+      cell.coordinate.y <= center + size
+    )
+      cell.state = CellStates.RADIOACTIVE;
+    this.renderer.to_fill.add(cell);
+    this.occupied += 1;
+  }
+
+  // Creates a barrier depending on specified conditions.
+  public create_barrier(cell: GridCell): void {
+    const center = this.grid_size / 2;
+    const size = 7.5;
+    if (
+      cell.coordinate.x >= center - size &&
+      cell.coordinate.x <= center + size &&
+      cell.coordinate.y >= center - size &&
+      cell.coordinate.y <= center + size
+    )
+      cell.state = CellStates.WALL;
+    this.renderer.to_fill.add(cell);
+    this.occupied += 1;
+  }
+
+  // Fetches an random empty cell from the grid.
+  public fetch_empty_cell(): Coordinate {
+    if (this.occupied == this.grid_size ** 2) {
+      alert("No empty cells left!");
+      throw Error("No empty cells left!");
+    }
+    let random_coord = get_random_vector(0, 0, this.grid_size - 1, this.grid_size - 1);
+
+    while (!this.is_cell_empty(random_coord)) {
+      random_coord = get_random_vector(0, 0, this.grid_size - 1, this.grid_size - 1);
+    }
+
+    return random_coord;
   }
 }

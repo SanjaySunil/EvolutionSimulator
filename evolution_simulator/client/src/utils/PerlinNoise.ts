@@ -12,10 +12,7 @@ export default class PerlinNoise {
 
     for (let i = 0; i < 256; i++) {
       const randomIndex = Math.floor(Math.random() * (256 - i)) + i;
-      [permutationSource[i], permutationSource[randomIndex]] = [
-        permutationSource[randomIndex],
-        permutationSource[i],
-      ];
+      [permutationSource[i], permutationSource[randomIndex]] = [permutationSource[randomIndex], permutationSource[i]];
     }
 
     for (let i = 0; i < 256; i++) {

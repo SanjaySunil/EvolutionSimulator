@@ -1,12 +1,13 @@
+import { cloneDeep } from "lodash";
 import Directions from "../constants/Directions";
 import { InputNeurons } from "../constants/InputNeurons";
 import { AllCellStates } from "../environment/Grid";
-import { Coordinate } from "./types/Coordinate";
-import { add_vector, euclidean_distance } from "../utils/geometry";
 import weight_as_float from "../utils/connection2float";
+import { add_vector, euclidean_distance } from "../utils/geometry";
 import Gene from "./Gene";
 import { Neuron, NeuronTypes } from "./Neurons";
 import Organism from "./Organism";
+import { Coordinate } from "./types/Coordinate";
 
 type ConnectionList = Array<Gene>;
 type NodeMap = Map<number, Node>;
@@ -111,9 +112,15 @@ export default class Brain {
     } else if (sensor == InputNeurons.BOUNDARY_WEST) {
       return euclidean_distance(this.owner.coordinate, { x: 0, y: this.owner.coordinate.y }) / this.owner.environment.grid.grid_size;
     } else if (sensor == InputNeurons.BOUNDARY_EAST) {
-      return euclidean_distance(this.owner.coordinate, { x: this.owner.environment.grid.grid_size, y: this.owner.coordinate.y }) / this.owner.environment.grid.grid_size;
+      return (
+        euclidean_distance(this.owner.coordinate, { x: this.owner.environment.grid.grid_size, y: this.owner.coordinate.y }) /
+        this.owner.environment.grid.grid_size
+      );
     } else if (sensor == InputNeurons.BOUNDARY_SOUTH) {
-      return euclidean_distance(this.owner.coordinate, { x: this.owner.coordinate.x, y: this.owner.environment.grid.grid_size }) / this.owner.environment.grid.grid_size;
+      return (
+        euclidean_distance(this.owner.coordinate, { x: this.owner.coordinate.x, y: this.owner.environment.grid.grid_size }) /
+        this.owner.environment.grid.grid_size
+      );
     } else {
       return 0.0;
     }
@@ -124,26 +131,22 @@ export default class Brain {
    * and 1.0.
    */
   public get_sensor(sensor_id: number): number {
-    if ([
-      InputNeurons.X_COORDINATE,
-      InputNeurons.Y_COORDINATE,
-      InputNeurons.BOUNDARY_NORTH,
-      InputNeurons.BOUNDARY_EAST,
-      InputNeurons.BOUNDARY_SOUTH,
-      InputNeurons.BOUNDARY_WEST
-    ].includes(sensor_id)) {
-      return this.sensor_coordinate(sensor_id);
-    } else if ([
-      InputNeurons.LOOK_NORTH,
-      InputNeurons.LOOK_EAST,
-      InputNeurons.LOOK_SOUTH,
-      InputNeurons.LOOK_WEST,
-    ].includes(sensor_id)
+    if (
+      [
+        InputNeurons.X_COORDINATE,
+        InputNeurons.Y_COORDINATE,
+        InputNeurons.BOUNDARY_NORTH,
+        InputNeurons.BOUNDARY_EAST,
+        InputNeurons.BOUNDARY_SOUTH,
+        InputNeurons.BOUNDARY_WEST,
+      ].includes(sensor_id)
     ) {
+      return this.sensor_coordinate(sensor_id);
+    } else if ([InputNeurons.LOOK_NORTH, InputNeurons.LOOK_EAST, InputNeurons.LOOK_SOUTH, InputNeurons.LOOK_WEST].includes(sensor_id)) {
       return this.sensor_look(sensor_id);
-    } return 0.0;
+    }
+    return 0.0;
   }
-
 
   /**
    * Performs a feed-forward computation in the neural network.
@@ -265,7 +268,7 @@ export default class Brain {
 
   // Removes connections to a specific neuron from the connection list and updates the node map accordingly.
   public remove_connections_to_neuron(connection_list: ConnectionList, node_map: NodeMap, neuron_number: number): void {
-    for (let i = 0; i < connection_list.length;) {
+    for (let i = 0; i < connection_list.length; ) {
       const neuron = connection_list[i];
       if (neuron.sink_type == NeuronTypes.NEURON && neuron.sink_id === neuron_number) {
         // Remove the connection here. If the connection source is from another neuron, decrement the other neuron's number of outputs.

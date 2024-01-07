@@ -83,19 +83,24 @@ export default class NeuralNetworkVisualizer {
     const group = this.create_element_ns("g", {});
     let circle, text_elem;
     if (node_type == "SENSOR") {
-      const prev = Object.keys(this.sensor_neurons).length == 0 ? this.spacing + this.radius : this.last_sensor_y + (this.spacing + 2 * this.radius);
+      const prev =
+        Object.keys(this.sensor_neurons).length == 0 ? this.spacing + this.radius : this.last_sensor_y + (this.spacing + 2 * this.radius);
       this.sensor_neurons[node_id] = [50, prev];
       this.last_sensor_y = prev;
       circle = this.create_circle(50, prev, this.radius, "black");
       text_elem = this.create_text(50, prev, InputNeuronSymbols[node_id], "white");
     } else if (node_type == "ACTION") {
-      const prev = Object.keys(this.action_neurons).length == 0 ? this.spacing + this.radius : this.last_action_y + (this.spacing + 2 * this.radius);
+      const prev =
+        Object.keys(this.action_neurons).length == 0 ? this.spacing + this.radius : this.last_action_y + (this.spacing + 2 * this.radius);
       this.action_neurons[node_id] = [350, prev];
       this.last_action_y = prev;
       circle = this.create_circle(350, prev, this.radius, "black");
       text_elem = this.create_text(350, prev, OutputNeuronSymbols[node_id], "white");
     } else if (node_type == "NEURON") {
-      const prev = Object.keys(this.internal_neurons).length == 0 ? this.spacing + this.radius : this.last_internal_y + (this.spacing + 2 * this.radius);
+      const prev =
+        Object.keys(this.internal_neurons).length == 0
+          ? this.spacing + this.radius
+          : this.last_internal_y + (this.spacing + 2 * this.radius);
       this.internal_neurons[node_id] = [200, prev];
       this.last_internal_y = prev;
       circle = this.create_circle(200, prev, this.radius, "black");
@@ -133,27 +138,35 @@ export default class NeuralNetworkVisualizer {
       let source;
       let sink;
       if (conn.source_type == NeuronTypes.SENSOR) {
-        source = this.sensor_neurons[conn.source_id] || (() => {
-          this.create_node(conn.source_type == 0 ? "NEURON" : "SENSOR", conn.source_id);
-          return this.sensor_neurons[conn.source_id];
-        })();
+        source =
+          this.sensor_neurons[conn.source_id] ||
+          (() => {
+            this.create_node(conn.source_type == 0 ? "NEURON" : "SENSOR", conn.source_id);
+            return this.sensor_neurons[conn.source_id];
+          })();
       } else if (conn.source_type == NeuronTypes.NEURON) {
-        source = this.internal_neurons[conn.source_id] || (() => {
-          this.create_node(conn.source_type == 0 ? "NEURON" : "SENSOR", conn.source_id);
-          return this.internal_neurons[conn.source_id];
-        })();
+        source =
+          this.internal_neurons[conn.source_id] ||
+          (() => {
+            this.create_node(conn.source_type == 0 ? "NEURON" : "SENSOR", conn.source_id);
+            return this.internal_neurons[conn.source_id];
+          })();
       }
 
       if (conn.sink_type == NeuronTypes.ACTION) {
-        sink = this.action_neurons[conn.sink_id] || (() => {
-          this.create_node(conn.sink_type == 0 ? "NEURON" : "ACTION", conn.sink_id);
-          return this.action_neurons[conn.sink_id];
-        })();
+        sink =
+          this.action_neurons[conn.sink_id] ||
+          (() => {
+            this.create_node(conn.sink_type == 0 ? "NEURON" : "ACTION", conn.sink_id);
+            return this.action_neurons[conn.sink_id];
+          })();
       } else if (conn.sink_type == NeuronTypes.NEURON) {
-        sink = this.internal_neurons[conn.sink_id] || (() => {
-          this.create_node(conn.sink_type == 0 ? "NEURON" : "ACTION", conn.sink_id);
-          return this.internal_neurons[conn.sink_id];
-        })();
+        sink =
+          this.internal_neurons[conn.sink_id] ||
+          (() => {
+            this.create_node(conn.sink_type == 0 ? "NEURON" : "ACTION", conn.sink_id);
+            return this.internal_neurons[conn.sink_id];
+          })();
       }
 
       const max_thickness = 2.5;

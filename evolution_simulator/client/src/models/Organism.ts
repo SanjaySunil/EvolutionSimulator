@@ -2,7 +2,8 @@ import { SimulationConfig } from "../config/simulation.config";
 import Directions from "../constants/Directions";
 import { OutputNeurons } from "../constants/OutputNeurons";
 import { Environment } from "../environment";
-import { Coordinate, make_vector } from "../math/Coordinate";
+import { Coordinate } from "./types/Coordinate";
+import { make_vector } from "../utils/geometry";
 import get_random_vector from "../utils/get_random_vector";
 import prob2bool from "../utils/prob2bool";
 import Brain from "./Brain";
@@ -28,12 +29,7 @@ export default class Organism {
     // If a genome has been given, use this genome, else create a new random genome.
     this.genome = new Genome(this, genome);
     this.config = environment.config;
-    this.brain = new Brain(
-      this,
-      this.config.NUMBER_OF_SENSORS,
-      this.config.NUMBER_OF_NEURONS,
-      this.config.NUMBER_OF_ACTIONS
-    );
+    this.brain = new Brain(this, this.config.NUMBER_OF_SENSORS, this.config.NUMBER_OF_NEURONS, this.config.NUMBER_OF_ACTIONS);
     this.direction = Directions.NORTH;
     this.fitness = null;
     this.alive = true;
@@ -61,7 +57,7 @@ export default class Organism {
       const partner_gene: Gene = partner.genome.data[i];
       const random_probability: number = Math.random();
 
-      const selection_probability = ((100 - this.config.MUTATION_PERCENT) / 2) / 100;
+      const selection_probability = (100 - this.config.MUTATION_PERCENT) / 2 / 100;
       if (random_probability < selection_probability) {
         child_genome[i] = organism_gene;
       } else if (random_probability < selection_probability * 2) {
@@ -71,11 +67,7 @@ export default class Organism {
       }
     }
 
-    let random_coord = get_random_vector(0, 0, this.config.GRID_SIZE - 1, this.config.GRID_SIZE - 1);
-
-    while (!this.environment.grid.is_cell_empty(random_coord)) {
-      random_coord = get_random_vector(0, 0, this.config.GRID_SIZE - 1, this.config.GRID_SIZE - 1);
-    }
+    let random_coord = this.environment.grid.fetch_empty_cell();
 
     return new Organism(random_coord, child_genome, this.environment);
   }

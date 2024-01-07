@@ -1,19 +1,15 @@
 import { SimulationConfig } from "../config/simulation.config";
 import Canvas from "../controllers/canvas.controller";
-import { Coordinate } from "../models/types/Coordinate";
-import { add_vector } from "../utils/geometry";
 import { select_and_crossover, sort_and_calculate_fitness } from "../math/GeneticAlgorithm";
 import Gene from "../models/Gene";
 import Organism from "../models/Organism";
-import get_random_vector from "../utils/get_random_vector";
+import { Coordinate } from "../models/types/Coordinate";
+import { add_vector } from "../utils/geometry";
 import { CellStates } from "./Grid";
-
-type Frame = { org_positions: Coordinate[] };
 
 // Environment Class.
 export class Environment extends Canvas {
   public population: Organism[];
-  public simulation_frames: Frame[];
   public ticks: number;
   public generation: number;
   public overall_fitness: number;
@@ -25,7 +21,6 @@ export class Environment extends Canvas {
   constructor(canvas_id: string, config: typeof SimulationConfig) {
     super(canvas_id, config);
     this.population = [];
-    this.simulation_frames = [];
     this.ticks = 0;
     this.generation = 1;
     this.best_fitness = config.GRID_SIZE;
@@ -36,20 +31,15 @@ export class Environment extends Canvas {
 
   // Adds an Organism to the environment and configures knowledge.
   public add_organism(coordinate: Coordinate, gene_data: Gene[]): void {
-    const org = new Organism(coordinate, gene_data, this);
-    this.grid.get_cell_at(coordinate).owner = org;
-    this.population.push(org);
-    this.renderer.to_fill.add(this.grid.get_cell_at(coordinate));
+    const organism = new Organism(coordinate, gene_data, this);
+    this.grid.set_cell_owner(coordinate, organism);
+    this.population.push(organism);
   }
 
   // Initialises a new Environment.
   public init(): void {
     while (this.population.length != this.config.POPULATION) {
-      let random_coord = get_random_vector(0, 0, this.config.GRID_SIZE - 1, this.config.GRID_SIZE - 1);
-
-      while (!this.grid.is_cell_empty(random_coord)) {
-        random_coord = get_random_vector(0, 0, this.config.GRID_SIZE - 1, this.config.GRID_SIZE - 1);
-      }
+      let random_coord = this.grid.fetch_empty_cell();
 
       const data: Gene[] = [];
       for (let i = 0; i < this.config.NUMBER_OF_GENES; i++) {
@@ -88,29 +78,24 @@ export class Environment extends Canvas {
     } else {
       // Iterate through Organism list and perform action.
       this.alive = 0;
-      const org_positions: any = [];
 
-      for (let organism = 0; organism < this.population.length; organism++) {
-        const org = this.population[organism];
-
-        if (org.alive) {
+      for (const organism of this.population) {
+        if (organism.alive) {
           this.alive++;
-          const offset = org.action();
-          const new_coordinate = add_vector(org.coordinate, offset);
+          const offset = organism.action();
+          const new_coordinate = add_vector(organism.coordinate, offset);
           if (this.grid.is_valid_cell_at(new_coordinate) && this.grid.is_cell_empty(new_coordinate)) {
             // Update direction
-            org.direction = offset;
-            org.coordinate = new_coordinate;
-            org_positions.push({ coordinate: org.coordinate, colour: org.genome.colour });
+            organism.direction = offset;
+            organism.coordinate = new_coordinate;
           } else if (this.grid.is_valid_cell_at(new_coordinate) && this.grid.get_cell_at(new_coordinate).state == CellStates.RADIOACTIVE) {
             // Clear Cell.
-            this.grid.clear_cell_state(org.coordinate);
-            org.alive = false;
+            this.grid.clear_cell_state(organism.coordinate);
+            organism.alive = false;
             this.alive--;
           }
         }
       }
-      this.simulation_frames.push({ org_positions });
     }
     this.ticks++;
   }

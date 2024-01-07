@@ -1,12 +1,36 @@
+import Renderer from "../controllers/renderer.controller";
+import Simulation from "../controllers/simulation.controller";
+import { Grid } from "../environment/Grid";
+
+function check_config_changes(simulation, config, key) {
+  if (key === "GRID_SIZE") {
+    simulation.environment.pixel_size = (config[key] * 15) / config[key];
+    simulation.environment.canvas.width = simulation.environment.canvas.height = config[key] * 15;
+    simulation.environment.canvas.style.transform = `scale(${simulation.environment.zoom_level})`;
+    simulation.environment.renderer = new Renderer(
+      simulation.environment.canvas,
+      simulation.environment.ctx,
+      simulation.environment.pixel_size
+    );
+    simulation.environment.grid = new Grid(config[key], simulation.environment.renderer);
+    simulation.environment.renderer.pixel_size = simulation.environment.pixel_size;
+    simulation.environment.renderer.clear_canvas();
+  } else if (key === "POPULATION") {
+    simulation.environment.renderer.clear_canvas();
+  }
+}
+
 // Function to render the frames per second (fps) element
 export function render_fps_element(element: HTMLElement, fps: number): void {
   element.innerHTML = Math.round(fps).toString();
 }
 
 // Function to render the settings based on the provided config object
-export function render_settings(config: object): void {
+export function render_settings(simulation: Simulation, config: object): void {
   const settings = document.getElementById("settings") as HTMLDivElement;
   const keys = Object.keys(config);
+
+  settings.innerHTML = "";
 
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i];
@@ -40,8 +64,12 @@ export function render_settings(config: object): void {
       input.setAttribute("value", value.toString());
     }
 
-    // Add event listener for input change
-    input.addEventListener("change", (e: Event) => {
+    const inputs = document.querySelectorAll("input");
+    inputs.forEach((input) => {
+      input.addEventListener("change", handleChange);
+    });
+
+    function handleChange(e: Event) {
       const target = e.target as HTMLInputElement;
       const key = target.id;
       const value = target.value;
@@ -52,7 +80,9 @@ export function render_settings(config: object): void {
       } else if (typeof config[key] === "boolean") {
         config[key] = target.checked;
       }
-    });
+
+      check_config_changes(simulation, config, key);
+    }
 
     // Append the input cell to the row
     row.appendChild(input_cell);
@@ -60,5 +90,8 @@ export function render_settings(config: object): void {
 
     // Append the row to the settings div
     settings.appendChild(row);
+
+    // Check config changes.
+    check_config_changes(simulation, config, key);
   }
 }

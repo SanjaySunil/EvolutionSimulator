@@ -5,7 +5,7 @@ import get_random_vector from "../utils/get_random_vector";
 
 // Function to calculate the absolute difference between two values
 export function optimise_to_side(organism_coord_component, point_component): number {
-  return (Math.max(organism_coord_component, point_component) - Math.min(organism_coord_component, point_component));
+  return Math.max(organism_coord_component, point_component) - Math.min(organism_coord_component, point_component);
 }
 
 // Function to calculate the fitness of an organism based on its coordinate and a target point
@@ -69,13 +69,7 @@ export function select_and_crossover(population: Organism[], config: typeof Simu
 
   // Generate new coordinates for the selected organisms
   for (const organism of new_generation) {
-    let random_coord = get_random_vector(0, 0, config.GRID_SIZE - 1, config.GRID_SIZE - 1);
-
-    // Find an empty cell in the environment grid for the organism
-    while (!organism.environment.grid.is_cell_empty(random_coord)) {
-      random_coord = get_random_vector(0, 0, config.GRID_SIZE - 1, config.GRID_SIZE - 1);
-    }
-
+    let random_coord = organism.environment.grid.fetch_empty_cell();
     organism.coordinate = random_coord;
   }
 

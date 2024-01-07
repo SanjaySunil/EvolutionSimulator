@@ -1,6 +1,6 @@
+import { render_fps_element } from "../components/Settings";
 import { SimulationConfig } from "../config/simulation.config";
 import { Environment } from "../environment";
-import { render_fps_element } from "../components/Settings";
 
 // Get references to HTML elements
 const target_update_fps = document.getElementById("target_update_fps") as HTMLSpanElement;
@@ -41,7 +41,9 @@ export default class Simulation {
 
   // Define environment and population variables
   public environment: Environment;
-  public cached_population: any[];
+
+  public file_imported: string | null;
+  public cached_organisms: [];
 
   // Constructor for the Simulation class
   constructor(config: typeof SimulationConfig = SimulationConfig) {
@@ -64,13 +66,14 @@ export default class Simulation {
     this.rendering_enabled = true;
     this.started_simulation = false;
     this.first_simulation = true;
+    this.file_imported = null;
 
     // Initialize loop variables
     this.update_loop = undefined;
     this.render_loop = undefined;
 
     // Initialize population and environment
-    this.cached_population = [];
+    this.cached_organisms = [];
     this.environment = new Environment("canvas", this.config);
 
     // Setup render loop
@@ -81,45 +84,49 @@ export default class Simulation {
     render_fps_element(target_render_fps, this.config.TARGET_RENDER_FPS);
   }
 
+  public is_config_valid(): boolean {
+    if (this.cached_organisms.length > this.config.GRID_SIZE ** 2 || this.config.POPULATION > this.config.GRID_SIZE ** 2) {
+      let error = "Population size cannot be greater than Grid size squared.";
+      alert(error);
+      return false;
+    }
+    return true;
+  }
+
   // Initialize the simulation
   public init(): void {
-    if (!this.started_simulation) {
-      // Clone and replace canvas if changes have been made to Grid size
-      if (!this.first_simulation) {
-        const old_canvas = document.getElementById("canvas")!;
-        const new_canvas = old_canvas.cloneNode(true);
-        old_canvas.parentNode!.replaceChild(new_canvas, old_canvas);
-        this.environment = new Environment("canvas", this.config);
+    // Add cached organisms to the environment
+    if (this.cached_organisms.length > 0) {
+      for (const genome of this.cached_organisms) {
+        this.environment.add_organism(this.environment.grid.fetch_empty_cell(), genome);
       }
-
-      // Add cached organisms to the environment
-      if (this.cached_population.length > 0) {
-        for (const org of this.cached_population) {
-          this.environment.add_organism(org.coordinate, org.genome);
-        }
-        console.log(this.cached_population);
-      } else {
-        this.environment.init();
-      }
-
-      this.started_simulation = true;
+    } else {
+      this.environment.init();
     }
+
+    this.started_simulation = true;
   }
 
   // Setup the render loop
   public setup_render_loop(): void {
     if (this.rendering_enabled) {
-      this.render_loop = setInterval(() => { this.render_simulation(); }, 1000 / this.config.TARGET_RENDER_FPS);
+      this.render_loop = setInterval(() => {
+        this.render_simulation();
+      }, 1000 / this.config.TARGET_RENDER_FPS);
     }
   }
 
   // Start the simulation
-  public start(): void {
-    this.init();
+  public start_engine(): boolean {
+    if (!this.is_config_valid()) return false;
+    // Check if simulation has been started before.
+    if (!this.started_simulation) this.init();
+
     if (this.render_loop != undefined) {
       clearInterval(this.render_loop);
       this.render_loop = undefined;
     }
+
     if (!this.is_running) {
       this.is_running = true;
 
@@ -147,10 +154,11 @@ export default class Simulation {
         }
       }, 1000 / this.config.TARGET_UPDATE_FPS);
     }
+    return true;
   }
 
   // Stop the simulation
-  public stop(): void {
+  public stop_engine(): void {
     if (this.is_running) {
       this.is_running = false;
       clearInterval(this.update_loop);
@@ -160,9 +168,9 @@ export default class Simulation {
   }
 
   // Restart the simulation
-  public restart(): void {
-    this.stop();
-    this.start();
+  public restart_engine(): void {
+    this.stop_engine();
+    this.start_engine();
   }
 
   // Update the simulation

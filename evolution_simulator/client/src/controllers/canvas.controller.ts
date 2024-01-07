@@ -56,9 +56,11 @@ export default class Canvas {
     this.renderer = new Renderer(this.canvas, this.ctx, this.pixel_size);
     this.grid = new Grid(this.grid_size, this.renderer);
     this.mode = Modes[0];
-
-    this.goal_coordinates = [{ x: 0, y: 0 }, {x: this.grid_size - 1, y: this.grid_size - 1}];
-
+    
+    this.goal_coordinates = [
+      { x: 0, y: 0 },
+      { x: this.grid_size - 1, y: this.grid_size - 1 },
+    ];
     for (const coordinate of this.goal_coordinates) {
       this.grid.set_cell_selected(coordinate, true);
     }
@@ -142,8 +144,13 @@ export default class Canvas {
     if (this.mouse.left_click) {
       const cell = this.grid.get_cell_at(this.mouse.grid_coord);
       if (this.mode == Modes[ModesEnum.GOAL]) {
-        this.goal_coordinates.push(cell.coordinate);
-        this.grid.set_cell_selected(cell.coordinate, true);
+        if (cell.is_selected) {
+          this.goal_coordinates.splice(this.goal_coordinates.indexOf(cell.coordinate), 1);
+          this.grid.set_cell_selected(cell.coordinate, false);
+        } else {
+          this.goal_coordinates.push(cell.coordinate);
+          this.grid.set_cell_selected(cell.coordinate, true);
+        }
       } else if (this.mode == Modes[ModesEnum.IDLE]) {
         if (cell.state == CellStates.ORGANISM) {
           if (cell.owner?.brain.connections) {

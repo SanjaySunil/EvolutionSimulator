@@ -1,4 +1,4 @@
-import { OutputNeurons } from './../constants/OutputNeurons';
+import { OutputNeurons } from "./../constants/OutputNeurons";
 import { InputNeurons } from "../constants/InputNeurons";
 
 // SimulationConfig Types

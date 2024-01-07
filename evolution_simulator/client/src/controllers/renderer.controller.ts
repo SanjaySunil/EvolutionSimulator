@@ -120,8 +120,9 @@ export default class Renderer {
 
         this.render_organism_cell(cell, rotation);
       }
-    } else if (cell.state == CellStates.EMPTY) { this.render_empty_cell(cell); }
-    else if (cell.state == CellStates.RADIOACTIVE) this.render_radioactive_cell(cell);
+    } else if (cell.state == CellStates.EMPTY) {
+      this.render_empty_cell(cell);
+    } else if (cell.state == CellStates.RADIOACTIVE) this.render_radioactive_cell(cell);
     else if (cell.state == CellStates.WALL) this.render_wall_cell(cell);
     else {
       this.ctx.fillRect(cell.coordinate.x * this.pixel_size, cell.coordinate.y * this.pixel_size, this.pixel_size, this.pixel_size);
