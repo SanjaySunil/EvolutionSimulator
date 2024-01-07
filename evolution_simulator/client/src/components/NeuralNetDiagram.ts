@@ -3,7 +3,7 @@ import { OutputNeuronSymbols } from "../constants/OutputNeurons";
 import { InputNeuronSymbols } from "../constants/InputNeurons";
 import { Neurons } from "../models/Neurons";
 
-/** Neural Network Visualiser Class */
+// This class is responsible for drawing the neural network diagram.
 export default class NeuralNetDiagram {
   public radius = 20;
   public spacing = 10;

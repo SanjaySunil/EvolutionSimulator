@@ -87,7 +87,6 @@ body {
   position: relative;
   image-rendering: pixelated;
   cursor: pointer;
-  /** Transform needs to be updated for javascript as well */
 }
 
 #header {

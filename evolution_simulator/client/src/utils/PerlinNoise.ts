@@ -1,4 +1,4 @@
-/** Need to create own implementation. */
+// Need to create own implementation.
 export default class PerlinNoise {
   private permutation: number[];
 
