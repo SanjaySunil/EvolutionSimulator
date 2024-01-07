@@ -8,11 +8,6 @@ export function optimise_to_side(organism_coord_component, point_component): num
   return Math.max(organism_coord_component, point_component) - Math.min(organism_coord_component, point_component);
 }
 
-// Function to calculate the fitness of an organism based on its coordinate and a target point
-export function calculate_fitness(coord, point): number {
-  return euclidean_distance(coord, point);
-}
-
 // Function to merge two sorted arrays of organisms
 export function merge(left: Organism[], right: Organism[]): Organism[] {
   const result: Organism[] = [];
@@ -42,14 +37,23 @@ export function merge_sort(arr: Organism[]): Organism[] {
 }
 
 // Function to sort the population of organisms based on their fitness and calculate their fitness values
-export function sort_and_calculate_fitness(population: Organism[], coordinates): Organism[] {
+export function sort_and_calculate_fitness(population: Organism[], goal_coordinates, max_distances_to_goal): Organism[] {
   for (const organism of population) {
     const results: number[] = [];
 
-    for (const coordinate of coordinates) {
-      results.push(calculate_fitness(organism.coordinate, coordinate));
+    for (const coordinate of goal_coordinates) {
+      results.push(euclidean_distance(organism.coordinate, coordinate));
     }
-    organism.fitness = Math.min(...results);
+
+    // Get the index of the minimum fitness value
+    const index = results.indexOf(Math.min(...results));
+    const distance = Math.min(...results);
+    const max_distance = max_distances_to_goal[index];
+    const normalized_distance = 1 - (distance / max_distance);
+    const normalized_energy = organism.energy / organism.config.MAX_ENERGY;
+    organism.fitness = 1 - (0.5 * normalized_distance + 0.5 * normalized_energy);
+
+    if (organism.fitness == 0) console.log(distance, max_distance, normalized_distance, normalized_energy);
   }
 
   // population.sort((a, b) => a.fitness! - b.fitness!);

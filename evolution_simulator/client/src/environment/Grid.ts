@@ -23,6 +23,7 @@ export class GridCell {
   private _state: number;
   public is_selected: boolean;
   public is_highlighted: boolean;
+  public energy: number;
 
   // Builds a new GridCell.
   constructor(x: number, y: number, state = CellStates.EMPTY) {
@@ -31,6 +32,7 @@ export class GridCell {
     this._state = state;
     this.is_selected = false;
     this.is_highlighted = false;
+    this.energy = 0;
   }
 
   // Clears the GridCell.
@@ -144,6 +146,7 @@ export class Grid {
     if (this.is_valid_cell_at(coordinate)) {
       const cell = this.get_cell_at(coordinate);
       cell.state = state;
+      if (cell.state == CellStates.FOOD) cell.energy = 1;
       cell.owner = null;
       this.renderer.to_fill.add(cell);
       this.occupied += 1;
@@ -172,7 +175,8 @@ export class Grid {
   public clear_cell_state(coordinate: Coordinate): void {
     if (this.is_valid_cell_at(coordinate)) {
       const cell = this.get_cell_at(coordinate);
-      cell.state = CellStates.EMPTY;
+      if (cell.energy == 0) cell.state = CellStates.EMPTY;
+      else cell.state = CellStates.FOOD;
       cell.owner = null;
       this.renderer.to_clear.add(cell);
       this.occupied -= 1;

@@ -5,6 +5,7 @@ import Gene from "../models/Gene";
 import Organism from "../models/Organism";
 import { Coordinate } from "../models/types/Coordinate";
 import { add_vector } from "../utils/geometry";
+import get_random_vector from "../utils/get_random_vector";
 import { CellStates } from "./Grid";
 
 // Environment Class.
@@ -42,6 +43,15 @@ export class Environment extends Canvas {
     return true;
   }
 
+  public drop_food(): void {
+    for (let i = 0; i < 1000; i++) {
+      this.grid.set_cell_state(
+        get_random_vector(this.config.GRID_SIZE - 50, this.config.GRID_SIZE - 50, this.config.GRID_SIZE - 1, this.config.GRID_SIZE - 1),
+        CellStates.FOOD
+      );
+    }
+  }
+
   // Initialises a new Environment.
   public init(): void {
     while (this.population.length != this.config.POPULATION) {
@@ -51,13 +61,15 @@ export class Environment extends Canvas {
       }
       this.add_organism(data);
     }
+
+    this.drop_food();
   }
 
   // Updates the Environment.
   public update(): void {
     if (this.ticks > this.config.TICKS_PER_GENERATION) {
       // Calculate fitness of all individuals.
-      this.population = sort_and_calculate_fitness(this.population, this.goal_coordinates);
+      this.population = sort_and_calculate_fitness(this.population, this.goal_coordinates, this.max_distances_to_goal);
 
       let best_found = false;
       let fitness_sum = 0;
@@ -79,6 +91,8 @@ export class Environment extends Canvas {
       // Reset tick count and increment generation count.
       this.ticks = 0;
       this.generation++;
+
+      this.drop_food();
     } else {
       // Iterate through Organism list and perform action.
       this.alive = 0;
@@ -89,7 +103,7 @@ export class Environment extends Canvas {
           const offset = organism.action();
           const new_coordinate = add_vector(organism.coordinate, offset);
           if (this.grid.is_valid_cell_at(new_coordinate) && this.grid.is_cell_empty(new_coordinate)) {
-            // Update direction
+            // Update coordinates.
             organism.direction = offset;
             organism.coordinate = new_coordinate;
           } else if (this.grid.is_valid_cell_at(new_coordinate) && this.grid.get_cell_at(new_coordinate).state == CellStates.RADIOACTIVE) {
@@ -97,6 +111,19 @@ export class Environment extends Canvas {
             this.grid.clear_cell_state(organism.coordinate);
             organism.alive = false;
             this.alive--;
+          } else if (this.grid.is_valid_cell_at(new_coordinate) && this.grid.get_cell_at(new_coordinate).state == CellStates.FOOD) {
+            // Clear Cell.
+            this.grid.clear_cell_state(organism.coordinate);
+
+            // If Organism is not full.
+            if (organism.energy < this.config.MAX_ENERGY) {
+              this.grid.get_cell_at(new_coordinate).energy = 0;
+              organism.energy = 1;
+            }
+
+            // Update coordinates
+            organism.direction = offset;
+            organism.coordinate = new_coordinate;
           }
         }
       }

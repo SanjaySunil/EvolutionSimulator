@@ -17,6 +17,7 @@ const SimulationConfig: Types = {
   MUTATION_PERCENT: 5,
   SEXUAL_REPRODUCTION: true,
   NUMBER_OF_NEURONS: 127,
+  MAX_ENERGY: 1,
   // DEFAULT: 25
   NUMBER_OF_GENES: 25,
 

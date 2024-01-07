@@ -2,13 +2,12 @@ import { SimulationConfig } from "../config/simulation.config";
 import Directions from "../constants/Directions";
 import { OutputNeurons } from "../constants/OutputNeurons";
 import { Environment } from "../environment";
-import { Coordinate } from "./types/Coordinate";
 import { make_vector } from "../utils/geometry";
-import get_random_vector from "../utils/get_random_vector";
 import prob2bool from "../utils/prob2bool";
 import Brain from "./Brain";
 import Gene from "./Gene";
 import Genome from "./Genome";
+import { Coordinate } from "./types/Coordinate";
 
 // Represents an organism in the simulation.
 export default class Organism {
@@ -17,6 +16,7 @@ export default class Organism {
   public brain: Brain;
   public fitness: number | null;
   public alive: boolean;
+  public energy: number;
   public age: number;
   public direction: Coordinate;
   public environment: Environment;
@@ -34,6 +34,7 @@ export default class Organism {
     this.fitness = null;
     this.alive = true;
     this.age = 0;
+    this.energy = 0;
   }
 
   // Sets the coordinate of the organism.

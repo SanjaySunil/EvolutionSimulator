@@ -76,22 +76,16 @@ export default class Renderer {
     this.ctx.fillRect(x - this.pixel_size / 2, y - this.pixel_size / 2, width, height); // Draw the sub-shape starting from the top-left corner
   }
 
-  // public render_food_cell(cell: GridCell): void {
-  //   // Temporary fix: when this if statement is removed, some empty cells on the map have 0 energy.
-  //   // This may be caused due to set_cell_state being set to food in another place other than the
-  //   // organism kill method.
-  //   if (cell.energy <= 0) return this.render_empty_cell(cell);
-  //   else {
-  //     const transparent = "#282a36";
-  //     const food = "#44475a";
-  //     this.draw(cell, 0, 0, 15, 15, transparent);
-  //     this.draw(cell, 6, 3, 3, 9, food);
-  //     this.draw(cell, 4, 4, 2, 7, food);
-  //     this.draw(cell, 9, 4, 2, 7, food);
-  //     this.draw(cell, 3, 6, 1, 3, food);
-  //     this.draw(cell, 11, 6, 1, 3, food);
-  //   }
-  // }
+  public render_food_cell(cell: GridCell): void {
+    const transparent = "#282a36";
+    const food = "#44475a";
+    this.draw(cell, 0, 0, 15, 15, transparent);
+    this.draw(cell, 6, 3, 3, 9, food);
+    this.draw(cell, 4, 4, 2, 7, food);
+    this.draw(cell, 9, 4, 2, 7, food);
+    this.draw(cell, 3, 6, 1, 3, food);
+    this.draw(cell, 11, 6, 1, 3, food);
+  }
 
   public render_radioactive_cell(cell: GridCell): void {
     this.draw(cell, 0, 0, 15, 15, ThemeConfig.RADIOACTIVE);
@@ -122,6 +116,8 @@ export default class Renderer {
       }
     } else if (cell.state == CellStates.EMPTY) {
       this.render_empty_cell(cell);
+    } else if (cell.state == CellStates.FOOD) {
+      this.render_food_cell(cell);
     } else if (cell.state == CellStates.RADIOACTIVE) this.render_radioactive_cell(cell);
     else if (cell.state == CellStates.WALL) this.render_wall_cell(cell);
     else {
