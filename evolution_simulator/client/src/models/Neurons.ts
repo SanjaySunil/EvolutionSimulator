@@ -1,8 +1,8 @@
 // Identifiers for each type of neuron.
 export const NeuronTypes = {
-  SENSOR: 1,
-  ACTION: 1,
-  NEURON: 0,
+  INPUT: 1,
+  OUTPUT: 1,
+  HIDDEN: 0,
 };
 
 export class Neuron {
