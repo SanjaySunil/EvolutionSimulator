@@ -17,6 +17,7 @@ export default class Renderer {
     this.to_clear = new Set();
   }
 
+  // Renders the entire grid.
   private draw(cell: GridCell, x: number, y: number, width: number, height: number, colour: string): void {
     this.ctx.fillStyle = colour;
     this.ctx.fillRect(cell.coordinate.x * 15 + x, cell.coordinate.y * 15 + y, width, height);
@@ -76,6 +77,7 @@ export default class Renderer {
     this.ctx.fillRect(x - this.pixel_size / 2, y - this.pixel_size / 2, width, height); // Draw the sub-shape starting from the top-left corner
   }
 
+  // Renders a food cell.
   public render_food_cell(cell: GridCell): void {
     const transparent = "#282a36";
     const food = "#44475a";
@@ -96,7 +98,7 @@ export default class Renderer {
   }
 
   public render_empty_cell(cell: GridCell): void {
-    this.draw(cell, 0, 0, 15, 15, "#282a36");
+    this.draw(cell, 0, 0, 15, 15, ThemeConfig.EMPTY);
   }
 
   public fill_cell(cell: GridCell): void {

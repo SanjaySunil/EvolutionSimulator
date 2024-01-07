@@ -1,11 +1,11 @@
+import NeuralNetDiagram from "../components/NeuralNetDiagram";
 import { SimulationConfig } from "../config/simulation.config";
 import { CellStates, Grid } from "../environment/Grid";
 import { Coordinate } from "../models/types/Coordinate";
+import { max_distance } from "../utils/get_max_distance";
 import get_style from "../utils/get_style";
 import Mouse from "./mouse.controller";
-import NeuralNetDiagram from "../components/NeuralNetDiagram";
 import Renderer from "./renderer.controller";
-import { max_distance } from "../utils/get_max_distance";
 
 const mode = document.getElementById("mode") as HTMLSpanElement;
 const organism_selected = document.getElementById("organism_selected") as HTMLParagraphElement;
@@ -38,7 +38,6 @@ export default class Canvas {
   public goal_coordinates: Coordinate[];
   public max_distances_to_goal: number[];
 
-  // Build a new canvas.
   constructor(canvas_id: string, config: typeof SimulationConfig) {
     this.config = config;
 
@@ -147,7 +146,7 @@ export default class Canvas {
           this.grid.set_cell_selected(cell.coordinate, false);
         } else {
           this.goal_coordinates.push(cell.coordinate);
-          this.max_distances_to_goal.push(max_distance(this.config.GRID_SIZE, cell.coordinate.x, cell.coordinate.y))
+          this.max_distances_to_goal.push(max_distance(this.config.GRID_SIZE, cell.coordinate.x, cell.coordinate.y));
           this.grid.set_cell_selected(cell.coordinate, true);
         }
       } else if (this.mode == Modes[ModesEnum.IDLE]) {
