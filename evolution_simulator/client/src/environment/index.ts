@@ -30,22 +30,26 @@ export class Environment extends Canvas {
   }
 
   // Adds an Organism to the environment and configures knowledge.
-  public add_organism(coordinate: Coordinate, gene_data: Gene[]): void {
+  public add_organism(gene_data: Gene[], coordinate?: Coordinate): boolean {
+    if (this.population.length > this.config.POPULATION) {
+      alert("Population size cannot be greater than Grid size squared.");
+      return false;
+    }
+    if (!coordinate) coordinate = this.grid.fetch_empty_cell();
     const organism = new Organism(coordinate, gene_data, this);
     this.grid.set_cell_owner(coordinate, organism);
     this.population.push(organism);
+    return true;
   }
 
   // Initialises a new Environment.
   public init(): void {
     while (this.population.length != this.config.POPULATION) {
-      let random_coord = this.grid.fetch_empty_cell();
-
       const data: Gene[] = [];
       for (let i = 0; i < this.config.NUMBER_OF_GENES; i++) {
         data.push(new Gene(this.config.NUMBER_OF_NEURONS));
       }
-      this.add_organism(random_coord, data);
+      this.add_organism(data);
     }
   }
 

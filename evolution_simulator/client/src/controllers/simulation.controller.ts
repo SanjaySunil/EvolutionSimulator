@@ -41,8 +41,6 @@ export default class Simulation {
 
   // Define environment and population variables
   public environment: Environment;
-
-  public file_imported: string | null;
   public cached_organisms: [];
 
   // Constructor for the Simulation class
@@ -66,7 +64,6 @@ export default class Simulation {
     this.rendering_enabled = true;
     this.started_simulation = false;
     this.first_simulation = true;
-    this.file_imported = null;
 
     // Initialize loop variables
     this.update_loop = undefined;
@@ -95,15 +92,7 @@ export default class Simulation {
 
   // Initialize the simulation
   public init(): void {
-    // Add cached organisms to the environment
-    if (this.cached_organisms.length > 0) {
-      for (const genome of this.cached_organisms) {
-        this.environment.add_organism(this.environment.grid.fetch_empty_cell(), genome);
-      }
-    } else {
-      this.environment.init();
-    }
-
+    this.environment.init()
     this.started_simulation = true;
   }
 
