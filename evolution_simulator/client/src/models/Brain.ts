@@ -25,11 +25,11 @@ export class Node {
 
 export default class Brain {
   public owner: Organism;
-  public sensor_neurons: object;
-  public action_neurons: object;
-  public internal_neurons: object;
+  public in: object;
+  public on: object;
+  public hn: object;
   /** All neurons in the organism's neural network. */
-  public neurons: Neuron[];
+  public hidden_neurons: Neuron[];
   /** All connections in the neural network. */
   public connections: Gene[];
   /** Number of sensors in the neural network. */
@@ -42,26 +42,23 @@ export default class Brain {
   /** Builds a new brain. */
   constructor(owner, NUMBER_OF_SENSORS: number, NUMBER_OF_NEURONS: number, NUMBER_OF_ACTIONS: number) {
     this.owner = owner;
-    this.sensor_neurons = {};
-    this.action_neurons = {};
-    this.internal_neurons = {};
-    this.neurons = [];
+    this.in = {};
+    this.on = {};
+    this.hn = {};
+    this.hidden_neurons = [];
     this.connections = [];
     this.NUMBER_OF_SENSORS = NUMBER_OF_SENSORS;
     this.NUMBER_OF_NEURONS = NUMBER_OF_NEURONS;
     this.NUMBER_OF_ACTIONS = NUMBER_OF_ACTIONS;
-    this.configure_brain();
+    this.wire_brain();
   }
 
-  /**
-   * This function is called when an organism is spawned.
-   * It converts the organism's genome into its neural network.
-   */
-  public configure_brain(): void {
+  // Converts an organism's genome into a neural network brain.
+  public wire_brain(): void {
     this.connections = [];
-    this.neurons = [];
+    this.hidden_neurons = [];
 
-    /** List of synaptic connections, with a length of `Constants.NUMBER_OF_GENES`. */
+    // List of all connections in the neural network.
     const connection_list: ConnectionList = this.create_connection_list();
 
     /** Map of neurons and their number of inputs and outputs. */
@@ -76,6 +73,8 @@ export default class Brain {
      */
     this.create_renumbered_connection_list(connection_list, node_map);
     this.create_neural_node_list(node_map);
+
+    console.log(this.in);
   }
 
   public sensor_look(direction: number): number {
@@ -156,15 +155,15 @@ export default class Brain {
     const action_levels = new Array(this.NUMBER_OF_ACTIONS).fill(0.0);
 
     // The weighted inputs to each neuron are accumulated in neuron_accumulators.
-    const neuron_accumulators = new Array(this.neurons.length).fill(0.0);
+    const neuron_accumulators = new Array(this.hidden_neurons.length).fill(0.0);
 
     let neuron_outputs_computed = false;
     for (const connection of this.connections) {
       if (connection.sink_type == Neurons.OUTPUT && !neuron_outputs_computed) {
         // Compute the output of neurons in the range (-1.0..1.0) using the hyperbolic tangent function.
-        for (let neuron_index = 0; neuron_index < this.neurons.length; neuron_index++) {
-          if (this.neurons[neuron_index].driven) {
-            this.neurons[neuron_index].output = Math.tanh(neuron_accumulators[neuron_index]);
+        for (let neuron_index = 0; neuron_index < this.hidden_neurons.length; neuron_index++) {
+          if (this.hidden_neurons[neuron_index].driven) {
+            this.hidden_neurons[neuron_index].output = Math.tanh(neuron_accumulators[neuron_index]);
           }
         }
         neuron_outputs_computed = true;
@@ -177,7 +176,7 @@ export default class Brain {
         // Read the sensor data using the sensor identifier.
         input_val = this.get_sensor(connection.source_id);
       } else {
-        input_val = this.neurons[connection.source_id].output;
+        input_val = this.hidden_neurons[connection.source_id].output;
       }
 
       // Weight the connection's value and add it to the accumulator of the corresponding neuron or action.
@@ -310,19 +309,19 @@ export default class Brain {
 
     for (const connection of connection_list) {
       if (connection.sink_type == Neurons.HIDDEN) {
-        const new_conn = cloneDeep(connection);
+        const new_connection = cloneDeep(connection);
 
         // Fix the destination neuron number.
-        const node = node_map.get(new_conn.sink_id);
-        if (node) new_conn.sink_id = node.remapped_number;
+        const node = node_map.get(new_connection.sink_id);
+        if (node) new_connection.sink_id = node.remapped_number;
 
         // If the source is a neuron, fix its number too.
-        if (new_conn.source_type === Neurons.HIDDEN) {
-          const node = node_map.get(new_conn.source_id);
-          if (node) new_conn.source_id = node.remapped_number;
+        if (new_connection.source_type === Neurons.HIDDEN) {
+          const node = node_map.get(new_connection.source_id);
+          if (node) new_connection.source_id = node.remapped_number;
         }
 
-        this.connections.push(new_conn);
+        this.connections.push(new_connection);
       }
     }
 
@@ -341,10 +340,10 @@ export default class Brain {
       }
 
       // Push sensor neurons, internal neurons, and action neurons to each set.
-      if (connection.source_type == Neurons.INPUT) this.sensor_neurons[connection.source_id] = undefined;
-      else this.internal_neurons[connection.source_id] = undefined;
-      if (connection.sink_type == Neurons.OUTPUT) this.action_neurons[connection.sink_id] = undefined;
-      else this.internal_neurons[connection.sink_id] = undefined;
+      if (connection.source_type == Neurons.INPUT) this.in[connection.source_id] = undefined;
+      else this.hn[connection.source_id] = undefined;
+      if (connection.sink_type == Neurons.OUTPUT) this.on[connection.sink_id] = undefined;
+      else this.hn[connection.sink_id] = undefined;
     }
   }
 
@@ -354,8 +353,8 @@ export default class Brain {
       const neuron = new Neuron();
       neuron.output = 0.5;
       neuron.driven = node.inputs_from_sensors_or_neurons !== 0;
-      this.neurons.push(neuron);
+      this.hidden_neurons.push(neuron);
     }
-    return this.neurons;
+    return this.hidden_neurons;
   }
 }
