@@ -3,7 +3,7 @@ import { CellStates, Grid } from "../environment/Grid";
 import { Coordinate } from "../models/types/Coordinate";
 import get_style from "../utils/get_style";
 import Mouse from "./mouse.controller";
-import NeuralNetworkVisualizer from "./nn_visualizer.controller";
+import NeuralNetDiagram from "./nn_visualizer.controller";
 import Renderer from "./renderer.controller";
 
 const mode = document.getElementById("mode") as HTMLSpanElement;
@@ -151,14 +151,9 @@ export default class Canvas {
           if (cell.owner?.brain.connections) {
             organism_selected.innerHTML = "Organism selected";
             organism_selected_table.style.display = "block";
-            const NN = new NeuralNetworkVisualizer();
 
-            NN.draw(
-              cell.owner.brain.sensor_neurons,
-              cell.owner.brain.action_neurons,
-              cell.owner.brain.neurons.length,
-              cell.owner.brain.connections
-            );
+            const diagram = new NeuralNetDiagram();
+            diagram.draw(cell.owner.brain.connections);
           }
         } else {
           organism_selected.innerHTML = "";
