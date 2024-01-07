@@ -188,7 +188,6 @@ export default class Brain {
   }
 
   public create_connection_list(): any[] {
-    /** List of synaptic connections, strictly `Constants.NUMBER_OF_GENES`. */
     const connection_list: ConnectionList = [];
 
     if (this.owner.genome.data) {
@@ -220,19 +219,19 @@ export default class Brain {
     /** List of neurons and their number of inputs and outputs. */
     const node_map: NodeMap = new Map();
 
-    for (const gene of connection_list) {
+    for (const connection of connection_list) {
       /** If the sink type is a neuron. */
-      if (gene.sink_type === Neurons.HIDDEN) {
-        const self_input = gene.source_type == Neurons.HIDDEN && gene.source_id == gene.sink_id;
+      if (connection.sink_type === Neurons.HIDDEN) {
+        const self_input = connection.source_type == Neurons.HIDDEN && connection.source_id == connection.sink_id;
 
-        if (node_map.has(gene.sink_id)) {
-          const node = node_map.get(gene.sink_id);
+        if (node_map.has(connection.sink_id)) {
+          const node = node_map.get(connection.sink_id);
           if (node) {
             if (self_input) node.self_inputs++;
             else node.inputs_from_sensors_or_neurons++;
           } else {
             // If the neuron is not in the node map, add it with the appropriate input/output values.
-            node_map.set(gene.sink_id, {
+            node_map.set(connection.sink_id, {
               remapped_number: 0,
               outputs: 0,
               self_inputs: self_input ? 1 : 0,
@@ -243,13 +242,13 @@ export default class Brain {
       }
 
       /** If the source type is a neuron. */
-      if (gene.source_type === Neurons.HIDDEN) {
-        if (node_map.has(gene.source_id)) {
-          const node = node_map.get(gene.source_id);
+      if (connection.source_type === Neurons.HIDDEN) {
+        if (node_map.has(connection.source_id)) {
+          const node = node_map.get(connection.source_id);
           if (node) node.outputs++;
         } else {
           // If the neuron is not in the node map, add it with the appropriate input/output values.
-          node_map.set(gene.source_id, {
+          node_map.set(connection.source_id, {
             remapped_number: 0,
             outputs: 1,
             self_inputs: 0,
