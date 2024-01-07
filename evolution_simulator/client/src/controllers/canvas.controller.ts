@@ -3,7 +3,7 @@ import { CellStates, Grid } from "../environment/Grid";
 import { Coordinate } from "../models/types/Coordinate";
 import get_style from "../utils/get_style";
 import Mouse from "./mouse.controller";
-import NeuralNetDiagram from "./nn_visualizer.controller";
+import NeuralNetDiagram from "../components/NeuralNetDiagram";
 import Renderer from "./renderer.controller";
 
 const mode = document.getElementById("mode") as HTMLSpanElement;
