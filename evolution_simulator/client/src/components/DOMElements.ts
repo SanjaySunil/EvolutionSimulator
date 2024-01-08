@@ -1,5 +1,3 @@
-// documented
-
 // DOM elements are stored in a single object to avoid polluting the global namespace.
 export const DOMElements = {
   button: document.getElementById("open_sidebar") as HTMLButtonElement,

@@ -2,7 +2,7 @@ import { cloneDeep } from "lodash";
 import Directions from "../constants/Directions";
 import { InputNeurons } from "../constants/InputNeurons";
 import { AllCellStates, Grid } from "../environment/Grid";
-import weight_as_float from "../utils/connection2float";
+import weight_as_float from "../utils/weight_as_float";
 import { add_vector, euclidean_distance } from "../utils/geometry";
 import Gene from "./Gene";
 import { Neuron, Neurons } from "./Neurons";

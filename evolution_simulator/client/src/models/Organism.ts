@@ -3,7 +3,7 @@ import Directions from "../constants/Directions";
 import { OutputNeurons } from "../constants/OutputNeurons";
 import { Grid } from "../environment/Grid";
 import { make_vector } from "../utils/geometry";
-import prob2bool from "../utils/prob2bool";
+import probability_to_boolean from "../utils/probability_to_boolean";
 import Brain from "./Brain";
 import Gene from "./Gene";
 import Genome from "./Genome";
@@ -56,12 +56,10 @@ export default class Organism {
     this._coordinate = coordinate;
   }
 
-
   // Gets the coordinate of the organism.
   public get coordinate(): Coordinate {
     return this._coordinate;
   }
-
 
   // Performs an action based on the organism's brain.
   public action(): Coordinate {
@@ -70,7 +68,6 @@ export default class Organism {
     // Compute the action to take based on the action levels.
     return this.compute_action(action_levels);
   }
-
 
   // Computes the action based on the action levels.
   public compute_action(action_levels: number[]): Coordinate {
@@ -89,8 +86,8 @@ export default class Organism {
     move_y = Math.tanh(move_y);
 
     // Calculate probabilities based on absolute values.
-    const prob_x = +prob2bool(Math.abs(move_x));
-    const prob_y = +prob2bool(Math.abs(move_y));
+    const prob_x = +probability_to_boolean(Math.abs(move_x));
+    const prob_y = +probability_to_boolean(Math.abs(move_y));
 
     // Determine direction of movement based on the sign of the values.
     const signum_x = move_x < 0.0 ? -1 : 1;

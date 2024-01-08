@@ -1,5 +1,3 @@
-// documented
-
 import Simulation from "../controllers/simulation.controller";
 import { DOMElements } from "./DOMElements";
 
