@@ -34,9 +34,9 @@ export default class Organism {
       this.coordinate,
       this.grid,
       this.genome.data,
-      this.config.NUMBER_OF_SENSORS,
-      this.config.NUMBER_OF_NEURONS,
-      this.config.NUMBER_OF_ACTIONS
+      this.config.NUMBER_OF_INPUTS,
+      this.config.NUMBER_OF_HIDDEN_NEURONS,
+      this.config.NUMBER_OF_OUTPUTS
     );
     this.direction = Directions.NORTH;
     this.fitness = null;

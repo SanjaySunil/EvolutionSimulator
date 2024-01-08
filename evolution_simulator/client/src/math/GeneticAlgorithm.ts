@@ -109,7 +109,7 @@ function mate(parent, partner: Organism, id): Organism {
     } else if (random_probability < selection_probability * 2) {
       child_genome[i] = partner_gene;
     } else {
-      child_genome[i] = new Gene(parent.config.NUMBER_OF_NEURONS);
+      child_genome[i] = new Gene(parent.config.NUMBER_OF_HIDDEN_NEURONS);
     }
   }
 

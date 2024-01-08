@@ -55,7 +55,7 @@ export class Environment extends Canvas {
     while (this.population.length != this.config.POPULATION) {
       const data: Gene[] = [];
       for (let i = 0; i < this.config.NUMBER_OF_GENES; i++) {
-        data.push(new Gene(this.config.NUMBER_OF_NEURONS));
+        data.push(new Gene(this.config.NUMBER_OF_HIDDEN_NEURONS));
       }
       this.add_organism(data);
     }
