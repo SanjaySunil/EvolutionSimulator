@@ -40,7 +40,7 @@ export default class Renderer {
     // Draw a rectangle centered at (0, 0) to represent the organism.
 
     this.ctx.fillRect(-this.pixel_size / 2, -this.pixel_size / 2, this.pixel_size, this.pixel_size); // Draw a rectangle centered at (0, 0)
-    // Colors used for drawing shapes.
+    // Colours used for drawing shapes.
 
     const colour = cell.owner.genome.colour;
     const transparent = "#282a36";
@@ -81,20 +81,19 @@ export default class Renderer {
   }
 
   // Function to draw a sub-shape within a grid cell
-  public draw_sub_shape(x, y, width, height, color): void {
-    // Set the fill color for the sub-shape
-    this.ctx.fillStyle = color;
+  public draw_sub_shape(x, y, width, height, colour): void {
+    // Set the fill colour for the sub-shape
+    this.ctx.fillStyle = colour;
     // Draw the sub-shape starting from the top-left corner
     this.ctx.fillRect(x - this.pixel_size / 2, y - this.pixel_size / 2, width, height);
   }
-
 
   // Renders a food cell.
   public render_food_cell(cell: GridCell): void {
     const transparent = "#282a36";
     const food = "#44475a";
 
-    // Render the food cell with specific shapes and colors at various positions within the cell
+    // Render the food cell with specific shapes and colours at various positions within the cell
     this.draw(cell, 0, 0, 15, 15, transparent);
     this.draw(cell, 6, 3, 3, 9, food);
     this.draw(cell, 4, 4, 2, 7, food);
@@ -103,10 +102,9 @@ export default class Renderer {
     this.draw(cell, 11, 6, 1, 3, food);
   }
 
-
   // Renders a radioactive cell.
   public render_radioactive_cell(cell: GridCell): void {
-    // Render the radioactive cell with a specific color defined in the ThemeConfig
+    // Render the radioactive cell with a specific colour defined in the ThemeConfig
     this.draw(cell, 0, 0, 15, 15, ThemeConfig.RADIOACTIVE);
   }
 

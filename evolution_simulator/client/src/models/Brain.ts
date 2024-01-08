@@ -277,7 +277,7 @@ export default class Brain {
   // Removes connections to a specific neuron from the connection list and updates the node map accordingly.
   public remove_connections_to_neuron(connection_array: ConnectionArray, hidden_neuron_map: HiddenNeuronMap, neuron_number: number): void {
     // Loop through the connection array.
-    for (let i = 0; i < connection_array.length;) {
+    for (let i = 0; i < connection_array.length; ) {
       const neuron = connection_array[i];
       // Check if the current connection's sink is the specified neuron.
       if (neuron.sink_type == Neurons.HIDDEN && neuron.sink_id === neuron_number) {
