@@ -108,9 +108,6 @@ export class Grid {
         // Create a new GridCell instance with the current x and y coordinates
         const cell = new GridCell(x, y);
 
-        // Set the initial state of the cell (currently commented out)
-        // cell.state = grid[x][y] == true ? CellStates.WALL : CellStates.EMPTY;
-
         // Assign the cell to the current column in the grid
         column[y] = cell;
       }
