@@ -36,27 +36,39 @@ export function merge_sort(arr: Organism[]): Organism[] {
 }
 
 // Function to sort the population of organisms based on their fitness and calculate their fitness values
-export function sort_and_calculate_fitness(population: Organism[], goal_coordinates, max_distances_to_goal): Organism[] {
-  for (const organism of population) {
-    const results: number[] = [];
-
-    for (const coordinate of goal_coordinates) {
-      results.push(euclidean_distance(organism.coordinate, coordinate));
+export function calculate_and_sort_fitness(population: Organism[], goal, params?): Organism[] {
+  if (goal == "food") {
+    for (const organism of population) {
+      organism.fitness = calculate_fitness_by_food(organism);
     }
-
-    const index = results.indexOf(Math.min(...results));
-    const distance = Math.min(...results);
-    const max_distance = max_distances_to_goal[index];
-    const normalized_distance = 1 - distance / max_distance;
-    const normalized_energy = organism.energy / organism.config.MAX_ENERGY;
-    organism.fitness = 1 - (0.5 * normalized_distance + 0.5 * normalized_energy);
+  } else if (goal == "coord") {
+    for (const organism of population) {
+      organism.fitness = calculate_fitness_by_coord(organism, params);
+    }
   }
-
-  // population.sort((a, b) => a.fitness! - b.fitness!);
 
   // Sort the population based on fitness using merge sort
   population = merge_sort(population);
   return population;
+}
+
+export function calculate_fitness_by_food(organism) {
+  return 1 - (organism.energy / organism.config.MAX_ENERGY);
+}
+
+export function calculate_fitness_by_coord(organism, params) {
+  const results: number[] = [];
+
+  for (const coordinate of params.goal_coordinates) {
+    results.push(euclidean_distance(organism.coordinate, coordinate));
+  }
+
+  // Take the minimum of maximum distances to calculate the best fitness of the Organism.
+  const min_index = results.indexOf(Math.min(...results));
+  const distance = results[min_index];
+  const max_distance = params.max_distances_to_goal[min_index];
+  // Normalize fitness score by diving by the maximum distance.
+  return distance / max_distance;
 }
 
 // Function to select organisms for crossover and create a new generation

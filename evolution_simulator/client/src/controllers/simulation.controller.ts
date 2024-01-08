@@ -79,10 +79,21 @@ export default class Simulation {
       return false;
     }
 
-    if (this.environment.goal_coordinates.length == 0) {
+    if (!this.config.GOAL_COORD && !this.config.GOAL_FOOD) {
+      alert('Must have either "Goal is Food" or "Goal is Coordinate" enabled.');
+      return false;
+    }
+
+    if (this.config.GOAL_COORD && this.config.GOAL_FOOD) {
+      alert('Cannot have both "Goal is Food" and "Goal is Coordinate" enabled.');
+      return false;
+    }
+
+    if (this.config.GOAL_COORD && this.environment.goal_coordinates.length == 0) {
       alert("No goal coordinates have been set.");
       return false;
     }
+
     return true;
   }
 

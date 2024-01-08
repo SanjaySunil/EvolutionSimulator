@@ -9,12 +9,13 @@ import Renderer from "./renderer.controller";
 import { DOMElements } from "../components/DOMElements";
 
 // Define the different modes for mouse interaction.
-const Modes = ["IDLE", "PAN", "GOAL", "WALL"];
+const Modes = ["IDLE", "PAN", "GOAL", "WALL", "REMOVE"];
 const ModesEnum = {
   IDLE: 0,
   PAN: 1,
   GOAL: 2,
   WALL: 3,
+  REMOVE: 4,
 };
 
 // Controller used to manage canvas events.
@@ -165,9 +166,9 @@ export default class Canvas {
         this.canvas.style.top = canvas_top + (this.mouse.canvas_coord.y - this.mouse.clicked_coord.y) * this.zoom_level + "px";
         this.canvas.style.left = canvas_left + (this.mouse.canvas_coord.x - this.mouse.clicked_coord.x) * this.zoom_level + "px";
       } else if (this.mode == Modes[ModesEnum.WALL]) {
-        if (!cell.owner) {
-          this.grid.set_cell_state(this.mouse.grid_coord, CellStates.WALL);
-        }
+        if (!cell.owner) this.grid.set_cell_state(this.mouse.grid_coord, CellStates.WALL);
+      } else if (this.mode == Modes[ModesEnum.REMOVE]) {
+        if (!cell.owner) this.grid.clear_cell_state(this.mouse.grid_coord);
       }
     }
   }
@@ -185,6 +186,7 @@ export default class Canvas {
     else if (event.code == "Digit2") this.mode = Modes[ModesEnum.PAN];
     else if (event.code == "Digit3") this.mode = Modes[ModesEnum.GOAL];
     else if (event.code == "Digit4") this.mode = Modes[ModesEnum.WALL];
+    else if (event.code == "Digit5") this.mode = Modes[ModesEnum.REMOVE];
 
     DOMElements.mode.innerHTML = this.mode;
   }

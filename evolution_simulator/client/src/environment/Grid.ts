@@ -175,10 +175,15 @@ export class Grid {
   public clear_cell_state(coordinate: Coordinate): void {
     if (this.is_valid_cell_at(coordinate)) {
       const cell = this.get_cell_at(coordinate);
-      if (cell.energy == 0) cell.state = CellStates.EMPTY;
-      else cell.state = CellStates.FOOD;
       cell.owner = null;
-      this.renderer.to_clear.add(cell);
+      if (cell.energy <= 0) {
+        cell.state = CellStates.EMPTY;
+        this.renderer.to_clear.add(cell);
+      } else {
+        cell.state = CellStates.FOOD;
+        this.renderer.to_clear.add(cell);
+        this.renderer.to_fill.add(cell);
+      }
       this.occupied -= 1;
     }
   }

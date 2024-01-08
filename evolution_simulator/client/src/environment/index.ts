@@ -1,6 +1,6 @@
 import { DefaultSimulationConfig } from "../config/simulation.config";
 import Canvas from "../controllers/canvas.controller";
-import { select_and_crossover, sort_and_calculate_fitness } from "../math/GeneticAlgorithm";
+import { select_and_crossover, calculate_and_sort_fitness } from "../math/GeneticAlgorithm";
 import Gene from "../models/Gene";
 import Organism from "../models/Organism";
 import { Coordinate } from "../models/types/Coordinate";
@@ -24,8 +24,8 @@ export class Environment extends Canvas {
     this.population = [];
     this.ticks = 0;
     this.generation = 1;
-    this.best_fitness = config.GRID_SIZE;
-    this.overall_fitness = config.GRID_SIZE;
+    this.best_fitness = Infinity;
+    this.overall_fitness = Infinity;
     this.alive = 0;
     this.oldest_organism = 0;
   }
@@ -45,8 +45,9 @@ export class Environment extends Canvas {
 
   public drop_food(): void {
     for (let i = 0; i < 1000; i++) {
+      const center = Math.floor(this.config.GRID_SIZE / 2);
       this.grid.set_cell_state(
-        get_random_vector(this.config.GRID_SIZE - 50, this.config.GRID_SIZE - 50, this.config.GRID_SIZE - 1, this.config.GRID_SIZE - 1),
+        get_random_vector(center - 10, center - 10, center + 10, center + 10),
         CellStates.FOOD
       );
     }
@@ -62,14 +63,24 @@ export class Environment extends Canvas {
       this.add_organism(data);
     }
 
-    this.drop_food();
+    if (this.config.GOAL_FOOD) {
+      this.drop_food();
+    }
   }
 
   // Updates the Environment.
   public update(): void {
     if (this.ticks > this.config.TICKS_PER_GENERATION) {
       // Calculate fitness of all individuals.
-      this.population = sort_and_calculate_fitness(this.population, this.goal_coordinates, this.max_distances_to_goal);
+
+      if (this.config.GOAL_COORD) {
+        this.population = calculate_and_sort_fitness(this.population, "coord", {
+          goal_coordinates: this.goal_coordinates,
+          max_distances_to_goal: this.max_distances_to_goal,
+        });
+      } else if (this.config.GOAL_FOOD) {
+        this.population = calculate_and_sort_fitness(this.population, "food");
+      }
 
       let best_found = false;
       let fitness_sum = 0;
@@ -92,7 +103,9 @@ export class Environment extends Canvas {
       this.ticks = 0;
       this.generation++;
 
-      this.drop_food();
+      if (this.config.GOAL_FOOD) {
+        this.drop_food();
+      }
     } else {
       // Iterate through Organism list and perform action.
       this.alive = 0;
@@ -116,8 +129,8 @@ export class Environment extends Canvas {
             this.grid.clear_cell_state(organism.coordinate);
 
             // If Organism is not full.
-            if (organism.energy < this.config.MAX_ENERGY) {
-              this.grid.get_cell_at(new_coordinate).energy = 0;
+            if (organism.energy == 0) {
+              this.grid.get_cell_at(new_coordinate).energy -= 1;
               organism.energy = 1;
             }
 
