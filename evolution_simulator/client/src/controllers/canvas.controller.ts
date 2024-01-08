@@ -206,29 +206,36 @@ export default class Canvas {
     DOMElements.mode.innerHTML = this.mode;
   }
 
-  // Panning controls
+  // Handles mouse wheel event for zooming and panning
   public handle_mouse_wheel(event: WheelEvent): void {
     // Handle mouse wheel event for zooming and panning
     const sign = -Math.sign(event.deltaY);
+
+    // Calculate the scale by taking the maximum between the minimum zoom level and the current zoom level plus the sign of the mouse wheel scroll multiplied by the zoom speed.
     const scale = Math.max(this.min_zoom, this.zoom_level + sign * this.zoom_speed);
 
+    // Obtain the current top and left style values for the canvas
     const canvas_top = parseInt(get_style("canvas", "top"));
     const canvas_left = parseInt(get_style("canvas", "left"));
 
+    // Calculate the displacement in X and Y from zooming
     const dx = (this.canvas.width / 2 - this.mouse.canvas_coord.x) * (scale - this.zoom_level);
     const dy = (this.canvas.height / 2 - this.mouse.canvas_coord.y) * (scale - this.zoom_level);
 
+    // Update the top and left styles for canvas based on the zoom level and mouse position
     this.canvas.style.top = canvas_top + dy + "px";
     this.canvas.style.left = canvas_left + dx + "px";
 
+    // Update the zoom level and apply the CSS scale transformation to the canvas
     this.zoom_level = scale;
     this.canvas.style.transform = `scale(${this.zoom_level})`;
   }
 
-  // Highlight cell action.
+  // Handles the action to highlight cells upon mouse move.
   public handle_mouse_move(): void {
-    // Handle mouse move event to highlight cells
+    // Clear the highlight from the previously highlighted cell
     this.grid.set_cell_highlighted(this.mouse.prev_grid_coord, false);
+    // Set the current cell under the mouse pointer as highlighted
     this.grid.set_cell_highlighted(this.mouse.grid_coord, true);
   }
 
