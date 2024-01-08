@@ -1,4 +1,4 @@
-import { SimulationConfig } from "../config/simulation.config";
+import { DefaultSimulationConfig } from "../config/simulation.config";
 import Directions from "../constants/Directions";
 import { OutputNeurons } from "../constants/OutputNeurons";
 import { Grid } from "../environment/Grid";
@@ -19,7 +19,7 @@ export default class Organism {
   public energy: number;
   public age: number;
   public direction: Coordinate;
-  public config: typeof SimulationConfig;
+  public config: typeof DefaultSimulationConfig;
   public id: number;
   public grid: Grid;
 
@@ -28,9 +28,16 @@ export default class Organism {
     this.grid = grid;
     this._coordinate = coordinate;
     // If a genome has been given, use this genome, else create a new random genome.
-    this.genome = new Genome(this, genome);
+    this.genome = new Genome(genome);
     this.config = config;
-    this.brain = new Brain(this, this.config.NUMBER_OF_SENSORS, this.config.NUMBER_OF_NEURONS, this.config.NUMBER_OF_ACTIONS);
+    this.brain = new Brain(
+      this.coordinate,
+      this.grid,
+      this.genome.data,
+      this.config.NUMBER_OF_SENSORS,
+      this.config.NUMBER_OF_NEURONS,
+      this.config.NUMBER_OF_ACTIONS
+    );
     this.direction = Directions.NORTH;
     this.fitness = null;
     this.alive = true;
@@ -50,7 +57,7 @@ export default class Organism {
   public get coordinate(): Coordinate {
     return this._coordinate;
   }
-  
+
   // Performs an action based on the organism's brain.
   public action(): Coordinate {
     // Perform NN Feed Forward.

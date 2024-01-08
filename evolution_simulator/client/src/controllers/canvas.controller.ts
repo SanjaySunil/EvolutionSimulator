@@ -1,5 +1,5 @@
 import NeuralNetDiagram from "../components/NeuralNetDiagram";
-import { SimulationConfig } from "../config/simulation.config";
+import { DefaultSimulationConfig } from "../config/simulation.config";
 import { CellStates, Grid } from "../environment/Grid";
 import { Coordinate } from "../models/types/Coordinate";
 import { max_distance } from "../utils/get_max_distance";
@@ -34,11 +34,11 @@ export default class Canvas {
   public renderer: Renderer;
   public grid: Grid;
   public mode: string;
-  public config: typeof SimulationConfig;
+  public config: typeof DefaultSimulationConfig;
   public goal_coordinates: Coordinate[];
   public max_distances_to_goal: number[];
 
-  constructor(canvas_id: string, config: typeof SimulationConfig) {
+  constructor(canvas_id: string, config: typeof DefaultSimulationConfig) {
     this.config = config;
 
     // Get the canvas element and its 2D rendering context
@@ -53,7 +53,7 @@ export default class Canvas {
     this.zoom_speed = 0.01;
     this.min_zoom = 0.1;
     this.pan_amount = 50;
-    this.mouse = new Mouse(this.pixel_size);
+    this.mouse = new Mouse(this.pixel_size, this.grid_size);
     this.renderer = new Renderer(this.canvas, this.ctx, this.pixel_size);
     this.grid = new Grid(this.grid_size, this.renderer);
     this.mode = Modes[0];

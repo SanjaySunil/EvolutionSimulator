@@ -1,12 +1,11 @@
 import { cloneDeep } from "lodash";
 import Directions from "../constants/Directions";
 import { InputNeurons } from "../constants/InputNeurons";
-import { AllCellStates } from "../environment/Grid";
+import { AllCellStates, Grid } from "../environment/Grid";
 import weight_as_float from "../utils/connection2float";
 import { add_vector, euclidean_distance } from "../utils/geometry";
 import Gene from "./Gene";
 import { Neuron, Neurons } from "./Neurons";
-import Organism from "./Organism";
 import { Coordinate } from "./types/Coordinate";
 
 type ConnectionArray = Array<Gene>;
@@ -24,7 +23,9 @@ export class HiddenNeuron {
 }
 
 export default class Brain {
-  public owner: Organism;
+  public coordinate: Coordinate;
+  public grid: Grid;
+  public genome_data: Gene[];
   // Used temporarily to store the neural network's inputs, outputs, and hidden neurons.
   public inputs: object;
   public outputs: object;
@@ -38,8 +39,11 @@ export default class Brain {
   public num_hidden_neurons: number;
   public num_output_neurons: number;
 
-  constructor(owner, num_input_neurons: number, num_hidden_neurons: number, num_output_neurons: number) {
-    this.owner = owner;
+  constructor(coordinate, grid, genome_data, num_input_neurons: number, num_hidden_neurons: number, num_output_neurons: number) {
+    // References to the organism's coordinate and the grid.
+    this.coordinate = coordinate;
+    this.grid = grid;
+    this.genome_data = genome_data;
     this.inputs = {};
     this.outputs = {};
     this.hidden = {};
@@ -69,7 +73,7 @@ export default class Brain {
 
   // Allows the organism to look in a specific direction and return the state of the cell.
   public observation_sensor(direction: number): number {
-    let current_vector = { x: this.owner.coordinate.x, y: this.owner.coordinate.y };
+    let current_vector = { x: this.coordinate.x, y: this.coordinate.y };
     let vector: Coordinate;
 
     if (direction == InputNeurons.LOOK_NORTH) vector = Directions.NORTH;
@@ -82,8 +86,8 @@ export default class Brain {
 
     current_vector = add_vector(current_vector, vector);
 
-    if (this.owner.grid.is_valid_cell_at(current_vector)) {
-      const cell = this.owner.grid.get_cell_at(current_vector);
+    if (this.grid.is_valid_cell_at(current_vector)) {
+      const cell = this.grid.get_cell_at(current_vector);
       return cell.state / AllCellStates.length;
     }
 
@@ -93,24 +97,18 @@ export default class Brain {
 
   // Allows the organism to obtain information about its current coordinates.
   public coordinate_sensor(sensor: number): number {
-    if (sensor == InputNeurons.X_COORDINATE && this.owner.grid.grid_size) {
-      return this.owner.coordinate.x / this.owner.grid.grid_size;
-    } else if (sensor == InputNeurons.Y_COORDINATE && this.owner.grid.grid_size) {
-      return this.owner.coordinate.y / this.owner.grid.grid_size;
+    if (sensor == InputNeurons.X_COORDINATE && this.grid.grid_size) {
+      return this.coordinate.x / this.grid.grid_size;
+    } else if (sensor == InputNeurons.Y_COORDINATE && this.grid.grid_size) {
+      return this.coordinate.y / this.grid.grid_size;
     } else if (sensor == InputNeurons.BOUNDARY_NORTH) {
-      return euclidean_distance(this.owner.coordinate, { x: this.owner.coordinate.x, y: 0 }) / this.owner.grid.grid_size;
+      return euclidean_distance(this.coordinate, { x: this.coordinate.x, y: 0 }) / this.grid.grid_size;
     } else if (sensor == InputNeurons.BOUNDARY_WEST) {
-      return euclidean_distance(this.owner.coordinate, { x: 0, y: this.owner.coordinate.y }) / this.owner.grid.grid_size;
+      return euclidean_distance(this.coordinate, { x: 0, y: this.coordinate.y }) / this.grid.grid_size;
     } else if (sensor == InputNeurons.BOUNDARY_EAST) {
-      return (
-        euclidean_distance(this.owner.coordinate, { x: this.owner.grid.grid_size, y: this.owner.coordinate.y }) /
-        this.owner.grid.grid_size
-      );
+      return euclidean_distance(this.coordinate, { x: this.grid.grid_size, y: this.coordinate.y }) / this.grid.grid_size;
     } else if (sensor == InputNeurons.BOUNDARY_SOUTH) {
-      return (
-        euclidean_distance(this.owner.coordinate, { x: this.owner.coordinate.x, y: this.owner.grid.grid_size }) /
-        this.owner.grid.grid_size
-      );
+      return euclidean_distance(this.coordinate, { x: this.coordinate.x, y: this.grid.grid_size }) / this.grid.grid_size;
     } else {
       return 0.0;
     }
@@ -179,8 +177,8 @@ export default class Brain {
   public obtain_connections(): any[] {
     const connection_array: ConnectionArray = [];
 
-    if (this.owner.genome.data) {
-      for (const gene of this.owner.genome.data) {
+    if (this.genome_data) {
+      for (const gene of this.genome_data) {
         // Renumber the source neuron or sensor using modulo operator.
         if (gene.source_type === Neurons.HIDDEN) {
           gene.source_id %= this.num_hidden_neurons;

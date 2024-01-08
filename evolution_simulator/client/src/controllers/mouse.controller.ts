@@ -1,9 +1,9 @@
-import { SimulationConfig } from "../config/simulation.config";
 import { Coordinate } from "../models/types/Coordinate";
 import { make_vector } from "../utils/geometry";
 
 // This controller is used to manage mouse events.
 export default class Mouse {
+  public grid_size: number;
   public middle_click: boolean;
   public left_click: boolean;
   public right_click: boolean;
@@ -13,7 +13,8 @@ export default class Mouse {
   public canvas_coord: Coordinate;
   public clicked_coord: Coordinate;
 
-  constructor(pixel_size: number) {
+  constructor(pixel_size: number, grid_size: number) {
+    this.grid_size = grid_size;
     this.grid_coord = make_vector(0, 0);
     this.prev_grid_coord = make_vector(0, 0);
     this.canvas_coord = make_vector(0, 0);
@@ -37,8 +38,8 @@ export default class Mouse {
     this.grid_coord.y = Math.floor(this.canvas_coord.y / this.pixel_size);
 
     // Fix grid coordinates when at canvas boundaries.
-    if (this.grid_coord.x >= SimulationConfig.GRID_SIZE) this.grid_coord.x -= 1;
-    if (this.grid_coord.y >= SimulationConfig.GRID_SIZE) this.grid_coord.y -= 1;
+    if (this.grid_coord.x >= this.grid_size) this.grid_coord.x -= 1;
+    if (this.grid_coord.y >= this.grid_size) this.grid_coord.y -= 1;
     if (this.grid_coord.x <= 0) this.grid_coord.x = 0;
     if (this.grid_coord.y <= 0) this.grid_coord.y = 0;
   }

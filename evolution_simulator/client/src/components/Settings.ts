@@ -2,6 +2,7 @@ import Renderer from "../controllers/renderer.controller";
 import Simulation from "../controllers/simulation.controller";
 import { Grid } from "../environment/Grid";
 
+// Function to check for changes in the config object
 function check_config_changes(simulation, config, key) {
   if (key === "GRID_SIZE") {
     simulation.environment.pixel_size = (config[key] * 15) / config[key];
@@ -14,8 +15,6 @@ function check_config_changes(simulation, config, key) {
     );
     simulation.environment.grid = new Grid(config[key], simulation.environment.renderer);
     simulation.environment.renderer.pixel_size = simulation.environment.pixel_size;
-    simulation.environment.renderer.clear_canvas();
-  } else if (key === "POPULATION") {
     simulation.environment.renderer.clear_canvas();
   }
 }
@@ -65,11 +64,13 @@ export function render_settings(simulation: Simulation, config: object): void {
     }
 
     const inputs = document.querySelectorAll("input");
-    inputs.forEach((input) => {
-      input.addEventListener("change", handleChange);
-    });
 
-    function handleChange(e: Event) {
+    for (const input of inputs) {
+      input.addEventListener("change", handle_change);
+    }
+
+    // Function to handle changes in the input
+    function handle_change(e: Event) {
       const target = e.target as HTMLInputElement;
       const key = target.id;
       const value = target.value;

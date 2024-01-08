@@ -1,11 +1,11 @@
 import { OutputNeurons } from "./../constants/OutputNeurons";
 import { InputNeurons } from "../constants/InputNeurons";
 
-// SimulationConfig Types
+// DefaultSimulationConfig Types
 type Types = Record<string, any>;
 
 // This is the global simulation configuration file.
-const SimulationConfig: Types = {
+const DefaultSimulationConfig: Types = {
   GRID_SIZE: 128,
   TARGET_UPDATE_MAX_FPS: 300,
   TARGET_UPDATE_FPS: 300,
@@ -26,4 +26,4 @@ const SimulationConfig: Types = {
   NUMBER_OF_ACTIONS: Object.keys(OutputNeurons).length,
 };
 
-export { SimulationConfig };
+export { DefaultSimulationConfig };

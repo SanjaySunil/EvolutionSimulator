@@ -1,11 +1,11 @@
 // Import necessary modules and files
-import { SimulationConfig } from "../config/simulation.config";
 import Simulation from "../controllers/simulation.controller";
 import Organism from "../models/Organism";
 import export_object from "../utils/export_object";
 import { render_settings } from "./Settings";
 import { read_file } from "./FileReader";
 import { CellStates } from "../environment/Grid";
+import { DefaultSimulationConfig } from "../config/simulation.config";
 
 // Get references to HTML elements
 const export_all_organisms = document.getElementById("export_all_organisms") as HTMLButtonElement;
@@ -45,14 +45,14 @@ export function register_export_all_organisms_button(simulation: Simulation): vo
 }
 
 // Register event listener for exporting the config
-export function register_export_config_button(config: typeof SimulationConfig): void {
+export function register_export_config_button(config: typeof DefaultSimulationConfig): void {
   export_config.addEventListener("click", () => {
     export_object({ file_type: "config_export", config: config }, "config");
   });
 }
 
 // Register event listener for exporting the simulation
-export function register_export_simulation_button(simulation: Simulation, config: typeof SimulationConfig): void {
+export function register_export_simulation_button(simulation: Simulation, config: typeof DefaultSimulationConfig): void {
   export_simulation.addEventListener("click", () => {
     const obj: any = { simulation_config: [] };
 

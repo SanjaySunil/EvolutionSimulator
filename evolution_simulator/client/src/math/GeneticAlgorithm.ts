@@ -1,4 +1,4 @@
-import { SimulationConfig } from "../config/simulation.config";
+import { DefaultSimulationConfig } from "../config/simulation.config";
 import Organism from "../models/Organism";
 import { euclidean_distance } from "../utils/geometry";
 import Gene from "../models/Gene";
@@ -60,7 +60,7 @@ export function sort_and_calculate_fitness(population: Organism[], goal_coordina
 }
 
 // Function to select organisms for crossover and create a new generation
-export function select_and_crossover(population: Organism[], config: typeof SimulationConfig): Organism[] {
+export function select_and_crossover(population: Organism[], config: typeof DefaultSimulationConfig): Organism[] {
   const new_generation: Organism[] = [];
   const elitism_size: number = Math.floor((config.ELITISM_PERCENT * population.length) / 100);
 

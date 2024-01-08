@@ -1,4 +1,4 @@
-import { SimulationConfig } from "../config/simulation.config";
+import { DefaultSimulationConfig } from "../config/simulation.config";
 import Canvas from "../controllers/canvas.controller";
 import { select_and_crossover, sort_and_calculate_fitness } from "../math/GeneticAlgorithm";
 import Gene from "../models/Gene";
@@ -19,7 +19,7 @@ export class Environment extends Canvas {
   public oldest_organism: number;
 
   // Builds a new Environment.
-  constructor(canvas_id: string, config: typeof SimulationConfig) {
+  constructor(canvas_id: string, config: typeof DefaultSimulationConfig) {
     super(canvas_id, config);
     this.population = [];
     this.ticks = 0;

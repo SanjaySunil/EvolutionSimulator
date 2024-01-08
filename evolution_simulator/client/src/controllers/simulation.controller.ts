@@ -1,5 +1,5 @@
 import { render_fps_element } from "../components/Settings";
-import { SimulationConfig } from "../config/simulation.config";
+import { DefaultSimulationConfig } from "../config/simulation.config";
 import { Environment } from "../environment";
 
 // Get references to HTML elements
@@ -35,7 +35,7 @@ export default class Simulation {
   public first_simulation: boolean;
 
   // Define configuration and loop variables
-  public config: typeof SimulationConfig;
+  public config: typeof DefaultSimulationConfig;
   public update_loop: NodeJS.Timeout | undefined;
   public render_loop: NodeJS.Timeout | undefined;
 
@@ -44,7 +44,7 @@ export default class Simulation {
   public cached_organisms: [];
 
   // Constructor for the Simulation class
-  constructor(config: typeof SimulationConfig) {
+  constructor(config: typeof DefaultSimulationConfig) {
     this.config = config;
 
     // Initialize update loop properties

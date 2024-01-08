@@ -1,4 +1,3 @@
-// Import necessary modules and files
 import Simulation from "../controllers/simulation.controller";
 
 // Get references to HTML elements
@@ -8,6 +7,8 @@ const rendering_enabled = document.getElementById("render_on_off") as HTMLButton
 const sidebar = document.getElementById("sidebar") as HTMLDivElement;
 const sim_restart = document.getElementById("sim_restart") as HTMLButtonElement;
 const sim_start_stop = document.getElementById("sim_start_stop") as HTMLButtonElement;
+const slider_label = document.getElementById("target_update_fps") as HTMLSpanElement;
+const target_update_fps_slider = document.getElementById("target_update_fps_slider") as HTMLInputElement;
 
 // Register event listener for downloading the neural network as SVG
 export function register_download_neuralnet_button(): void {
@@ -74,39 +75,28 @@ export function register_sidebar_button() {
   });
 }
 
-// Function to read the FPS slider value
-function read_fps_slider(config, slider, label): void {
-  const slider_label = document.getElementById(label) as HTMLSpanElement;
-  let fps = 0;
-
-  if (slider.value === slider.max) {
-    slider_label.innerHTML = "MAX";
-    fps = Number.MAX_SAFE_INTEGER;
-  } else if (slider.value == slider.min) {
-    slider_label.innerHTML = "1";
-    fps = 1;
-  } else {
-    slider_label.innerHTML = slider.value;
-    fps = parseInt(slider.value, 10);
-  }
-
-  config.TARGET_UPDATE_FPS = fps;
-}
-
-// Function to handle the FPS slider
-function slider(simulation, config, slider, label): void {
-  if (simulation.is_running) {
-    read_fps_slider(config, slider, label);
-    simulation.restart_engine();
-  } else {
-    read_fps_slider(config, slider, label);
-  }
-}
-
 // Register event listener for the FPS sliders
 export function register_fps_sliders(simulation, config) {
-  const target_update_fps_slider = document.getElementById("target_update_fps_slider") as HTMLInputElement;
   target_update_fps_slider.max = config.TARGET_UPDATE_MAX_FPS.toString();
   target_update_fps_slider.value = config.TARGET_UPDATE_FPS.toString();
-  target_update_fps_slider.addEventListener("input", () => slider(simulation, config, target_update_fps_slider, "target_update_fps"));
+  target_update_fps_slider.addEventListener("input", () => {
+    let fps = 0;
+
+    if (target_update_fps_slider.value === target_update_fps_slider.max) {
+      slider_label.innerHTML = "MAX";
+      fps = Number.MAX_SAFE_INTEGER;
+    } else if (target_update_fps_slider.value == target_update_fps_slider.min) {
+      slider_label.innerHTML = "1";
+      fps = 1;
+    } else {
+      slider_label.innerHTML = target_update_fps_slider.value;
+      fps = parseInt(target_update_fps_slider.value, 10);
+    }
+
+    config.TARGET_UPDATE_FPS = fps;
+
+    if (simulation.is_running) {
+      simulation.restart_engine();
+    }
+  });
 }

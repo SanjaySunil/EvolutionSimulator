@@ -1,4 +1,11 @@
-import { register_download_neuralnet_button, register_fps_sliders, register_rendering_enabled_button, register_sidebar_button, register_sim_restart_button, register_sim_start_stop_button } from "./components/Buttons";
+import {
+  register_download_neuralnet_button,
+  register_fps_sliders,
+  register_rendering_enabled_button,
+  register_sidebar_button,
+  register_sim_restart_button,
+  register_sim_start_stop_button,
+} from "./components/Buttons";
 import {
   register_export_all_organisms_button,
   register_export_config_button,
@@ -10,26 +17,32 @@ import {
   register_import_simulation_button,
 } from "./components/ImportExport";
 import { render_settings } from "./components/Settings";
-import { SimulationConfig } from "./config/simulation.config";
 import Simulation from "./controllers/simulation.controller";
+import { ConfigController } from "./controllers/singleton.controller";
+import { DefaultSimulationConfig } from "./config/simulation.config";
 
-const config = SimulationConfig;
-const simulation = new Simulation(config);
+const config = ConfigController.get_instance();
+config.config = DefaultSimulationConfig;
 
-render_settings(simulation, config);
+const simulation = new Simulation(config.config);
+
+// Render settings and register event listeners for buttons.
+render_settings(simulation, config.config);
 register_sidebar_button();
 register_rendering_enabled_button(simulation);
 register_sim_restart_button();
 register_sim_start_stop_button(simulation);
 register_download_neuralnet_button();
-register_fps_sliders(simulation, config);
+register_fps_sliders(simulation, config.config);
+
 // Import Buttons
 register_import_organisms_button(simulation);
 register_import_simulation_button(simulation);
 register_import_config_button(simulation);
 register_import_environment_button(simulation);
+
 // Export Buttons
-register_export_config_button(config);
+register_export_config_button(config.config);
 register_export_environment_button(simulation);
 register_export_all_organisms_button(simulation);
-register_export_simulation_button(simulation, config);
+register_export_simulation_button(simulation, config.config);
