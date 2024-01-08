@@ -208,7 +208,7 @@ export default class Canvas {
 
   // Handles mouse wheel event for zooming and panning
   public handle_mouse_wheel(event: WheelEvent): void {
-    // Handle mouse wheel event for zooming and panning
+    // Determine the direction of mouse wheel scroll
     const sign = -Math.sign(event.deltaY);
 
     // Calculate the scale by taking the maximum between the minimum zoom level and the current zoom level plus the sign of the mouse wheel scroll multiplied by the zoom speed.
