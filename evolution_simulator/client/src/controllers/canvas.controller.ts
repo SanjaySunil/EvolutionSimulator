@@ -183,15 +183,18 @@ export default class Canvas {
     }
   }
 
-  // Handle key press.
+  // Handles keyboard key press events
   public handle_key_down(event: KeyboardEvent): void {
-    // Handle key press events
+    // Obtain canvas top and left style values
     const canvas_top = parseInt(get_style("canvas", "top"));
     const canvas_left = parseInt(get_style("canvas", "left"));
+
+    // If the WASD keys are pressed, pan the canvas by adding or subtracting the pan amount from the canvas top or left style values.
     if (event.code == "KeyD") this.canvas.style.left = canvas_left - this.pan_amount + "px";
     else if (event.code == "KeyA") this.canvas.style.left = canvas_left + this.pan_amount + "px";
     else if (event.code == "KeyS") this.canvas.style.top = canvas_top - this.pan_amount + "px";
     else if (event.code == "KeyW") this.canvas.style.top = canvas_top + this.pan_amount + "px";
+    // If the 1-6 keys are pressed, change the current mode.
     else if (event.code == "Digit1") this.mode = Modes[ModesEnum.IDLE];
     else if (event.code == "Digit2") this.mode = Modes[ModesEnum.PAN];
     else if (event.code == "Digit3") this.mode = Modes[ModesEnum.GOAL];
@@ -199,6 +202,7 @@ export default class Canvas {
     else if (event.code == "Digit5") this.mode = Modes[ModesEnum.RADIOACTIVE];
     else if (event.code == "Digit6") this.mode = Modes[ModesEnum.REMOVE];
 
+    // Display the current mode on the DOM
     DOMElements.mode.innerHTML = this.mode;
   }
 
