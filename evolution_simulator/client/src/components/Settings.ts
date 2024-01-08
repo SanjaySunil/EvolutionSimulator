@@ -42,19 +42,24 @@ export function render_fps_element(element: HTMLElement, fps: number): void {
 
 // Function to render the settings based on the provided config object
 export function render_settings(simulation: Simulation, config: object): void {
+  // Retrieve all keys from the config object
   const keys = Object.keys(config);
 
+  // Clear the innerHTML of the settings element
   DOMElements.settings.innerHTML = "";
 
+  // Iterate through each key in the config object
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i];
     const value = config[key];
 
-    // Create a new table row
+    // Create a new table row.
     const row = document.createElement("tr");
 
     // Create a new table cell for the key
     const key_cell = document.createElement("td");
+
+    // Display the key with underscores replaced by spaces
     key_cell.textContent = key.replaceAll("_", " ");
 
     // Append the key cell to the row
@@ -67,9 +72,9 @@ export function render_settings(simulation: Simulation, config: object): void {
     const input_cell = document.createElement("td");
     const input = document.createElement("input");
 
-    // Set the input type based on the value type
+    // Set the input type based on the value type (number or checkbox)
     input.setAttribute("type", typeof value === "number" ? "number" : "checkbox");
-    input.setAttribute("id", key);
+    input.setAttribute("id", key); // Set input ID to the key
 
     // Set the input value or checked attribute based on the value
     if (typeof value == "boolean" && value) {
@@ -77,12 +82,9 @@ export function render_settings(simulation: Simulation, config: object): void {
     } else {
       input.setAttribute("value", value.toString());
     }
-
-    const inputs = document.querySelectorAll("input");
-
-    for (const input of inputs) {
-      input.addEventListener("change", handle_change);
-    }
+    
+    // Add event listener to handle input changes
+    input.addEventListener("change", handle_change);
 
     // Function to handle changes in the input
     function handle_change(e: Event) {
@@ -97,6 +99,7 @@ export function render_settings(simulation: Simulation, config: object): void {
         config[key] = target.checked;
       }
 
+      // Trigger function to check and apply config changes
       check_config_changes(simulation, config, key);
     }
 
@@ -107,7 +110,7 @@ export function render_settings(simulation: Simulation, config: object): void {
     // Append the row to the settings div
     DOMElements.settings.appendChild(row);
 
-    // Check config changes.
+    // Check for config changes
     check_config_changes(simulation, config, key);
   }
 }
