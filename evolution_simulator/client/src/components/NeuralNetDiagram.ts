@@ -109,10 +109,13 @@ export default class NeuralNetDiagram {
     return circle;
   }
 
-  private quick(object, previous) {
+  // Private function to find the y-coordinate of the previous node.
+  private find_previous_node_y_coord(object, previous) {
+    // If the object is empty, there is no previous node, so return the node spacing plus the node radius as the initial y-coordinate.
     if (Object.keys(object).length == 0) {
       previous = this.node_spacing + this.node_radius;
     } else {
+      // Otherwise, find the previous y-coordinate by adding the node spacing and the node radius to the previous y-coordinate.
       previous = previous + (this.node_spacing + 2 * this.node_radius);
     }
     return previous;
@@ -136,15 +139,18 @@ export default class NeuralNetDiagram {
 
     // Determine the y-coordinate and update neuron positions based on node type.
     if (node_type == "INPUT") {
-      previous_y_coord = this.quick(this.input_neurons, this.last_input_neuron_coord);
+      // Find the previous y-coordinate for the input neuron.
+      previous_y_coord = this.find_previous_node_y_coord(this.input_neurons, this.last_input_neuron_coord);
       this.input_neurons[node_id] = [input, previous_y_coord];
       this.last_input_neuron_coord = previous_y_coord;
     } else if (node_type == "OUTPUT") {
-      previous_y_coord = this.quick(this.output_neurons, this.last_output_neuron_coord);
+      // Find the previous y-coordinate for the output neuron.
+      previous_y_coord = this.find_previous_node_y_coord(this.output_neurons, this.last_output_neuron_coord);
       this.output_neurons[node_id] = [output, previous_y_coord];
       this.last_output_neuron_coord = previous_y_coord;
     } else if (node_type == "HIDDEN") {
-      previous_y_coord = this.quick(this.hidden_neurons, this.last_hidden_neuron_coord);
+      // Find the previous y-coordinate for the hidden neuron.
+      previous_y_coord = this.find_previous_node_y_coord(this.hidden_neurons, this.last_hidden_neuron_coord);
       this.hidden_neurons[node_id] = [hidden, previous_y_coord];
       this.last_hidden_neuron_coord = previous_y_coord;
     }
@@ -169,10 +175,11 @@ export default class NeuralNetDiagram {
     group.appendChild(circle);
     group.appendChild(text_element);
 
-    // Append the group element to the SVG canvas.
+    // Append the group element to the SVG.
     this.svg.appendChild(group);
   }
 
+  // Public method to draw the neural network diagram.
   public draw(connections: Gene[]): void {
     const height = Math.max(this.last_input_neuron_coord, this.last_output_neuron_coord, this.last_hidden_neuron_coord + this.node_spacing);
     this.node_spacing + this.node_radius;
