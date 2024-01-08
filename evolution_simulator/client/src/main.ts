@@ -1,13 +1,13 @@
 import {
   register_download_neuralnet_button,
-  register_fps_sliders,
+  register_fps_slider,
   register_rendering_enabled_button,
-  register_sidebar_button,
+  register_show_controls,
   register_sim_restart_button,
   register_sim_start_stop_button,
 } from "./components/Buttons";
 import {
-  register_export_all_organisms_button,
+  export_population_button,
   register_export_config_button,
   register_export_environment_button,
   register_export_simulation_button,
@@ -28,12 +28,12 @@ const simulation = new Simulation(config.config);
 
 // Render settings and register event listeners for buttons.
 render_settings(simulation, config.config);
-register_sidebar_button();
+register_show_controls();
 register_rendering_enabled_button(simulation);
 register_sim_restart_button();
 register_sim_start_stop_button(simulation);
 register_download_neuralnet_button();
-register_fps_sliders(simulation, config.config);
+register_fps_slider(simulation, config.config);
 
 // Import Buttons
 register_import_organisms_button(simulation);
@@ -44,5 +44,5 @@ register_import_environment_button(simulation);
 // Export Buttons
 register_export_config_button(config.config);
 register_export_environment_button(simulation);
-register_export_all_organisms_button(simulation);
+export_population_button(simulation);
 register_export_simulation_button(simulation, config.config);

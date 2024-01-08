@@ -3,8 +3,6 @@ import { DefaultSimulationConfig } from "../config/simulation.config";
 import { Environment } from "../environment";
 import { DOMElements } from "../components/DOMElements";
 
-// Get references to HTML elements
-
 // Define the Simulation class
 export default class Simulation {
   // Define properties for update loop

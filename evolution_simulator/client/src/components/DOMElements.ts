@@ -1,3 +1,6 @@
+// documented
+
+// DOM elements are stored in a single object to avoid polluting the global namespace.
 export const DOMElements = {
   button: document.getElementById("open_sidebar") as HTMLButtonElement,
   export_neuralnet: document.getElementById("export_neuralnet") as HTMLButtonElement,
@@ -8,7 +11,7 @@ export const DOMElements = {
   slider_label: document.getElementById("target_update_fps") as HTMLSpanElement,
 
   target_update_fps_slider: document.getElementById("target_update_fps_slider") as HTMLInputElement,
-  export_all_organisms: document.getElementById("export_all_organisms") as HTMLButtonElement,
+  export_population: document.getElementById("export_all_organisms") as HTMLButtonElement,
   export_config: document.getElementById("export_config") as HTMLButtonElement,
   export_simulation: document.getElementById("export_simulation") as HTMLButtonElement,
   export_environment: document.getElementById("export_environment") as HTMLButtonElement,
