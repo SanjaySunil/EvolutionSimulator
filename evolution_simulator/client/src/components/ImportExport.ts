@@ -159,14 +159,19 @@ export function register_import_organisms_button(simulation: Simulation) {
 
 // Function to register an event listener for the import simulation button.
 export function register_import_simulation_button(simulation: Simulation) {
+  // Register an event listener for the import simulation button.
   DOMElements.import_simulation.addEventListener("change", (event: Event) => {
+    // Read and parse the JSON file.
     read_file(event).then((data) => {
+      // If the file is valid, import the simulation.
       if (data && data.file_type == "simulation_export") {
+        // If simulation config exists, update the simulation config and render settings.
         if (data.simulation_config) {
           simulation.config = data.simulation_config;
           render_settings(simulation, simulation.config);
-        } else alert("Failed to read simulation config from file.");
+        } else alert("Failed to read simulation config from file."); // Alert if simulation config is missing.
 
+        // If population data exists, add organisms to the simulation.
         if (data.population) {
           for (const organism of data.population) {
             let result = simulation.environment.add_organism(organism.genome, organism.coordinates);
@@ -175,18 +180,35 @@ export function register_import_simulation_button(simulation: Simulation) {
               return;
             }
           }
-        } else alert("Failed to read population from file.");
+        } else {
+          // Alert if population data is missing.
+          alert("Failed to read population from file.");
+        }
 
-        if (data.generation) simulation.environment.generation = data.generation;
-        else alert("Failed to read generation from file.");
+        // Update generation count if available.
+        if (data.generation) {
+          simulation.environment.generation = data.generation;
+        } else {
+          // Alert if generation count is missing.
+          alert("Failed to read generation from file.");
+        }
 
-        if (data.ticks) simulation.environment.ticks = data.ticks;
-        else alert("Failed to read ticks from file.");
+        // Update ticks count if available.
+        if (data.ticks) {
+          simulation.environment.ticks = data.ticks;
+        } else {
+          // Alert if ticks count is missing.
+          alert("Failed to read ticks from file.");
+        }
 
+        // Alert on successful import of the simulation.
         alert("Successfully imported simulation.");
       } else {
+        // Alert if the file is invalid.
         alert("Invalid file.");
       }
+
+      // Reset the file input element.
       DOMElements.import_simulation.value = "";
     });
   });
