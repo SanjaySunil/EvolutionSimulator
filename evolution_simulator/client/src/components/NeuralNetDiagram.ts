@@ -16,7 +16,7 @@ export default class NeuralNetDiagram {
   public last_output_neuron_coord: number = 0;
   public last_hidden_neuron_coord: number = 0;
 
-  // Function to create an SVG element with specific attributes.
+  // Private function to create an SVG element with specific attributes.
   private create_element_ns(element_type: string, attributes: Record<string, string>): SVGElement {
     // Create an SVG element with the specified element type.
     const element = document.createElementNS("http://www.w3.org/2000/svg", element_type);
@@ -30,7 +30,7 @@ export default class NeuralNetDiagram {
     return element;
   }
 
-  // Function to create an SVG text element with specific attributes.
+  // Private function to create an SVG text element with specific attributes.
   private create_text(x: number, y: number, text: string, fill: string): SVGElement {
     // Create an object with the attributes for the text element.
     const attributes = {
@@ -49,34 +49,63 @@ export default class NeuralNetDiagram {
     return text_element;
   }
 
+  // Private method to connect two nodes with a line.
   private connect_nodes(source: number[], sink: number[], weight: number, is_positive: boolean): void {
+    // Define attributes for the line connecting the source and sink nodes.
     const attributes = {
+      // X-coordinate of the source node.
       x1: source[0].toString(),
+      // Y-coordinate of the source node.
       y1: source[1].toString(),
+      // X-coordinate of the sink node.
       x2: sink[0].toString(),
+      // Y-coordinate of the sink node.
       y2: sink[1].toString(),
+      // Colour of the line based on weight.
       stroke: is_positive ? "green" : "red",
+      // Width of the line based on weight.
       "stroke-width": weight.toString(),
     };
+
+    // Create a line SVG element with the defined attributes.
     const line = this.create_element_ns("line", attributes);
+
+    // Append the line to the SVG canvas.
     this.svg.appendChild(line);
 
+    // Define properties for the circles representing the source and sink nodes.
     const circle_radius = 3;
+
+    // Fill colour of the circles.
     const circle_fill = is_positive ? "green" : "red";
-    const source_circle = this.create_circle(source[0], source[1], circle_radius, circle_fill);
-    const sink_circle = this.create_circle(sink[0], sink[1], circle_radius, circle_fill);
-    this.svg.appendChild(source_circle);
-    this.svg.appendChild(sink_circle);
+
+    // Create circle SVG elements representing the source and sink nodes.
+    const source_node = this.create_circle(source[0], source[1], circle_radius, circle_fill);
+    const sink_node = this.create_circle(sink[0], sink[1], circle_radius, circle_fill);
+
+    // Append the source and sink node to the SVG.
+    this.svg.appendChild(source_node);
+    this.svg.appendChild(sink_node);
   }
 
+  // Define a private function to create an SVG circle element.
   private create_circle(x: number, y: number, r: number, fill: string): SVGElement {
+    // Define attributes for the circle element.
     const attributes = {
+      // X-coordinate of the centre of the circle.
       cx: x.toString(),
+      // Y-coordinate of the centre of the circle.
       cy: y.toString(),
+      // Radius of the circle.
       r: r.toString(),
+      // Fill colour of the circle.
       fill: fill,
     };
+
+    // Create a circle SVG element with the defined attributes.
     const circle = this.create_element_ns("circle", attributes);
+
+    // Return the created circle element.
     return circle;
   }
 
