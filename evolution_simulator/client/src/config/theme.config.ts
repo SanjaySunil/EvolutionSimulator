@@ -1,6 +1,7 @@
+// Defining ThemeConfig types.
 type Types = Record<string, string>;
 
-// Theme pallete for simulation.
+// Theme palette for simulation, cells are coloured with hex values.
 const ThemeConfig: Types = {
   EMPTY: "#282a36",
   WALL: "#44475a",
