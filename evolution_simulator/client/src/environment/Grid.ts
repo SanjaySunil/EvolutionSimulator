@@ -85,17 +85,12 @@ export class Grid {
 
   // Initializes the grid.
   public init(): void {
-    const perlin = new PerlinNoise();
-    // const grid = this.generateMaze(this.grid_size, this.grid_size);
+    // const perlin = new PerlinNoise();
     for (let x = 0; x < this.grid_size; x++) {
       const column: GridCell[] = new Array(this.grid_size);
       for (let y = 0; y < this.grid_size; y++) {
         const cell = new GridCell(x, y);
         // cell.state = grid[x][y] == true ? CellStates.WALL : CellStates.EMPTY;
-        // this.create_barrier(cell);
-        // this.create_radioactive_barrier(cell);
-        // this.create_perlin_barrier(cell, perlin);
-        // this.renderer.to_clear.add(cell);
         column[y] = cell;
       }
       this._data[x] = column;
