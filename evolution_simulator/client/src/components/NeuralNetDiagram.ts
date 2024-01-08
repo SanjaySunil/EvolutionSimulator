@@ -181,14 +181,18 @@ export default class NeuralNetDiagram {
 
   // Public method to draw the neural network diagram.
   public draw(connections: Gene[]): void {
-    const height = Math.max(this.last_input_neuron_coord, this.last_output_neuron_coord, this.last_hidden_neuron_coord + this.node_spacing);
-    this.node_spacing + this.node_radius;
+    // Calculate the height of the SVG canvas based on the maximum y-coordinates of different types of nodes.
+    const height = Math.max(this.last_input_neuron_coord, this.last_output_neuron_coord, this.last_hidden_neuron_coord);
+
+    // Reset the HTML content of the SVG element with a specific width and calculated height.
     this.svg.innerHTML = `<svg width='400' height='${height}' id='neural-network-svg'></svg>`;
 
+    // Iterate through each connection to draw lines between connected nodes.
     for (const connection of connections) {
       let source;
       let sink;
 
+      // Determine the source node based on its type.
       if (connection.source_type == Neurons.INPUT) {
         if (this.input_neurons[connection.source_id]) {
           source = this.input_neurons[connection.source_id];
@@ -205,6 +209,7 @@ export default class NeuralNetDiagram {
         }
       }
 
+      // Determine the sink node based on its type.
       if (connection.sink_type == Neurons.OUTPUT) {
         if (this.output_neurons[connection.sink_id]) {
           sink = this.output_neurons[connection.sink_id];
@@ -221,13 +226,17 @@ export default class NeuralNetDiagram {
         }
       }
 
+      // Define constants for line thickness calculation based on the weight of the connection.
       const max_thickness = 2.5;
       const min_thickness = 0.5;
+
+      // The thickness is calculated by calculating the ratio of the weight to the maximum/minimum possible weight and multiplying it by the maximum/minimum thickness.
       const thickness = Math.max(
         connection.weight >= 0 ? (connection.weight / 0x7fff) * max_thickness : (Math.abs(connection.weight) / 0x8000) * max_thickness,
         min_thickness
       );
 
+      // Draw connections between nodes based on their coordinates and connection weight.
       this.connect_nodes(source, sink, thickness, connection.weight >= 0);
     }
   }
