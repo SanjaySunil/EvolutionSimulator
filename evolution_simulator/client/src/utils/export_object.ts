@@ -1,9 +1,9 @@
-export default function export_object(exportObj, exportName): void {
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
-  const downloadAnchorNode = document.createElement("a");
-  downloadAnchorNode.setAttribute("href", dataStr);
-  downloadAnchorNode.setAttribute("download", exportName + ".json");
-  document.body.appendChild(downloadAnchorNode);
-  downloadAnchorNode.click();
-  downloadAnchorNode.remove();
+export default function export_object(object, export_name): void {
+  const data_string = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(object));
+  const download_anchor_node = document.createElement("a");
+  download_anchor_node.setAttribute("href", data_string);
+  download_anchor_node.setAttribute("download", export_name + ".json");
+  document.body.appendChild(download_anchor_node);
+  download_anchor_node.click();
+  download_anchor_node.remove();
 }
