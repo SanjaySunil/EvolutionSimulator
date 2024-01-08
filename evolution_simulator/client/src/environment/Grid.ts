@@ -259,59 +259,6 @@ export class Grid {
     }
   }
 
-  // Creates walls using Perlin Noise.
-  public create_perlin_barrier(cell: GridCell, perlin): void {
-    const WALL_THRESHOLD = 0.85; // Threshold value for determining wall creation probability
-    const value = perlin.noise(cell.coordinate.x * 0.1, cell.coordinate.y * 0.1); // Generate Perlin noise value for the cell
-
-    // Set the cell state to WALL or EMPTY based on the noise value and threshold
-    cell.state = value > WALL_THRESHOLD ? CellStates.WALL : CellStates.EMPTY;
-
-    // Add the cell to the 'to_fill' set in the renderer for rendering
-    this.renderer.to_fill.add(cell);
-
-    // Increment the count of occupied cells if a wall is created
-    if (cell.state === CellStates.WALL) {
-      this.occupied += 1;
-    }
-  }
-
-  // Creates a radioactive barrier depending on specified conditions.
-  public create_radioactive_barrier(cell: GridCell): void {
-    const center = this.grid_size / 2; // Calculate the center of the grid
-    const size = 7.5; // Define the size of the radioactive barrier
-
-    // Check if the cell's coordinates fall within the specified radioactive barrier area
-    if (
-      cell.coordinate.x >= center - size &&
-      cell.coordinate.x <= center + size &&
-      cell.coordinate.y >= center - size &&
-      cell.coordinate.y <= center + size
-    ) {
-      cell.state = CellStates.RADIOACTIVE; // Set the cell state to RADIOACTIVE if it's within the barrier
-      this.renderer.to_fill.add(cell); // Add the cell to the 'to_fill' set in the renderer for rendering
-      this.occupied += 1; // Increment the count of occupied cells
-    }
-  }
-
-  // Creates a barrier depending on specified conditions.
-  public create_barrier(cell: GridCell): void {
-    const center = this.grid_size / 2; // Calculate the center of the grid
-    const size = 7.5; // Define the size of the barrier
-
-    // Check if the cell's coordinates fall within the specified barrier area
-    if (
-      cell.coordinate.x >= center - size &&
-      cell.coordinate.x <= center + size &&
-      cell.coordinate.y >= center - size &&
-      cell.coordinate.y <= center + size
-    ) {
-      cell.state = CellStates.WALL; // Set the cell state to WALL if it's within the barrier
-      this.renderer.to_fill.add(cell); // Add the cell to the 'to_fill' set in the renderer for rendering
-      this.occupied += 1; // Increment the count of occupied cells
-    }
-  }
-
   // Fetches a random empty cell from the grid.
   public fetch_empty_cell(): Coordinate {
     // Check if the grid is fully occupied, throw an error if no empty cells are available
