@@ -109,47 +109,67 @@ export default class NeuralNetDiagram {
     return circle;
   }
 
+  private quick(object, previous) {
+    if (Object.keys(object).length == 0) {
+      previous = this.node_spacing + this.node_radius;
+    } else {
+      previous = previous + (this.node_spacing + 2 * this.node_radius);
+    }
+    return previous;
+  }
+
+  // Private method to create a node for the neural network diagram.
   private create_node(node_type: string, node_id: number): void {
+    // Create a new SVG group element.
     const group = this.create_element_ns("g", {});
-    let circle, text_elem;
-    if (node_type == "SENSOR") {
-      let prev;
-      if (Object.keys(this.input_neurons).length == 0) {
-        prev = this.node_spacing + this.node_radius;
-      } else {
-        prev = this.last_input_neuron_coord + (this.node_spacing + 2 * this.node_radius);
-      }
-      this.input_neurons[node_id] = [50, prev];
-      this.last_input_neuron_coord = prev;
-      circle = this.create_circle(50, prev, this.node_radius, "black");
-      text_elem = this.create_text(50, prev, InputNeuronSymbols[node_id], "white");
-    } else if (node_type == "ACTION") {
-      let prev;
-      if (Object.keys(this.output_neurons).length == 0) {
-        prev = this.node_spacing + this.node_radius;
-      } else {
-        prev = this.last_output_neuron_coord + (this.node_spacing + 2 * this.node_radius);
-      }
-      this.output_neurons[node_id] = [350, prev];
-      this.last_output_neuron_coord = prev;
-      circle = this.create_circle(350, prev, this.node_radius, "black");
-      text_elem = this.create_text(350, prev, OutputNeuronSymbols[node_id], "white");
-    } else if (node_type == "NEURON") {
-      let prev;
-      if (Object.keys(this.hidden_neurons).length == 0) {
-        prev = this.node_spacing + this.node_radius;
-      } else {
-        prev = this.last_hidden_neuron_coord + (this.node_spacing + 2 * this.node_radius);
-      }
-      this.hidden_neurons[node_id] = [200, prev];
-      this.last_hidden_neuron_coord = prev;
-      circle = this.create_circle(200, prev, this.node_radius, "black");
-      text_elem = this.create_text(200, prev, node_id.toString(), "white");
+
+    // Define x coord positions for different types of nodes.
+    const input = 50;
+    const hidden = 200;
+    const output = 350;
+
+    // Initialise variables for circle, text element, previous y-coordinate, x-coordinate, and node text.
+    let circle, text_element;
+    let previous_y_coord;
+    let x_coord;
+    let node_text;
+
+    // Determine the y-coordinate and update neuron positions based on node type.
+    if (node_type == "INPUT") {
+      previous_y_coord = this.quick(this.input_neurons, this.last_input_neuron_coord);
+      this.input_neurons[node_id] = [input, previous_y_coord];
+      this.last_input_neuron_coord = previous_y_coord;
+    } else if (node_type == "OUTPUT") {
+      previous_y_coord = this.quick(this.output_neurons, this.last_output_neuron_coord);
+      this.output_neurons[node_id] = [output, previous_y_coord];
+      this.last_output_neuron_coord = previous_y_coord;
+    } else if (node_type == "HIDDEN") {
+      previous_y_coord = this.quick(this.hidden_neurons, this.last_hidden_neuron_coord);
+      this.hidden_neurons[node_id] = [hidden, previous_y_coord];
+      this.last_hidden_neuron_coord = previous_y_coord;
     }
 
-    group.appendChild(circle);
-    group.appendChild(text_elem);
+    // Determine x-coordinate and node text based on the node type.
+    if (node_type == "INPUT") {
+      x_coord = input;
+      node_text = InputNeuronSymbols[node_id];
+    } else if (node_type == "OUTPUT") {
+      x_coord = output;
+      node_text = OutputNeuronSymbols[node_id];
+    } else if (node_type == "HIDDEN") {
+      x_coord = hidden;
+      node_text = node_id.toString();
+    }
 
+    // Create circle and text elements for the node.
+    circle = this.create_circle(x_coord, previous_y_coord, this.node_radius, "black");
+    text_element = this.create_text(x_coord, previous_y_coord, node_text, "white");
+
+    // Append the circle and text elements to the group element.
+    group.appendChild(circle);
+    group.appendChild(text_element);
+
+    // Append the group element to the SVG canvas.
     this.svg.appendChild(group);
   }
 
@@ -166,14 +186,14 @@ export default class NeuralNetDiagram {
         if (this.input_neurons[connection.source_id]) {
           source = this.input_neurons[connection.source_id];
         } else {
-          this.create_node(connection.source_type == 0 ? "NEURON" : "SENSOR", connection.source_id);
+          this.create_node(connection.source_type == 0 ? "HIDDEN" : "INPUT", connection.source_id);
           source = this.input_neurons[connection.source_id];
         }
       } else if (connection.source_type == Neurons.HIDDEN) {
         if (this.hidden_neurons[connection.source_id]) {
           source = this.hidden_neurons[connection.source_id];
         } else {
-          this.create_node(connection.source_type == 0 ? "NEURON" : "SENSOR", connection.source_id);
+          this.create_node(connection.source_type == 0 ? "HIDDEN" : "INPUT", connection.source_id);
           source = this.hidden_neurons[connection.source_id];
         }
       }
@@ -182,14 +202,14 @@ export default class NeuralNetDiagram {
         if (this.output_neurons[connection.sink_id]) {
           sink = this.output_neurons[connection.sink_id];
         } else {
-          this.create_node(connection.sink_type == 0 ? "NEURON" : "ACTION", connection.sink_id);
+          this.create_node(connection.sink_type == 0 ? "HIDDEN" : "OUTPUT", connection.sink_id);
           sink = this.output_neurons[connection.sink_id];
         }
       } else if (connection.sink_type == Neurons.HIDDEN) {
         if (this.hidden_neurons[connection.sink_id]) {
           sink = this.hidden_neurons[connection.sink_id];
         } else {
-          this.create_node(connection.sink_type == 0 ? "NEURON" : "ACTION", connection.sink_id);
+          this.create_node(connection.sink_type == 0 ? "HIDDEN" : "OUTPUT", connection.sink_id);
           sink = this.hidden_neurons[connection.sink_id];
         }
       }
