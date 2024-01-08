@@ -69,9 +69,9 @@ export default class Canvas {
     this.renderer.clear_canvas();
   }
 
-  // Mouse event register
+  // Function to register mouse events.
   public register_mouse_events(): void {
-    // Register mouse events on the canvas
+    // Register mouse events on the canvas.
     this.canvas.addEventListener("mousemove", (e) => this.mouse_move(e));
     this.canvas.addEventListener("mouseup", (e) => this.mouse_up(e));
     this.canvas.addEventListener("mousedown", (e) => this.mouse_down(e));
@@ -80,7 +80,7 @@ export default class Canvas {
     this.canvas.addEventListener("wheel", (e) => this.wheel(e));
   }
 
-  // Keyboard event register
+  // Register keyboard events
   public register_keyboard_events(): void {
     // Register keyboard events on the window
     window.addEventListener("keydown", (e) => {
