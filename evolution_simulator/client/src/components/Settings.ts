@@ -5,23 +5,38 @@ import { DOMElements } from "./DOMElements";
 
 // Function to check for changes in the config object
 function check_config_changes(simulation, config, key) {
+  // Check if the key in the config object is "GRID_SIZE"
   if (key === "GRID_SIZE") {
+    // Calculate the new pixel size based on the grid size.
     simulation.environment.pixel_size = (config[key] * 15) / config[key];
+
+    // Set canvas width and height based on the grid size multiplied by 15,
     simulation.environment.canvas.width = simulation.environment.canvas.height = config[key] * 15;
+
+    // Apply scaling to the canvas using the zoom level.
     simulation.environment.canvas.style.transform = `scale(${simulation.environment.zoom_level})`;
+
+    // Create a new Renderer instance with updated canvas, context, and pixel size.
     simulation.environment.renderer = new Renderer(
       simulation.environment.canvas,
       simulation.environment.ctx,
       simulation.environment.pixel_size
     );
+
+    // Create a new Grid instance with the updated grid size and renderer
     simulation.environment.grid = new Grid(config[key], simulation.environment.renderer);
+
+    // Ensure renderer's pixel size matches the updated environment's pixel size
     simulation.environment.renderer.pixel_size = simulation.environment.pixel_size;
+
+    // Clear the canvas using the updated renderer.
     simulation.environment.renderer.clear_canvas();
   }
 }
 
-// Function to render the frames per second (fps) element
+// Function to render frames per second (FPS) element on the HTML page
 export function render_fps_element(element: HTMLElement, fps: number): void {
+  // Set the inner HTML of the specified HTML element to display the rounded FPS value as a string
   element.innerHTML = Math.round(fps).toString();
 }
 
