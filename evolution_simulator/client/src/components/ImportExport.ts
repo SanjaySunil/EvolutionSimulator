@@ -25,6 +25,7 @@ export function export_population(population: Organism[], with_coordinates: bool
       population_export.push(organism.genome.data);
     }
   }
+
   // Return the exported population.
   return population_export;
 }
@@ -99,6 +100,7 @@ export function register_export_environment_button(simulation: Simulation): void
         }
       }
     }
+
     // Export the obstacles.
     export_object({ file_type: "obstacles", obstacles: obstacles }, "obstacles");
   });
@@ -121,6 +123,7 @@ export function register_import_config_button(simulation: Simulation, config) {
         // Otherwise, alert the user that the file is invalid.
         alert("Failed to read config from file.");
       }
+
       // Reset the file input element.
       DOMElements.import_config.value = "";
     });
@@ -151,6 +154,7 @@ export function register_import_organisms_button(simulation: Simulation) {
         // Otherwise, alert the user that the file is invalid.
         alert("Invalid file.");
       }
+
       // Reset the file input element.
       DOMElements.import_organisms.value = "";
     });
@@ -214,16 +218,26 @@ export function register_import_simulation_button(simulation: Simulation) {
   });
 }
 
+// Function to register an event listener for importing environment button.
 export function register_import_environment_button(simulation) {
+  // Event listener for import environment button.
   DOMElements.import_environment.addEventListener("change", (event: Event) => {
+    // Read and parse the JSON file.
     read_file(event).then((data) => {
+      // Check if obstacles data exists and the file type is obstacles.
       if (data.obstacles && data.file_type == "obstacles") {
+        // Iterate through each obstacle and set its state as WALL in the grid.
         for (const obstacle of data.obstacles) {
           simulation.environment.grid.set_cell_state({ x: obstacle[0], y: obstacle[1] }, CellStates.WALL);
         }
+        // Alert on successful import of environment.
         alert("Successfully imported environment.");
-      } else alert("Failed to read obstacles from file.");
+      } else {
+        // Alert if obstacles data is missing or file type is incorrect.
+        alert("Failed to read obstacles from file.");
+      }
 
+      // Reset the file input element.
       DOMElements.import_environment.value = "";
     });
   });
