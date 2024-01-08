@@ -1,6 +1,7 @@
 import Renderer from "../controllers/renderer.controller";
 import Simulation from "../controllers/simulation.controller";
 import { Grid } from "../environment/Grid";
+import { DOMElements } from "./DOMElements";
 
 // Function to check for changes in the config object
 function check_config_changes(simulation, config, key) {
@@ -26,10 +27,9 @@ export function render_fps_element(element: HTMLElement, fps: number): void {
 
 // Function to render the settings based on the provided config object
 export function render_settings(simulation: Simulation, config: object): void {
-  const settings = document.getElementById("settings") as HTMLDivElement;
   const keys = Object.keys(config);
 
-  settings.innerHTML = "";
+  DOMElements.settings.innerHTML = "";
 
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i];
@@ -46,7 +46,7 @@ export function render_settings(simulation: Simulation, config: object): void {
     row.appendChild(key_cell);
 
     // Append the row to the settings div
-    settings.appendChild(row);
+    DOMElements.settings.appendChild(row);
 
     // Create a new table cell for the input
     const input_cell = document.createElement("td");
@@ -90,7 +90,7 @@ export function render_settings(simulation: Simulation, config: object): void {
     input_cell.appendChild(input);
 
     // Append the row to the settings div
-    settings.appendChild(row);
+    DOMElements.settings.appendChild(row);
 
     // Check config changes.
     check_config_changes(simulation, config, key);

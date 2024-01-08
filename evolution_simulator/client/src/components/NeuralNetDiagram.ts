@@ -2,12 +2,13 @@ import Gene from "../models/Gene";
 import { OutputNeuronSymbols } from "../constants/OutputNeurons";
 import { InputNeuronSymbols } from "../constants/InputNeurons";
 import { Neurons } from "../models/Neurons";
+import { DOMElements } from "./DOMElements";
 
 // This class is responsible for drawing the neural network diagram.
 export default class NeuralNetDiagram {
   public radius = 20;
   public spacing = 10;
-  public svg = document.getElementById("neural-network-svg")!;
+  public svg = DOMElements.neural_network_svg;
   public input_neurons: object = {};
   public output_neurons: object = {};
   public hidden_neurons: object = {};

@@ -6,10 +6,7 @@ import { max_distance } from "../utils/get_max_distance";
 import get_style from "../utils/get_style";
 import Mouse from "./mouse.controller";
 import Renderer from "./renderer.controller";
-
-const mode = document.getElementById("mode") as HTMLSpanElement;
-const organism_selected = document.getElementById("organism_selected") as HTMLParagraphElement;
-const organism_selected_table = document.getElementById("export_neuralnet") as HTMLTableElement;
+import { DOMElements } from "../components/DOMElements";
 
 // Define the different modes for mouse interaction.
 const Modes = ["IDLE", "PAN", "GOAL", "WALL"];
@@ -152,15 +149,15 @@ export default class Canvas {
       } else if (this.mode == Modes[ModesEnum.IDLE]) {
         if (cell.state == CellStates.ORGANISM) {
           if (cell.owner?.brain.connections) {
-            organism_selected.innerHTML = "Organism selected";
-            organism_selected_table.style.display = "block";
+            DOMElements.organism_selected.innerHTML = "Organism selected";
+            DOMElements.organism_selected_table.style.display = "block";
 
             const diagram = new NeuralNetDiagram();
             diagram.draw(cell.owner.brain.connections);
           }
         } else {
-          organism_selected.innerHTML = "";
-          organism_selected_table.style.display = "none";
+          DOMElements.organism_selected.innerHTML = "";
+          DOMElements.organism_selected_table.style.display = "none";
         }
       } else if (this.mode == Modes[ModesEnum.PAN]) {
         const canvas_top = parseInt(get_style("canvas", "top"));
@@ -189,7 +186,7 @@ export default class Canvas {
     else if (event.code == "Digit3") this.mode = Modes[ModesEnum.GOAL];
     else if (event.code == "Digit4") this.mode = Modes[ModesEnum.WALL];
 
-    mode.innerHTML = this.mode;
+    DOMElements.mode.innerHTML = this.mode;
   }
 
   // Panning controls

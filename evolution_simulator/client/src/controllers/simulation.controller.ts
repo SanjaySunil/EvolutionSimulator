@@ -1,18 +1,9 @@
 import { render_fps_element } from "../components/Settings";
 import { DefaultSimulationConfig } from "../config/simulation.config";
 import { Environment } from "../environment";
+import { DOMElements } from "../components/DOMElements";
 
 // Get references to HTML elements
-const target_update_fps = document.getElementById("target_update_fps") as HTMLSpanElement;
-const target_render_fps = document.getElementById("target_render_fps") as HTMLSpanElement;
-const current_update_fps = document.getElementById("current_update_fps") as HTMLSpanElement;
-const current_render_fps = document.getElementById("current_render_fps") as HTMLSpanElement;
-const tick_count = document.getElementById("tick_count") as HTMLSpanElement;
-const generation = document.getElementById("generation") as HTMLSpanElement;
-const best_fitness = document.getElementById("best_fitness") as HTMLSpanElement;
-const overall_fitness = document.getElementById("overall_fitness") as HTMLSpanElement;
-const organisms_alive = document.getElementById("organisms_alive") as HTMLSpanElement;
-const organisms_dead = document.getElementById("organisms_dead") as HTMLSpanElement;
 
 // Define the Simulation class
 export default class Simulation {
@@ -77,8 +68,8 @@ export default class Simulation {
     this.setup_render_loop();
 
     // Render target update and render FPS elements
-    render_fps_element(target_update_fps, this.config.TARGET_UPDATE_FPS);
-    render_fps_element(target_render_fps, this.config.TARGET_RENDER_FPS);
+    render_fps_element(DOMElements.target_update_fps, this.config.TARGET_UPDATE_FPS);
+    render_fps_element(DOMElements.target_render_fps, this.config.TARGET_RENDER_FPS);
   }
 
   public run_prechecks(): boolean {
@@ -130,12 +121,12 @@ export default class Simulation {
         this.update_simulation();
 
         // Update HTML elements with simulation data
-        tick_count.innerHTML = this.environment.ticks.toString();
-        generation.innerHTML = this.environment.generation.toString();
-        best_fitness.innerHTML = this.environment.best_fitness.toPrecision(3).toString();
-        overall_fitness.innerHTML = this.environment.overall_fitness.toPrecision(3).toString();
-        organisms_alive.innerHTML = this.environment.alive.toString();
-        organisms_dead.innerHTML = (this.environment.population.length - this.environment.alive).toString();
+        DOMElements.tick_count.innerHTML = this.environment.ticks.toString();
+        DOMElements.generation.innerHTML = this.environment.generation.toString();
+        DOMElements.best_fitness.innerHTML = this.environment.best_fitness.toPrecision(3).toString();
+        DOMElements.overall_fitness.innerHTML = this.environment.overall_fitness.toPrecision(3).toString();
+        DOMElements.organisms_alive.innerHTML = this.environment.alive.toString();
+        DOMElements.organisms_dead.innerHTML = (this.environment.population.length - this.environment.alive).toString();
 
         // Check if current FPS can handle rendering too
         if (this.current_update_fps >= this.config.TARGET_RENDER_FPS && this.render_loop != undefined) {
@@ -178,7 +169,7 @@ export default class Simulation {
       this.render_simulation();
     } else {
       // Update current FPS
-      render_fps_element(current_update_fps, this.current_update_fps);
+      render_fps_element(DOMElements.current_update_fps, this.current_update_fps);
     }
   }
 
@@ -194,7 +185,7 @@ export default class Simulation {
     this.environment.render();
 
     // Update current FPS
-    render_fps_element(current_update_fps, this.current_update_fps);
-    render_fps_element(current_render_fps, this.current_render_fps);
+    render_fps_element(DOMElements.current_update_fps, this.current_update_fps);
+    render_fps_element(DOMElements.current_render_fps, this.current_render_fps);
   }
 }
