@@ -2,6 +2,7 @@ import ThemeConfig from "../config/theme.config";
 import { CellStates, GridCell } from "../environment/Grid";
 import { to_angle } from "../utils/geometry";
 
+// Class to handle rendering of the simulation.
 export default class Renderer {
   public canvas;
   public ctx;

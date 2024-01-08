@@ -65,7 +65,6 @@ export class GridCell {
     }
   }
 
-
   // Returns state of GridCell.
   public get state(): number {
     // Retrieve and return the state of the GridCell
