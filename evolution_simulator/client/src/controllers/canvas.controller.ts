@@ -123,48 +123,59 @@ export default class Canvas {
     this.handle_mouse_wheel(event);
   }
 
-  // Read Mouse Events
+  // Checks and performs mouse-related actions based on the current mode
   public check_mouse_events(): void {
-    // Check mouse events based on the current mode
+    // Check if the left mouse button is clicked
     if (this.mouse.left_click) {
+      // Get the cell at the current mouse position
       const cell = this.grid.get_cell_at(this.mouse.grid_coord);
+
+      // If the current mode is goal, check if the cell is selected, and add or remove it from the goal coordinates.
       if (this.mode == Modes[ModesEnum.GOAL]) {
         if (cell.is_selected) {
+          // Remove selected goal coordinate and its max distance
           this.goal_coordinates.splice(this.goal_coordinates.indexOf(cell.coordinate), 1);
           this.max_distances_to_goal.splice(this.goal_coordinates.indexOf(cell.coordinate), 1);
           this.grid.set_cell_selected(cell.coordinate, false);
         } else {
+          // Add selected goal coordinate and its max distance
           this.goal_coordinates.push(cell.coordinate);
           this.max_distances_to_goal.push(max_distance(this.config.GRID_SIZE, cell.coordinate.x, cell.coordinate.y));
           this.grid.set_cell_selected(cell.coordinate, true);
         }
       } else if (this.mode == Modes[ModesEnum.IDLE]) {
-        if (cell.state == CellStates.ORGANISM) {
-          if (cell.owner?.brain.connections) {
-            DOMElements.organism_selected.innerHTML = "Organism selected";
-            DOMElements.organism_selected_table.style.display = "block";
+        // If the current mode is idle, check if the cell is an organism, and create its neural network diagram.
+        if (cell.state == CellStates.ORGANISM && cell.owner?.brain.connections) {
+          // Display selected organism's neural network diagram
+          DOMElements.organism_selected.innerHTML = "Organism selected";
+          DOMElements.organism_selected_table.style.display = "block";
 
-            const diagram = new NeuralNetDiagram();
-            diagram.draw(cell.owner.brain.connections);
-          }
+          const diagram = new NeuralNetDiagram();
+          diagram.draw(cell.owner.brain.connections);
         } else {
+          // Clear organism selected message and hide neural network diagram download button.
           DOMElements.organism_selected.innerHTML = "";
           DOMElements.organism_selected_table.style.display = "none";
         }
       } else if (this.mode == Modes[ModesEnum.PAN]) {
+        // If the current mode is pan, move the canvas based on the mouse movement.
         const canvas_top = parseInt(get_style("canvas", "top"));
         const canvas_left = parseInt(get_style("canvas", "left"));
+        // Add the difference between the current mouse position and the clicked mouse position to the canvas position.
         this.canvas.style.top = canvas_top + (this.mouse.canvas_coord.y - this.mouse.clicked_coord.y) * this.zoom_level + "px";
         this.canvas.style.left = canvas_left + (this.mouse.canvas_coord.x - this.mouse.clicked_coord.x) * this.zoom_level + "px";
       } else if (this.mode == Modes[ModesEnum.WALL]) {
+        // If the current mode is wall and there is no owner in the selected cell, set the cell state to wall.
         if (!cell.owner) {
           this.grid.set_cell_state(this.mouse.grid_coord, CellStates.WALL);
         }
       } else if (this.mode == Modes[ModesEnum.RADIOACTIVE]) {
+        // If the current mode is radioactive and there is no owner in the selected cell, set the cell state to radioactive.
         if (!cell.owner) {
           this.grid.set_cell_state(this.mouse.grid_coord, CellStates.RADIOACTIVE);
         }
       } else if (this.mode == Modes[ModesEnum.REMOVE]) {
+        // If the current mode is remove and there is no owner in the selected cell, clear the cell state.
         if (!cell.owner) {
           this.grid.clear_cell_state(this.mouse.grid_coord);
         }
