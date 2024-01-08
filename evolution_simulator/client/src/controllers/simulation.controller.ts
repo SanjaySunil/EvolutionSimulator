@@ -70,58 +70,72 @@ export default class Simulation {
     render_fps_element(DOMElements.target_render_fps, this.config.TARGET_RENDER_FPS);
   }
 
+  // Runs prechecks to validate the configuration before execution.
   public run_prechecks(): boolean {
+    // Check if the population size exceeds the maximum allowed grid size
     if (this.cached_organisms.length > this.config.GRID_SIZE ** 2 || this.config.POPULATION > this.config.GRID_SIZE ** 2) {
       let error = "Population size cannot be greater than Grid size squared.";
       alert(error);
       return false;
     }
 
+    // Check if no goal has been set.
     if (!this.config.GOAL_COORD && !this.config.GOAL_FOOD) {
-      alert('Must have either "Goal is Food" or "Goal is Coordinate" enabled.');
+      alert("No goal has been set.");
       return false;
     }
 
+    // Check if coordinate goal and food goal are both enabled.
     if (this.config.GOAL_COORD && this.config.GOAL_FOOD) {
-      alert('Cannot have both "Goal is Food" and "Goal is Coordinate" enabled.');
+      alert("Cannot have both coordinate and food goal enabled.");
       return false;
     }
 
+    // Check if coordinate goal is enabled and no goal coordinates have been set.
     if (this.config.GOAL_COORD && this.environment.goal_coordinates.length == 0) {
       alert("No goal coordinates have been set.");
       return false;
     }
 
+    // Checks have passed, so return true.
     return true;
   }
 
-  // Initialize the simulation
+  // Method to initialize the simulation
   public init(): void {
+    // Initialize the environment
     this.environment.init();
+    // Set the started_simulation flag to true.
     this.started_simulation = true;
   }
 
   // Setup the render loop
   public setup_render_loop(): void {
+    // Check if rendering is enabled
     if (this.rendering_enabled) {
+      // Setup the render loop
       this.render_loop = setInterval(() => {
         this.render_simulation();
       }, 1000 / this.config.TARGET_RENDER_FPS);
     }
   }
 
-  // Start the simulation
+  // Function to start the simulation engine.
   public start_engine(): boolean {
+    // Run prechecks to validate the configuration before execution.
     if (!this.run_prechecks()) return false;
     // Check if simulation has been started before.
     if (!this.started_simulation) this.init();
 
+    // Check if render loop is running and stop it if it is.
     if (this.render_loop != undefined) {
       clearInterval(this.render_loop);
       this.render_loop = undefined;
     }
 
+    // Check if the simulation is not running.
     if (!this.is_running) {
+      // Set the is_running flag to true.
       this.is_running = true;
 
       // Start the update loop
@@ -137,12 +151,15 @@ export default class Simulation {
         DOMElements.organisms_alive.innerHTML = this.environment.alive.toString();
         DOMElements.organisms_dead.innerHTML = (this.environment.population.length - this.environment.alive).toString();
 
-        // Check if current FPS can handle rendering too
+        // Check if the current update FPS is greater than or equal to the target update FPS.
         if (this.current_update_fps >= this.config.TARGET_RENDER_FPS && this.render_loop != undefined) {
+          // Stop the render loop
           clearInterval(this.render_loop);
           this.render_loop = undefined;
         } else {
+          // Check if the current render FPS is less than the target render FPS and the render loop is not running.
           if (this.current_render_fps < this.config.TARGET_RENDER_FPS && this.render_loop == undefined) {
+            // Start the render loop.
             this.setup_render_loop();
           }
         }
@@ -151,7 +168,7 @@ export default class Simulation {
     return true;
   }
 
-  // Stop the simulation
+  // Method to stop the simulation engine.
   public stop_engine(): void {
     if (this.is_running) {
       this.is_running = false;
@@ -161,20 +178,26 @@ export default class Simulation {
     }
   }
 
-  // Restart the simulation
+  // Method or restart the simulation engine.
   public restart_engine(): void {
     this.stop_engine();
     this.start_engine();
   }
 
-  // Update the simulation
+  // Method to update the simulation.
   public update_simulation(): void {
+    // Calculate the time since the last update by subtracting the current time from the last update time.
     this.last_update_dt = window.performance.now() - this.last_update_time;
+    // Set the last update time to the current time.
     this.last_update_time = window.performance.now();
+    // Calculate the current update FPS by dividing 1000 by the last update delta time.
     this.current_update_fps = 1000 / this.last_update_dt;
+    // Update the environment.
     this.environment.update();
 
+    // Check if the render loop is not running and rendering is enabled.
     if (this.render_loop === undefined && this.rendering_enabled) {
+      // Render the simulation
       this.render_simulation();
     } else {
       // Update current FPS
@@ -182,18 +205,26 @@ export default class Simulation {
     }
   }
 
-  // Render the simulation
+  // Method to render the simulation.
   public render_simulation(): void {
+    // Check if the render loop is running.
     if (this.render_loop) {
+      // Calculate the time since the last render by subtracting the current time from the last render time.
       this.last_render_dt = window.performance.now() - this.last_render_time;
+      // Set the last render time to the current time.
       this.last_render_time = window.performance.now();
     } else {
+      // Set the last render time to match the last update time.
       this.last_render_dt = this.last_update_dt;
     }
+
+    // Calculate the current render FPS by dividing 1000 by the last render delta time.
     this.current_render_fps = 1000 / this.last_render_dt;
+
+    // Render the environment.
     this.environment.render();
 
-    // Update current FPS
+    // Update FPS elements.
     render_fps_element(DOMElements.current_update_fps, this.current_update_fps);
     render_fps_element(DOMElements.current_render_fps, this.current_render_fps);
   }
