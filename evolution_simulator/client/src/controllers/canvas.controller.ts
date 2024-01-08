@@ -80,16 +80,6 @@ export default class Canvas {
     this.canvas.addEventListener("wheel", (e) => this.wheel(e));
   }
 
-  public clear_mouse_events(): void {
-    // Clear registered mouse events on the canvas
-    this.canvas.removeEventListener("mousemove", (e) => this.mouse_move(e));
-    this.canvas.removeEventListener("mouseup", (e) => this.mouse_up(e));
-    this.canvas.removeEventListener("mousedown", (e) => this.mouse_down(e));
-    this.canvas.removeEventListener("mouseenter", (e) => this.mouse_enter(e));
-    this.canvas.removeEventListener("mouseleave", () => this.mouse_leave());
-    this.canvas.removeEventListener("wheel", (e) => this.wheel(e));
-  }
-
   // Keyboard event register
   public register_keyboard_events(): void {
     // Register keyboard events on the window
