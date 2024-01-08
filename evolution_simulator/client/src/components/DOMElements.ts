@@ -34,5 +34,4 @@ export const DOMElements = {
   best_fitness: document.getElementById("best_fitness") as HTMLSpanElement,
   overall_fitness: document.getElementById("overall_fitness") as HTMLSpanElement,
   organisms_alive: document.getElementById("organisms_alive") as HTMLSpanElement,
-  organisms_dead: document.getElementById("organisms_dead") as HTMLSpanElement,
 };

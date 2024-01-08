@@ -149,7 +149,6 @@ export default class Simulation {
         DOMElements.best_fitness.innerHTML = this.environment.best_fitness.toPrecision(3).toString();
         DOMElements.overall_fitness.innerHTML = this.environment.overall_fitness.toPrecision(3).toString();
         DOMElements.organisms_alive.innerHTML = this.environment.alive.toString();
-        DOMElements.organisms_dead.innerHTML = (this.environment.population.length - this.environment.alive).toString();
 
         // Check if the current update FPS is greater than or equal to the target update FPS.
         if (this.current_update_fps >= this.config.TARGET_RENDER_FPS && this.render_loop != undefined) {
