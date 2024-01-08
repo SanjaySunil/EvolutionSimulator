@@ -78,11 +78,13 @@ export function register_export_environment_button(simulation: Simulation): void
 }
 
 // Register event listener for importing the config
-export function register_import_config_button(simulation: Simulation) {
+export function register_import_config_button(simulation: Simulation, config) {
   DOMElements.import_config.addEventListener("change", (event: Event) => {
     read_file(event).then((data) => {
       if (data.config && data.file_type == "config_export") {
+        config = data.config;
         simulation.config = data.config;
+        simulation.environment.config = data.config;
         render_settings(simulation, simulation.config);
         alert("Successfully imported config.");
       } else {

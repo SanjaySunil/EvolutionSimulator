@@ -1,4 +1,4 @@
-import { DefaultConfig } from "../config/simulation.config";
+import { DefaultSimulationConfig } from "../config/simulation.config";
 
 export class ConfigController {
   private static instance: ConfigController;
@@ -19,11 +19,11 @@ export class ConfigController {
     return this._config;
   }
 
-  public set config(newValue: typeof DefaultConfig) {
-    this._config = newValue;
+  public set config(new_value: typeof DefaultSimulationConfig) {
+    this._config = new_value;
   }
 
-  public update_value(key: string, newValue: any): void {
-    this._config[key] = newValue;
+  public update_value(key: string, new_value: any): void {
+    this._config[key] = new_value;
   }
 }

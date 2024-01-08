@@ -113,11 +113,8 @@ export default class NeuralNetDiagram {
   }
 
   public draw(connections: Gene[]): void {
-    const height =
-      (Object.keys(this.input_neurons).length + Object.keys(this.output_neurons).length + Object.keys(this.hidden_neurons).length) *
-        (this.spacing + 2 * this.radius) +
-      this.spacing +
-      this.radius;
+    const height = Math.max(this.last_input_neuron_coord, this.last_output_neuron_coord, this.last_hidden_neuron_coord + this.spacing);
+    this.spacing + this.radius;
     this.svg.innerHTML = `<svg width='400' height='${height}' id='neural-network-svg'></svg>`;
 
     for (const connection of connections) {

@@ -18,7 +18,7 @@ import {
 } from "./components/ImportExport";
 import { render_settings } from "./components/Settings";
 import Simulation from "./controllers/simulation.controller";
-import { ConfigController } from "./controllers/singleton.controller";
+import { ConfigController } from "./controllers/config.controller";
 import { DefaultSimulationConfig } from "./config/simulation.config";
 
 const config = ConfigController.get_instance();
@@ -38,7 +38,7 @@ register_fps_sliders(simulation, config.config);
 // Import Buttons
 register_import_organisms_button(simulation);
 register_import_simulation_button(simulation);
-register_import_config_button(simulation);
+register_import_config_button(simulation, config.config);
 register_import_environment_button(simulation);
 
 // Export Buttons

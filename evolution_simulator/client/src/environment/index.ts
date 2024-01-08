@@ -46,10 +46,7 @@ export class Environment extends Canvas {
   public drop_food(): void {
     for (let i = 0; i < 1000; i++) {
       const center = Math.floor(this.config.GRID_SIZE / 2);
-      this.grid.set_cell_state(
-        get_random_vector(center - 10, center - 10, center + 10, center + 10),
-        CellStates.FOOD
-      );
+      this.grid.set_cell_state(get_random_vector(center - 10, center - 10, center + 10, center + 10), CellStates.FOOD);
     }
   }
 

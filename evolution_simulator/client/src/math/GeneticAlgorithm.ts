@@ -2,10 +2,6 @@ import { DefaultSimulationConfig } from "../config/simulation.config";
 import Organism from "../models/Organism";
 import { euclidean_distance } from "../utils/geometry";
 import Gene from "../models/Gene";
-// Function to calculate the absolute difference between two values
-export function optimise_to_side(organism_coord_component, point_component): number {
-  return Math.max(organism_coord_component, point_component) - Math.min(organism_coord_component, point_component);
-}
 
 // Function to merge two sorted arrays of organisms
 export function merge(left: Organism[], right: Organism[]): Organism[] {
@@ -53,7 +49,7 @@ export function calculate_and_sort_fitness(population: Organism[], goal, params?
 }
 
 export function calculate_fitness_by_food(organism) {
-  return 1 - (organism.energy / organism.config.MAX_ENERGY);
+  return 1 - organism.energy / organism.config.MAX_ENERGY;
 }
 
 export function calculate_fitness_by_coord(organism, params) {
@@ -89,8 +85,8 @@ export function select_and_crossover(population: Organism[], config: typeof Defa
 
   // Perform crossover by randomly selecting parents and creating offspring
   for (let i = 0; i < mating_size; i++) {
-    const parent1: Organism = population[Math.floor(Math.random() * 50)];
-    const parent2: Organism = population[Math.floor(Math.random() * 50)];
+    const parent1: Organism = population[Math.floor(Math.random() * ((config.TOP_PERCENT_TO_REPRODUCE / 100) * population.length))];
+    const parent2: Organism = population[Math.floor(Math.random() * ((config.TOP_PERCENT_TO_REPRODUCE / 100) * population.length))];
     const child: Organism = mate(parent1, parent2, population.length);
     new_generation.push(child);
   }
