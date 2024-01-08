@@ -6,8 +6,8 @@ import { DOMElements } from "./DOMElements";
 
 // This class is responsible for drawing the neural network diagram.
 export default class NeuralNetDiagram {
-  public radius = 20;
-  public spacing = 10;
+  public node_radius = 20;
+  public node_spacing = 10;
   public svg = DOMElements.neural_network_svg;
   public input_neurons: object = {};
   public output_neurons: object = {};
@@ -16,15 +16,23 @@ export default class NeuralNetDiagram {
   public last_output_neuron_coord: number = 0;
   public last_hidden_neuron_coord: number = 0;
 
+  // Function to create an SVG element with specific attributes.
   private create_element_ns(element_type: string, attributes: Record<string, string>): SVGElement {
+    // Create an SVG element with the specified element type.
     const element = document.createElementNS("http://www.w3.org/2000/svg", element_type);
+
+    // Iterate through the key value pairs in the attributes object and set each attribute to the element.
     for (const [key, value] of Object.entries(attributes)) {
       element.setAttribute(key, value);
     }
+
+    // Return the element.
     return element;
   }
 
+  // Function to create an SVG text element with specific attributes.
   private create_text(x: number, y: number, text: string, fill: string): SVGElement {
+    // Create an object with the attributes for the text element.
     const attributes = {
       x: x.toString(),
       y: y.toString(),
@@ -32,9 +40,13 @@ export default class NeuralNetDiagram {
       dy: ".3em",
       fill: fill,
     };
-    const text_elem = this.create_element_ns("text", attributes);
-    text_elem.textContent = text;
-    return text_elem;
+
+    // Create the text element and set its text content.
+    const text_element = this.create_element_ns("text", attributes);
+    text_element.textContent = text;
+
+    // Return the text element.
+    return text_element;
   }
 
   private connect_nodes(source: number[], sink: number[], weight: number, is_positive: boolean): void {
@@ -74,35 +86,35 @@ export default class NeuralNetDiagram {
     if (node_type == "SENSOR") {
       let prev;
       if (Object.keys(this.input_neurons).length == 0) {
-        prev = this.spacing + this.radius;
+        prev = this.node_spacing + this.node_radius;
       } else {
-        prev = this.last_input_neuron_coord + (this.spacing + 2 * this.radius);
+        prev = this.last_input_neuron_coord + (this.node_spacing + 2 * this.node_radius);
       }
       this.input_neurons[node_id] = [50, prev];
       this.last_input_neuron_coord = prev;
-      circle = this.create_circle(50, prev, this.radius, "black");
+      circle = this.create_circle(50, prev, this.node_radius, "black");
       text_elem = this.create_text(50, prev, InputNeuronSymbols[node_id], "white");
     } else if (node_type == "ACTION") {
       let prev;
       if (Object.keys(this.output_neurons).length == 0) {
-        prev = this.spacing + this.radius;
+        prev = this.node_spacing + this.node_radius;
       } else {
-        prev = this.last_output_neuron_coord + (this.spacing + 2 * this.radius);
+        prev = this.last_output_neuron_coord + (this.node_spacing + 2 * this.node_radius);
       }
       this.output_neurons[node_id] = [350, prev];
       this.last_output_neuron_coord = prev;
-      circle = this.create_circle(350, prev, this.radius, "black");
+      circle = this.create_circle(350, prev, this.node_radius, "black");
       text_elem = this.create_text(350, prev, OutputNeuronSymbols[node_id], "white");
     } else if (node_type == "NEURON") {
       let prev;
       if (Object.keys(this.hidden_neurons).length == 0) {
-        prev = this.spacing + this.radius;
+        prev = this.node_spacing + this.node_radius;
       } else {
-        prev = this.last_hidden_neuron_coord + (this.spacing + 2 * this.radius);
+        prev = this.last_hidden_neuron_coord + (this.node_spacing + 2 * this.node_radius);
       }
       this.hidden_neurons[node_id] = [200, prev];
       this.last_hidden_neuron_coord = prev;
-      circle = this.create_circle(200, prev, this.radius, "black");
+      circle = this.create_circle(200, prev, this.node_radius, "black");
       text_elem = this.create_text(200, prev, node_id.toString(), "white");
     }
 
@@ -113,8 +125,8 @@ export default class NeuralNetDiagram {
   }
 
   public draw(connections: Gene[]): void {
-    const height = Math.max(this.last_input_neuron_coord, this.last_output_neuron_coord, this.last_hidden_neuron_coord + this.spacing);
-    this.spacing + this.radius;
+    const height = Math.max(this.last_input_neuron_coord, this.last_output_neuron_coord, this.last_hidden_neuron_coord + this.node_spacing);
+    this.node_spacing + this.node_radius;
     this.svg.innerHTML = `<svg width='400' height='${height}' id='neural-network-svg'></svg>`;
 
     for (const connection of connections) {
