@@ -3,19 +3,10 @@ import Simulation from "../controllers/simulation.controller";
 import Organism from "../models/Organism";
 import export_object from "../utils/export_object";
 import { render_settings } from "./Settings";
-import { read_file } from "./FileReader";
+import { read_file } from "../utils/read_file";
 import { CellStates } from "../environment/Grid";
 import { DefaultSimulationConfig } from "../config/simulation.config";
-
-// Get references to HTML elements
-const export_all_organisms = document.getElementById("export_all_organisms") as HTMLButtonElement;
-const export_config = document.getElementById("export_config") as HTMLButtonElement;
-const export_simulation = document.getElementById("export_simulation") as HTMLButtonElement;
-const export_environment = document.getElementById("export_environment") as HTMLButtonElement;
-const import_config = document.getElementById("import_config") as HTMLInputElement;
-const import_organisms = document.getElementById("import_organisms") as HTMLInputElement;
-const import_simulation = document.getElementById("import_simulation") as HTMLInputElement;
-const import_environment = document.getElementById("import_environment") as HTMLInputElement;
+import { DOMElements } from "./DOMElements";
 
 // Export all organisms
 export function export_population(population: Organism[], with_coordinates: boolean): object {
@@ -35,7 +26,7 @@ export function export_population(population: Organism[], with_coordinates: bool
 
 // Register event listener for exporting all organisms
 export function register_export_all_organisms_button(simulation: Simulation): void {
-  export_all_organisms.addEventListener("click", () => {
+  DOMElements.export_all_organisms.addEventListener("click", () => {
     const organisms = simulation.environment.population;
     if (organisms) {
       const population = export_population(organisms, false);
@@ -46,14 +37,14 @@ export function register_export_all_organisms_button(simulation: Simulation): vo
 
 // Register event listener for exporting the config
 export function register_export_config_button(config: typeof DefaultSimulationConfig): void {
-  export_config.addEventListener("click", () => {
+  DOMElements.export_config.addEventListener("click", () => {
     export_object({ file_type: "config_export", config: config }, "config");
   });
 }
 
 // Register event listener for exporting the simulation
 export function register_export_simulation_button(simulation: Simulation, config: typeof DefaultSimulationConfig): void {
-  export_simulation.addEventListener("click", () => {
+  DOMElements.export_simulation.addEventListener("click", () => {
     const obj: any = { simulation_config: [] };
 
     obj.simulation_config.push(config);
@@ -73,7 +64,7 @@ export function register_export_simulation_button(simulation: Simulation, config
 }
 
 export function register_export_environment_button(simulation: Simulation): void {
-  export_environment.addEventListener("click", () => {
+  DOMElements.export_environment.addEventListener("click", () => {
     let arr: number[][] = [];
     for (let i = 0; i < simulation.environment.grid_size; i++) {
       for (let j = 0; j < simulation.environment.grid_size; j++) {
@@ -88,7 +79,7 @@ export function register_export_environment_button(simulation: Simulation): void
 
 // Register event listener for importing the config
 export function register_import_config_button(simulation: Simulation) {
-  import_config.addEventListener("change", (event: Event) => {
+  DOMElements.import_config.addEventListener("change", (event: Event) => {
     read_file(event).then((data) => {
       if (data.config && data.file_type == "config_export") {
         simulation.config = data.config;
@@ -97,14 +88,14 @@ export function register_import_config_button(simulation: Simulation) {
       } else {
         alert("Failed to read config from file.");
       }
-      import_config.value = "";
+      DOMElements.import_config.value = "";
     });
   });
 }
 
 // Register event listener for importing organisms
 export function register_import_organisms_button(simulation: Simulation) {
-  import_organisms.addEventListener("change", (event: Event) => {
+  DOMElements.import_organisms.addEventListener("change", (event: Event) => {
     read_file(event).then((data) => {
       if (data && data.file_type == "organism_export") {
         for (const genome of data.population) {
@@ -118,14 +109,14 @@ export function register_import_organisms_button(simulation: Simulation) {
       } else {
         alert("Invalid file.");
       }
-      import_organisms.value = "";
+      DOMElements.import_organisms.value = "";
     });
   });
 }
 
 // Register event listener for importing the simulation
 export function register_import_simulation_button(simulation: Simulation) {
-  import_simulation.addEventListener("change", (event: Event) => {
+  DOMElements.import_simulation.addEventListener("change", (event: Event) => {
     read_file(event).then((data) => {
       if (data && data.file_type == "simulation_export") {
         if (data.simulation_config) {
@@ -153,13 +144,13 @@ export function register_import_simulation_button(simulation: Simulation) {
       } else {
         alert("Invalid file.");
       }
-      import_simulation.value = "";
+      DOMElements.import_simulation.value = "";
     });
   });
 }
 
 export function register_import_environment_button(simulation) {
-  import_environment.addEventListener("change", (event: Event) => {
+  DOMElements.import_environment.addEventListener("change", (event: Event) => {
     read_file(event).then((data) => {
       if (data.obstacles && data.file_type == "obstacles") {
         for (const obstacle of data.obstacles) {
@@ -168,7 +159,7 @@ export function register_import_environment_button(simulation) {
         alert("Successfully imported environment.");
       } else alert("Failed to read obstacles from file.");
 
-      import_environment.value = "";
+      DOMElements.import_environment.value = "";
     });
   });
 }
