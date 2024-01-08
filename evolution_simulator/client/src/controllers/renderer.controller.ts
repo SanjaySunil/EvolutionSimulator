@@ -19,7 +19,7 @@ export default class Renderer {
 
   // Renders a specific cell in the grid.
   private draw(cell: GridCell, x: number, y: number, width: number, height: number, colour: string): void {
-    // Set the fill style to the specified color.
+    // Set the fill style to the specified colour.
     this.ctx.fillStyle = colour;
 
     // Fill a rectangle on the canvas representing the cell.
@@ -111,14 +111,12 @@ export default class Renderer {
   // Define a method named 'render_wall_cell' that takes a 'cell' parameter of type 'GridCell'
   public render_wall_cell(cell: GridCell): void {
     // Call the 'draw' method with the provided parameters to render a wall cell
-    // The parameters are: 'cell', starting coordinates (0, 0), width and height (15, 15), and the color theme 'ThemeConfig.WALL'
     this.draw(cell, 0, 0, 15, 15, ThemeConfig.WALL);
   }
 
   // Define a method named 'render_empty_cell' that takes a 'cell' parameter of type 'GridCell'
   public render_empty_cell(cell: GridCell): void {
     // Call the 'draw' method with the provided parameters to render an empty cell
-    // The parameters are: 'cell', starting coordinates (0, 0), width and height (15, 15), and the color theme 'ThemeConfig.EMPTY'
     this.draw(cell, 0, 0, 15, 15, ThemeConfig.EMPTY);
   }
 
@@ -158,17 +156,14 @@ export default class Renderer {
     } else if (cell.state == CellStates.WALL) {
       // Render a wall cell if the cell state is 'WALL'
       this.render_wall_cell(cell);
-    } else {
-      // If the cell state doesn't match any predefined states, fill the cell with a solid color
-      this.ctx.fillRect(cell.coordinate.x * this.pixel_size, cell.coordinate.y * this.pixel_size, this.pixel_size, this.pixel_size);
     }
   }
 
   // Define a method named 'highlight_cell' that takes a 'cell' parameter of type 'GridCell'
   public highlight_cell(cell: GridCell): void {
-    // Set the fill style to a yellow color
+    // Set the fill style to a yellow colour
     this.ctx.fillStyle = "#f1fa8c";
-    // Fill the cell with the specified color at the cell's coordinates using the pixel size
+    // Fill the cell with the specified colour at the cell's coordinates using the pixel size
     this.ctx.fillRect(cell.coordinate.x * this.pixel_size, cell.coordinate.y * this.pixel_size, this.pixel_size, this.pixel_size);
   }
 
@@ -176,23 +171,23 @@ export default class Renderer {
   public select_cell(cell: GridCell): void {
     // Set the fill style to white
     this.ctx.fillStyle = "white";
-    // Fill the cell with the specified color at the cell's coordinates using the pixel size
+    // Fill the cell with the specified colour at the cell's coordinates using the pixel size
     this.ctx.fillRect(cell.coordinate.x * this.pixel_size, cell.coordinate.y * this.pixel_size, this.pixel_size, this.pixel_size);
   }
 
   // Define a method named 'clear_cell' that takes a 'cell' parameter of type 'GridCell'
   public clear_cell(cell: GridCell): void {
-    // Set the fill style to a dark color
+    // Set the fill style to a dark colour
     this.ctx.fillStyle = "#282a36";
-    // Fill the cell with the specified color at the cell's coordinates using the pixel size
+    // Fill the cell with the specified colour at the cell's coordinates using the pixel size
     this.ctx.fillRect(cell.coordinate.x * this.pixel_size, cell.coordinate.y * this.pixel_size, this.pixel_size, this.pixel_size);
   }
 
   // Define a method named 'clear_canvas'
   public clear_canvas(): void {
-    // Set the fill style to a dark color
+    // Set the fill style to a dark colour
     this.ctx.fillStyle = "#282a36";
-    // Fill the entire canvas with the specified color
+    // Fill the entire canvas with the specified colour
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 }
