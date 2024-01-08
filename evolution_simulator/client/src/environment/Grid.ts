@@ -43,7 +43,6 @@ export class GridCell {
     this._state = CellStates.EMPTY;
   }
 
-
   // Returns owner of GridCell.
   public get owner(): Organism | null {
     // Retrieve and return the owner of the GridCell
@@ -70,7 +69,6 @@ export class GridCell {
     // Retrieve and return the state of the GridCell
     return this._state;
   }
-
 
   // Sets the state of GridCell.
   public set state(state: number) {
@@ -171,7 +169,6 @@ export class Grid {
       this.occupied += 1;
     }
   }
-
 
   // Sets the state of a cell.
   public set_cell_state(coordinate: Coordinate, state: number): void {
