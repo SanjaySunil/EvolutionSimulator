@@ -360,7 +360,7 @@ export default class Brain {
       if (connection.sink_type == Neurons.OUTPUT) {
         const new_conn = cloneDeep(connection);
 
-        // If the source is a neuron, fix its number using the updated node map.
+        // If the source is a hidden neuron, fix its number using the updated node map.
         if (new_conn.source_type === Neurons.HIDDEN) {
           const node = hidden_neuron_map.get(new_conn.source_id);
           if (node) new_conn.source_id = node.identifer;
@@ -370,7 +370,7 @@ export default class Brain {
         this.connections.push(new_conn);
       }
 
-      // Group sensor neurons, internal neurons, and action neurons into their respective sets.
+      // Group input neurons, hidden neurons, and output neurons into their respective sets.
       if (connection.source_type == Neurons.INPUT) this.inputs[connection.source_id] = undefined;
       else this.hidden[connection.source_id] = undefined;
 

@@ -2,13 +2,13 @@ import get_random_number from "../utils/get_random_number";
 
 // Each gene specifies one synaptic connection in a neural network.
 export default class Gene {
-  // Source of the connection is either an input sensory neuron/internal neuron.
+  // Source of the connection is either an input neuron/hidden neuron.
   public source_type: number;
-  // Identifer of which input sensory neuron/internal neuron.
+  // Identifer of which input neuron/hidden neuron.
   public source_id: number;
-  // Sink of the connection is either an output action neuron/internal neuron
+  // Sink of the connection is either an output neuron/hidden neuron
   public sink_type: number;
-  // Identifier of which output action neuron/internal neuron.
+  // Identifier of which output neuron/hidden neuron.
   public sink_id: number;
   // The weight of the connection.
   public weight: number;
