@@ -33,6 +33,7 @@ export default class Simulation {
 
   // Constructor for the Simulation class
   constructor(config: typeof DefaultSimulationConfig) {
+    // Set the configuration
     this.config = config;
 
     // Initialize update loop properties
