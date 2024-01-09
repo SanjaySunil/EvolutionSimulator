@@ -6,13 +6,11 @@ import { DOMElements } from "../components/DOMElements";
 // Define the Simulation class
 export default class Simulation {
   // Define properties for update loop
-  public target_update_fps: number;
   public current_update_fps: number;
   public last_update_time: number;
   public last_update_dt: number;
 
   // Define properties for render loop
-  public target_render_fps: number;
   public current_render_fps: number;
   public last_render_time: number;
   public last_render_dt: number;
@@ -21,7 +19,6 @@ export default class Simulation {
   public is_running: boolean;
   public rendering_enabled: boolean;
   public started_simulation: boolean;
-  public first_simulation: boolean;
 
   // Define configuration and loop variables
   public config: typeof DefaultSimulationConfig;
@@ -37,13 +34,11 @@ export default class Simulation {
     this.config = config;
 
     // Initialize update loop properties
-    this.target_update_fps = this.config.TARGET_UPDATE_FPS;
     this.current_update_fps = 0;
     this.last_update_time = window.performance.now();
     this.last_update_dt = 0;
 
     // Initialize render loop properties
-    this.target_render_fps = this.config.TARGET_RENDER_FPS;
     this.current_render_fps = 0;
     this.last_render_time = window.performance.now();
     this.last_render_dt = 0;
@@ -52,7 +47,6 @@ export default class Simulation {
     this.is_running = false;
     this.rendering_enabled = true;
     this.started_simulation = false;
-    this.first_simulation = true;
 
     // Initialize loop variables
     this.update_loop = undefined;
