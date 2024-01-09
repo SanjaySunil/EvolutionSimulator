@@ -39,11 +39,9 @@ export default class Canvas {
 
   constructor(canvas_id: string, config: typeof DefaultSimulationConfig) {
     this.config = config;
-
     // Get the canvas element and its 2D rendering context
     this.canvas = document.getElementById(canvas_id) as HTMLCanvasElement;
     this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
-
     // Set the canvas dimensions based on the grid size
     this.canvas.width = this.canvas.height = this.config.GRID_SIZE * 15;
     this.grid_size = this.config.GRID_SIZE;
@@ -56,13 +54,10 @@ export default class Canvas {
     this.renderer = new Renderer(this.canvas, this.ctx, this.pixel_size);
     this.grid = new Grid(this.grid_size, this.renderer);
     this.mode = Modes[0];
-
     this.goal_coordinates = [];
     this.max_distances_to_goal = [];
-
     // Set the initial zoom level and transform the canvas accordingly
     this.canvas.style.transform = `scale(${this.zoom_level})`;
-
     // Register mouse and keyboard events
     this.register_mouse_events();
     this.register_keyboard_events();
