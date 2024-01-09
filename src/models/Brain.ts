@@ -300,7 +300,7 @@ export default class Brain {
   }
 
   // Removes useless connections from the connection list and updates the node map accordingly.
-  public prune_connections(connections: ConnectionArray, hidden_neuron_map: HiddenNeuronMap): any {
+  public prune_connections(connections: ConnectionArray, hidden_neuron_map: HiddenNeuronMap): void {
     // Flag to track if connections are pruned.
     let connections_pruned = false;
 
