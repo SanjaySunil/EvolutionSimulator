@@ -31,9 +31,4 @@ export class ConfigController {
   public set config(new_value: typeof DefaultSimulationConfig) {
     this._config = new_value;
   }
-
-  // Updates the value of a key in the configuration object.
-  public update_value(key: string, new_value: any): void {
-    this._config[key] = new_value;
-  }
 }
