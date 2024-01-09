@@ -19,7 +19,6 @@ export default class Organism {
   public energy: number;
   public direction: Coordinate;
   public config: typeof DefaultSimulationConfig;
-  public id: number;
   public grid: Grid;
 
   // Constructs a new Organism object.
@@ -41,7 +40,6 @@ export default class Organism {
     this.fitness = null;
     this.alive = true;
     this.energy = 0;
-    this.id = id;
   }
 
   // Sets the coordinate of the organism.
