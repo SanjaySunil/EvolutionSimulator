@@ -17,7 +17,6 @@ export default class Organism {
   public fitness: number | null;
   public alive: boolean;
   public energy: number;
-  public age: number;
   public direction: Coordinate;
   public config: typeof DefaultSimulationConfig;
   public id: number;
@@ -41,7 +40,6 @@ export default class Organism {
     this.direction = Directions.NORTH;
     this.fitness = null;
     this.alive = true;
-    this.age = 0;
     this.energy = 0;
     this.id = id;
   }
