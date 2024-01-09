@@ -1,6 +1,6 @@
 import get_random_number from "../utils/get_random_number";
 
-// Each gene specifies one synaptic connection in a neural network.
+// Each gene specifies one connection in the neural network.
 export default class Gene {
   // Source of the connection is either an input neuron/hidden neuron.
   public source_type: number;
