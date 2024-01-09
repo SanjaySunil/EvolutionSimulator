@@ -58,7 +58,7 @@ export function register_sim_start_stop_button(simulation: Simulation): void {
       simulation.stop_engine();
       DOMElements.sim_start_stop.innerHTML = "START";
     } else {
-      let engine_started = simulation.start_engine();
+      const engine_started = simulation.start_engine();
       if (engine_started) {
         DOMElements.sim_start_stop.innerHTML = "STOP";
       }
@@ -67,7 +67,7 @@ export function register_sim_start_stop_button(simulation: Simulation): void {
 }
 
 // Function to register an event listener for the show controls button.
-export function register_show_controls() {
+export function register_show_controls(): void {
   let control_window_shown = false;
 
   // When the button is clicked, the control window is either shown or hidden.
@@ -82,7 +82,7 @@ export function register_show_controls() {
 }
 
 // Function to register an event listener for the FPS slider.
-export function register_fps_slider(simulation, config) {
+export function register_fps_slider(simulation, config): void {
   // Set the slider's min, max, and initial value.
   DOMElements.target_update_fps_slider.max = config.TARGET_UPDATE_MAX_FPS.toString();
   DOMElements.target_update_fps_slider.value = config.TARGET_UPDATE_FPS.toString();

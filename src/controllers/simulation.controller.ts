@@ -74,7 +74,7 @@ export default class Simulation {
   public run_prechecks(): boolean {
     // Check if the population size exceeds the maximum allowed grid size
     if (this.cached_organisms.length > this.config.GRID_SIZE ** 2 || this.config.POPULATION > this.config.GRID_SIZE ** 2) {
-      let error = "Population size cannot be greater than Grid size squared.";
+      const error = "Population size cannot be greater than Grid size squared.";
       alert(error);
       return false;
     }

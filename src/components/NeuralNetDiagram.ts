@@ -12,9 +12,9 @@ export default class NeuralNetDiagram {
   public input_neurons: object = {};
   public output_neurons: object = {};
   public hidden_neurons: object = {};
-  public last_input_neuron_coord: number = 0;
-  public last_output_neuron_coord: number = 0;
-  public last_hidden_neuron_coord: number = 0;
+  public last_input_neuron_coord = 0;
+  public last_output_neuron_coord = 0;
+  public last_hidden_neuron_coord = 0;
 
   // Private function to create an SVG element with specific attributes.
   private create_element_ns(element_type: string, attributes: Record<string, string>): SVGElement {
@@ -110,7 +110,7 @@ export default class NeuralNetDiagram {
   }
 
   // Private function to find the y-coordinate of the previous node.
-  private find_previous_node_y_coord(object, previous) {
+  private find_previous_node_y_coord(object, previous): number {
     // If the object is empty, there is no previous node, so return the node spacing plus the node radius as the initial y-coordinate.
     if (Object.keys(object).length == 0) {
       previous = this.node_spacing + this.node_radius;
@@ -131,8 +131,7 @@ export default class NeuralNetDiagram {
     const hidden = 200;
     const output = 350;
 
-    // Initialise variables for circle, text element, previous y-coordinate, x-coordinate, and node text.
-    let circle, text_element;
+    // Initialise variables for previous y-coordinate, x-coordinate, and node text.
     let previous_y_coord;
     let x_coord;
     let node_text;
@@ -168,8 +167,8 @@ export default class NeuralNetDiagram {
     }
 
     // Create circle and text elements for the node.
-    circle = this.create_circle(x_coord, previous_y_coord, this.node_radius, "black");
-    text_element = this.create_text(x_coord, previous_y_coord, node_text, "white");
+    const circle = this.create_circle(x_coord, previous_y_coord, this.node_radius, "black");
+    const text_element = this.create_text(x_coord, previous_y_coord, node_text, "white");
 
     // Append the circle and text elements to the group element.
     group.appendChild(circle);

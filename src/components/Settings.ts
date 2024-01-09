@@ -4,7 +4,7 @@ import { Grid } from "../environment/Grid";
 import { DOMElements } from "./DOMElements";
 
 // Function to check for changes in the config object
-function check_config_changes(simulation, config, key) {
+function check_config_changes(simulation, config, key): void {
   // Check if the key in the config object is "GRID_SIZE"
   if (key === "GRID_SIZE") {
     // Calculate the new pixel size based on the grid size.
@@ -42,6 +42,23 @@ export function render_fps_element(element: HTMLElement, fps: number): void {
 
 // Function to render the settings based on the provided config object
 export function render_settings(simulation: Simulation, config: object): void {
+  // Function to handle changes in the input
+  function handle_change(e: Event): void {
+    const target = e.target as HTMLInputElement;
+    const key = target.id;
+    const value = target.value;
+
+    // Update the config object based on the input type
+    if (typeof config[key] === "number") {
+      config[key] = parseInt(value);
+    } else if (typeof config[key] === "boolean") {
+      config[key] = target.checked;
+    }
+
+    // Trigger function to check and apply config changes
+    check_config_changes(simulation, config, key);
+  }
+
   // Retrieve all keys from the config object
   const keys = Object.keys(config);
 
@@ -82,26 +99,9 @@ export function render_settings(simulation: Simulation, config: object): void {
     } else {
       input.setAttribute("value", value.toString());
     }
-    
+
     // Add event listener to handle input changes
     input.addEventListener("change", handle_change);
-
-    // Function to handle changes in the input
-    function handle_change(e: Event) {
-      const target = e.target as HTMLInputElement;
-      const key = target.id;
-      const value = target.value;
-
-      // Update the config object based on the input type
-      if (typeof config[key] === "number") {
-        config[key] = parseInt(value);
-      } else if (typeof config[key] === "boolean") {
-        config[key] = target.checked;
-      }
-
-      // Trigger function to check and apply config changes
-      check_config_changes(simulation, config, key);
-    }
 
     // Append the input cell to the row
     row.appendChild(input_cell);

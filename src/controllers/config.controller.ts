@@ -5,7 +5,7 @@ export class ConfigController {
   // Singleton instance
   private static instance: ConfigController;
   // Configuration object
-  private _config: { [key: string]: any };
+  private _config: typeof DefaultSimulationConfig;
 
   private constructor() {
     this._config = {};

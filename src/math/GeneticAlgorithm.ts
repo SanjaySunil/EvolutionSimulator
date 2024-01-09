@@ -65,7 +65,6 @@ export function calculate_fitness_by_food(organism: any): number {
   return 1 - organism.energy / organism.config.MAX_ENERGY;
 }
 
-
 /**
  * Calculates the fitness value of an organism based on its proximity to specified coordinates.
  * @param organism - The organism for which fitness is being calculated.
@@ -89,7 +88,6 @@ export function calculate_fitness_by_coord(organism: any, params: any): number {
   return distance / max_distance;
 }
 
-
 /**
  * Selects organisms for crossover and creates a new generation based on the provided population and configuration.
  * @param population - The array of organisms from which selection for crossover is performed.
@@ -105,7 +103,7 @@ export function select_and_crossover(population: Organism[], config: typeof Defa
 
   // Generate new coordinates for the selected organisms
   for (const organism of new_generation) {
-    let random_coord = organism.grid.fetch_empty_cell();
+    const random_coord = organism.grid.fetch_empty_cell();
     organism.coordinate = random_coord;
   }
 
@@ -159,7 +157,7 @@ function mate(parent, partner: Organism, id): Organism {
   }
 
   // Get a random empty cell coordinate on the grid
-  let random_coord = parent.grid.fetch_empty_cell();
+  const random_coord = parent.grid.fetch_empty_cell();
 
   // Create and return a new organism with the generated genome and a random empty cell coordinate
   return new Organism(random_coord, child_genome, parent.grid, parent.config, id);

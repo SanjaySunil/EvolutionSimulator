@@ -90,7 +90,7 @@ export function register_export_environment_button(simulation: Simulation): void
   // Register an event listener for the export environment button.
   DOMElements.export_environment.addEventListener("click", () => {
     // Create an array to store the obstacles.
-    let obstacles: number[][] = [];
+    const obstacles: number[][] = [];
     // Iterate over all cells in the grid.
     for (let i = 0; i < simulation.environment.grid_size; i++) {
       for (let j = 0; j < simulation.environment.grid_size; j++) {
@@ -107,14 +107,13 @@ export function register_export_environment_button(simulation: Simulation): void
 }
 
 // Function to register an event listener for the import config button.
-export function register_import_config_button(simulation: Simulation, config) {
+export function register_import_config_button(simulation: Simulation): void {
   // Register an event listener for the import config button.
   DOMElements.import_config.addEventListener("change", (event: Event) => {
     // Read and parse the json file, then update the simulation config.
     read_file(event).then((data) => {
       // If the file is valid, update the simulation config.
       if (data.config && data.file_type == "config_export") {
-        config = data.config;
         simulation.config = data.config;
         simulation.environment.config = data.config;
         render_settings(simulation, simulation.config);
@@ -131,7 +130,7 @@ export function register_import_config_button(simulation: Simulation, config) {
 }
 
 // Function to register an event listener for the import organisms button.
-export function register_import_organisms_button(simulation: Simulation) {
+export function register_import_organisms_button(simulation: Simulation): void {
   // Register an event listener for the import organisms button.
   DOMElements.import_organisms.addEventListener("change", (event: Event) => {
     // Read and parse the json file, then add the organisms to the simulation.
@@ -141,7 +140,7 @@ export function register_import_organisms_button(simulation: Simulation) {
         // Iterate over all organisms in the file.
         for (const genome of data.population) {
           // Add the organism to the simulation using its genome.
-          let added_organism = simulation.environment.add_organism(genome);
+          const added_organism = simulation.environment.add_organism(genome);
           // If the organism was not added, alert the user.
           if (!added_organism) {
             alert("Failed to import all organisms.");
@@ -162,7 +161,7 @@ export function register_import_organisms_button(simulation: Simulation) {
 }
 
 // Function to register an event listener for the import simulation button.
-export function register_import_simulation_button(simulation: Simulation) {
+export function register_import_simulation_button(simulation: Simulation): void {
   // Register an event listener for the import simulation button.
   DOMElements.import_simulation.addEventListener("change", (event: Event) => {
     // Read and parse the JSON file.
@@ -178,7 +177,7 @@ export function register_import_simulation_button(simulation: Simulation) {
         // If population data exists, add organisms to the simulation.
         if (data.population) {
           for (const organism of data.population) {
-            let result = simulation.environment.add_organism(organism.genome, organism.coordinates);
+            const result = simulation.environment.add_organism(organism.genome, organism.coordinates);
             if (!result) {
               alert("Failed to import all organisms.");
               return;
@@ -219,7 +218,7 @@ export function register_import_simulation_button(simulation: Simulation) {
 }
 
 // Function to register an event listener for importing environment button.
-export function register_import_environment_button(simulation) {
+export function register_import_environment_button(simulation): void {
   // Event listener for import environment button.
   DOMElements.import_environment.addEventListener("change", (event: Event) => {
     // Read and parse the JSON file.
