@@ -30,7 +30,6 @@ export default class Simulation {
 
   // Define environment and population variables
   public environment: Environment;
-  public cached_organisms: [];
 
   // Constructor for the Simulation class
   constructor(config: typeof DefaultSimulationConfig) {
@@ -59,7 +58,6 @@ export default class Simulation {
     this.render_loop = undefined;
 
     // Initialize population and environment
-    this.cached_organisms = [];
     this.environment = new Environment("canvas", this.config);
 
     // Setup render loop
@@ -73,7 +71,7 @@ export default class Simulation {
   // Runs prechecks to validate the configuration before execution.
   public run_prechecks(): boolean {
     // Check if the population size exceeds the maximum allowed grid size
-    if (this.cached_organisms.length > this.config.GRID_SIZE ** 2 || this.config.POPULATION > this.config.GRID_SIZE ** 2) {
+    if (this.config.POPULATION > this.config.GRID_SIZE ** 2) {
       const error = "Population size cannot be greater than Grid size squared.";
       alert(error);
       return false;
