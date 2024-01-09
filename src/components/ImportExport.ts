@@ -146,9 +146,9 @@ export function register_import_organisms_button(simulation: Simulation): void {
             alert("Failed to import all organisms.");
             return;
           }
-          // Alert the user that the organisms were successfully imported.
-          alert("Successfully imported organisms.");
         }
+        // Alert the user that the organisms were successfully imported.
+        alert("Successfully imported organisms.");
       } else {
         // Otherwise, alert the user that the file is invalid.
         alert("Invalid file.");

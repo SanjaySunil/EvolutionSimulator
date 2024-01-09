@@ -11,11 +11,11 @@ export default class Genome {
   }
 
   // Obtains a colour for the organism based on its genome.
-  public get_colour(data): string {
+  public get_colour(genome): string {
     let genome_string = "";
 
     // Convert each individual gene into a genome string.
-    for (const gene of data) {
+    for (const gene of genome) {
       genome_string += `${gene.source_type},${gene.source_id},${gene.sink_type},${gene.sink_id},${gene.weight}`;
     }
 
