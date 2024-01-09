@@ -16,7 +16,6 @@ export class Environment extends Canvas {
   public overall_fitness: number;
   public best_fitness: number;
   public alive: number;
-  public oldest_organism: number;
 
   // Builds a new Environment.
   constructor(canvas_id: string, config: typeof DefaultSimulationConfig) {
@@ -27,7 +26,6 @@ export class Environment extends Canvas {
     this.best_fitness = Infinity;
     this.overall_fitness = Infinity;
     this.alive = 0;
-    this.oldest_organism = 0;
   }
 
   // Adds an Organism to the environment and configures knowledge.
