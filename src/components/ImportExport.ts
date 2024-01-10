@@ -45,7 +45,7 @@ export function export_population_button(simulation: Simulation): void {
       // Otherwise, alert the user that there are no organisms to export.
       alert("No organisms available to export.");
     }
-  }); 
+  });
 }
 
 // Function to register event listeners for the export config button.
