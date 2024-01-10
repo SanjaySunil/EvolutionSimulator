@@ -1,7 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
 :root {
-  --background-default: #121212;
-  --background-paper: #121212;
   --bg-dark: #21222c;
   --bg-darker: #191a21;
   --bg-light: #343746;
@@ -10,12 +8,9 @@
   --bg: #282a36;
   --border: #4c5067;
   --canvas: #111;
-  --comment: #6272a4;
+  --label: #6272a4;
   --foreground: #f8f8f2;
-  --primary: var(--foreground);
-  --purple: rgb(189, 147, 249);
   --red: #ff5555;
-  --secondary: red;
 }
 ::-webkit-scrollbar {
   -webkit-border-radius: 100px;
@@ -316,7 +311,6 @@ th {
 #organism_selected {
   color: var(--red);
 }
-
 input[type="file"] {
   display: none;
 }
