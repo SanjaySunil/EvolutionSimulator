@@ -109,3 +109,10 @@ export function register_fps_slider(simulation, config): void {
     }
   });
 }
+
+export function register_switch_chart(simulation: Simulation): void {
+  DOMElements.switch_chart.addEventListener("change", () => {
+    const index = parseInt(DOMElements.switch_chart.value);
+    simulation.environment.chart.switch_chart(index);
+  });
+}

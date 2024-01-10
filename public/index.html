@@ -91,6 +91,10 @@
                       <td>Organisms Alive</td>
                       <td id="organisms_alive"></td>
                     </tr>
+                    <tr>
+                      <td>Number of Species</td>
+                      <td id="number_of_species"></td>
+                    </tr>
                   </table>
                   <br />
                   <table>
@@ -145,14 +149,14 @@
                     </tr>
                   </table>
                   <br />
-                  <select style="color: black; width: 100%" id="switch_graph">
-                    <option value="0" disabled>Select a graph:</option>
-                    <option value="0">Population</option>
-                    <option value="1">Species</option>
-                    <option value="2">Dead</option></select
-                  ><br />
                   <div>
-                    <div id="organism_chart"></div>
+                    <select style="color: black; width: 100%" id="switch_chart">
+                      <option value="0" disabled>Select a graph:</option>
+                      <option value="0">Best Fitness</option>
+                      <option value="1">Overall Fitness</option>
+                      <option value="2">Number of Species</option>
+                    </select>
+                    <div id="chart"></div>
                   </div>
                 </div>
                 <!--Settings-->
@@ -171,6 +175,5 @@
     </div>
     <svg width="100%" height="100%" preserveAspectRatio="none" id="neural_network_svg"></svg>
   </body>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="js/main.js"></script>
 </html>

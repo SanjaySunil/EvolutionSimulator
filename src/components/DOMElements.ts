@@ -32,4 +32,7 @@ export const DOMElements = {
   best_fitness: document.getElementById("best_fitness") as HTMLSpanElement,
   overall_fitness: document.getElementById("overall_fitness") as HTMLSpanElement,
   organisms_alive: document.getElementById("organisms_alive") as HTMLSpanElement,
+
+  switch_chart: document.getElementById("switch_chart") as HTMLButtonElement,
+  number_of_species: document.getElementById("number_of_species") as HTMLSpanElement,
 };

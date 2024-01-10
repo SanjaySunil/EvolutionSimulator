@@ -5,6 +5,7 @@ import {
   register_show_controls,
   register_sim_restart_button,
   register_sim_start_stop_button,
+  register_switch_chart,
 } from "./components/Buttons";
 import {
   export_population_button,
@@ -36,6 +37,7 @@ register_sim_restart_button();
 register_sim_start_stop_button(simulation);
 register_download_neuralnet_button();
 register_fps_slider(simulation, config.config);
+register_switch_chart(simulation);
 
 // Import Buttons
 register_import_organisms_button(simulation);

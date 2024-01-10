@@ -1,11 +1,11 @@
+import { DefaultSimulationConfig } from "../config/simulation.config";
 import Simulation from "../controllers/simulation.controller";
+import { CellStates } from "../environment/Grid";
 import Organism from "../models/Organism";
 import export_object from "../utils/export_object";
-import { render_settings } from "./Settings";
 import { read_file } from "../utils/read_file";
-import { CellStates } from "../environment/Grid";
-import { DefaultSimulationConfig } from "../config/simulation.config";
 import { DOMElements } from "./DOMElements";
+import { render_settings } from "./Settings";
 
 // Function to export all organisms in the simulation.
 export function export_population(population: Organism[], with_coordinates: boolean): object {
@@ -45,7 +45,7 @@ export function export_population_button(simulation: Simulation): void {
       // Otherwise, alert the user that there are no organisms to export.
       alert("No organisms available to export.");
     }
-  });
+  }); 
 }
 
 // Function to register event listeners for the export config button.

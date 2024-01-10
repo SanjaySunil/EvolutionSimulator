@@ -1,31 +1,50 @@
 import { DefaultSimulationConfig } from "../config/simulation.config";
 import Canvas from "../controllers/canvas.controller";
-import { select_and_crossover, calculate_and_sort_fitness } from "../math/GeneticAlgorithm";
+import ChartController from "../controllers/chart.controller";
+import { calculate_and_sort_fitness, select_and_crossover } from "../math/GeneticAlgorithm";
 import Gene from "../models/Gene";
 import Organism from "../models/Organism";
 import { Coordinate } from "../models/types/Coordinate";
 import { add_vector } from "../utils/geometry";
 import get_random_vector from "../utils/get_random_vector";
 import { CellStates } from "./Grid";
+import { DOMElements } from "../components/DOMElements";
 
-// Environment Class.
+// Environment class.
 export class Environment extends Canvas {
   public population: Organism[];
   public ticks: number;
   public generation: number;
   public overall_fitness: number;
   public best_fitness: number;
+  public species_count: number;
   public alive: number;
+  public best_fitness_data_points: Coordinate[];
+  public overall_fitness_data_points: Coordinate[];
+  public number_of_species_data_points: Coordinate[];
+  public species_data_points: any;
+  public species: Set<string>;
+  public chart: ChartController;
 
-  // Builds a new Environment.
+  // Builds a new Environment instance.
   constructor(canvas_id: string, config: typeof DefaultSimulationConfig) {
     super(canvas_id, config);
     this.population = [];
     this.ticks = 0;
-    this.generation = 1;
-    this.best_fitness = Infinity;
-    this.overall_fitness = Infinity;
+    this.generation = 0;
+    this.best_fitness = 1;
+    this.overall_fitness = 1;
+    this.species_count = Infinity;
     this.alive = 0;
+    this.best_fitness_data_points = [];
+    this.overall_fitness_data_points = [];
+    this.number_of_species_data_points = [];
+    this.species = new Set();
+    this.chart = new ChartController("chart");
+    this.chart.add_config("Best Fitness", "Generation", "Best Fitness", this.best_fitness_data_points, 1);
+    this.chart.add_config("Overall Fitness", "Generation", "Overall Fitness", this.overall_fitness_data_points, 1);
+    this.chart.add_config("Number of Species", "Generation", "Number of Species", this.number_of_species_data_points);
+    this.chart.switch_chart(0);
   }
 
   // Adds an Organism to the environment and configures knowledge.
@@ -65,6 +84,25 @@ export class Environment extends Canvas {
     }
   }
 
+  // Updates the simulation chart.
+  public update_charts(): void {
+    // Adds data points to the chart.
+    this.best_fitness_data_points.push({
+      x: this.generation,
+      y: this.best_fitness,
+    });
+    this.overall_fitness_data_points.push({
+      x: this.generation,
+      y: this.overall_fitness,
+    });
+    this.number_of_species_data_points.push({
+      x: this.generation,
+      y: this.species_count,
+    });
+    // Updates and renders the chart.
+    this.chart.chart.render();
+  }
+
   // Initializes a new environment by populating it with organisms.
   public init(): void {
     // Populate the environment until the desired population size is reached.
@@ -100,8 +138,10 @@ export class Environment extends Canvas {
       let best_found = false;
       let fitness_sum = 0;
 
-      // Calculate overall fitness and find the best individual.
+      // Find the best individual and calculate the fitness sum, which is to be used to calculate the overall fitness.
       for (const organism of this.population) {
+        // Add the organism's colour to the species set.
+        if (organism.genome.colour) this.species.add(organism.genome.colour);
         if (organism.alive) fitness_sum += organism.fitness!;
         if (!best_found && organism.alive) {
           this.best_fitness = organism.fitness!;
@@ -110,23 +150,33 @@ export class Environment extends Canvas {
         this.grid.clear_cell_state(organism.coordinate);
       }
 
+      // Calculate the overall fitness of the population.
       this.overall_fitness = this.alive > 0 ? fitness_sum / this.alive : 0;
 
       // Select and crossover individuals based on the configured genetic algorithm.
       this.population = select_and_crossover(this.population, this.config);
 
       // Reset tick count and increment generation count.
+      this.species_count = this.species.size;
+      this.update_charts();
       this.ticks = 0;
       this.generation++;
+
+      // Update HTML elements with simulation data.
+      DOMElements.best_fitness.innerHTML = this.best_fitness.toPrecision(3).toString();
+      DOMElements.overall_fitness.innerHTML = this.overall_fitness.toPrecision(3).toString();
+      DOMElements.number_of_species.innerHTML = this.species_count.toString();
+
+      this.species = new Set();
 
       // If the goal is to distribute food, do so within the environment.
       if (this.config.GOAL_FOOD) {
         this.drop_food();
       }
     } else {
-      // Iterate through the list of organisms and perform actions based on the environment's rules.
       this.alive = 0;
 
+      // Iterate through the list of organisms and perform actions based on the environment's rules.
       for (const organism of this.population) {
         if (organism.alive) {
           this.alive++;

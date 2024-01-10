@@ -128,6 +128,7 @@ export class Grid {
     // Check if the specified coordinate is within the grid boundaries
     return coordinate.x >= 0 && coordinate.y >= 0 && coordinate.x < this.grid_size && coordinate.y < this.grid_size;
   }
+
   // Checks if specified cell is empty.
   public is_cell_empty(coordinate: Coordinate): boolean {
     // Check if the provided cell coordinate is valid within the grid

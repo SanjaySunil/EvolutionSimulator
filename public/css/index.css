@@ -58,7 +58,7 @@ body {
   flex: 1 100%;
   padding: 10px;
 }
-.main canvas {
+.main #canvas {
   background: #000;
   cursor: pointer;
   image-rendering: pixelated;
@@ -195,7 +195,7 @@ body {
 .tab {
   border-radius: 5px;
   border: 1px solid var(--border);
-  height: 70vh;
+  height: 60vh;
   overflow-y: scroll;
   padding: 15px;
 }
