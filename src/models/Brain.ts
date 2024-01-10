@@ -61,7 +61,7 @@ export default class Brain {
     // List to store neural network connections.
     const connections: ConnectionArray = this.obtain_connections();
 
-    // Map of neurons and their number of inputs and outputs.
+    // Map of the hidden neurons and their number of inputs and outputs.
     const hidden_neuron_map: HiddenNeuronMap = this.create_hidden_neuron_map(connections);
 
     // Remove connections to neurons with no outputs or neurons that feed themselves.
@@ -221,9 +221,9 @@ export default class Brain {
     return connection_array;
   }
 
-  // Creates a map of neurons and their corresponding input and output counts.
+  // Creates a map of hidden neurons and their corresponding input and output counts.
   public create_hidden_neuron_map(connection_array: ConnectionArray): HiddenNeuronMap {
-    // Initialize a map to store neurons and their input/output counts.
+    // Initialize a map to store hidden neurons and their input/output counts.
     const hidden_neuron_map: HiddenNeuronMap = new Map();
 
     // Iterate through the connection array to process each connection.
@@ -269,7 +269,6 @@ export default class Brain {
         }
       }
     }
-
     // Return the created map of neurons with their input/output counts.
     return hidden_neuron_map;
   }
