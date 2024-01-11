@@ -39,7 +39,7 @@ function noise(permutation, x: number): number {
   return lerp(u, grad(permutation[X], x), grad(permutation[X + 1], x - 1));
 }
 
-export default function generate_noise(widht, height, threshold, scale) {
+export default function generate_noise(width, height, threshold, scale) {
   const permutation = generate_permutation();
   const noise_map: number[][] = [];
 

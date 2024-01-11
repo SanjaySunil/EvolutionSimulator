@@ -61,7 +61,7 @@ export class Environment extends Canvas {
     if (!coordinate) coordinate = this.grid.fetch_empty_cell();
 
     // Create a new Organism instance with the provided gene data, grid, configuration, and population index.
-    const organism = new Organism(coordinate, gene_data, this.grid, this.config, this.population.length);
+    const organism = new Organism(coordinate, gene_data, this.grid, this.config);
 
     // Set the cell owner as the newly created organism.
     this.grid.set_cell_owner(coordinate, organism);
@@ -213,18 +213,18 @@ export class Environment extends Canvas {
   // Renders the environment on the canvas.
   public render(): void {
     // Clear cells that are not selected and fill others based on to_clear and to_fill lists.
-    for (const cell of this.renderer.to_clear) {
+    let cell = this.renderer.to_clear.dequeue();
+    while (cell != null) {
       if (!cell.is_selected) this.renderer.clear_cell(cell);
       else this.renderer.fill_cell(cell);
+      cell = this.renderer.to_clear.dequeue();
     }
 
+    cell = this.renderer.to_fill.dequeue();
     // Fill cells based on the to_fill list.
-    for (const cell of this.renderer.to_fill) {
+    while (cell != null) {
       this.renderer.fill_cell(cell);
+      cell = this.renderer.to_fill.dequeue();
     }
-
-    // Clear both to_clear and to_fill lists after rendering.
-    this.renderer.to_clear.clear();
-    this.renderer.to_fill.clear();
   }
 }

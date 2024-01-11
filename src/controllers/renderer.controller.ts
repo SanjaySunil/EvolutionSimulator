@@ -1,5 +1,6 @@
 import ThemeConfig from "../config/theme.config";
 import { CellStates, GridCell } from "../environment/Grid";
+import Queue from "../structures/Queue";
 import { to_angle } from "../utils/geometry";
 
 // Class to handle rendering of the simulation.
@@ -7,15 +8,15 @@ export default class Renderer {
   public canvas;
   public ctx;
   public pixel_size;
-  public to_fill: Set<GridCell>;
-  public to_clear: Set<GridCell>;
+  public to_fill: Queue;
+  public to_clear: Queue;
 
   constructor(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, pixel_size: number) {
     this.canvas = canvas;
     this.ctx = ctx;
     this.pixel_size = pixel_size;
-    this.to_fill = new Set();
-    this.to_clear = new Set();
+    this.to_fill = new Queue();
+    this.to_clear = new Queue();
   }
 
   // Renders a specific cell in the grid.

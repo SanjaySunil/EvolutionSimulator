@@ -164,7 +164,7 @@ export class Grid {
       cell.owner = owner;
 
       // Add the cell to the 'to_fill' set in the renderer
-      this.renderer.to_fill.add(cell);
+      this.renderer.to_fill.enqueue(cell);
 
       // Increment the count of occupied cells
       this.occupied += 1;
@@ -190,7 +190,7 @@ export class Grid {
       cell.owner = null;
 
       // Add the cell to the 'to_fill' set in the renderer
-      this.renderer.to_fill.add(cell);
+      this.renderer.to_fill.enqueue(cell);
 
       // Increment the count of occupied cells
       this.occupied += 1;
@@ -208,7 +208,7 @@ export class Grid {
       cell.is_selected = selected;
 
       // Add the cell to the 'to_fill' set in the renderer for rendering purposes
-      this.renderer.to_fill.add(cell);
+      this.renderer.to_fill.enqueue(cell);
     }
   }
   // Sets the highlighted state of a cell.
@@ -222,7 +222,7 @@ export class Grid {
       cell.is_highlighted = highlighted;
 
       // Add the cell to the 'to_fill' set in the renderer for rendering purposes
-      this.renderer.to_fill.add(cell);
+      this.renderer.to_fill.enqueue(cell);
     }
   }
 
@@ -240,12 +240,12 @@ export class Grid {
       if (cell.energy <= 0) {
         // Set cell state to EMPTY and add it to the 'to_clear' set in the renderer for clearing
         cell.state = CellStates.EMPTY;
-        this.renderer.to_clear.add(cell);
+        this.renderer.to_clear.enqueue(cell);
       } else {
         // Set cell state to FOOD and add it to both 'to_clear' and 'to_fill' sets in the renderer
         cell.state = CellStates.FOOD;
-        this.renderer.to_clear.add(cell);
-        this.renderer.to_fill.add(cell);
+        this.renderer.to_clear.enqueue(cell);
+        this.renderer.to_fill.enqueue(cell);
       }
 
       // Reduce the count of occupied cells

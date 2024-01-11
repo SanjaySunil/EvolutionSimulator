@@ -22,7 +22,7 @@ export default class Organism {
   public grid: Grid;
 
   // Constructs a new Organism object.
-  constructor(coordinate, genome: Gene[], grid: Grid, config, id) {
+  constructor(coordinate, genome: Gene[], grid: Grid, config) {
     this.grid = grid;
     this._coordinate = coordinate;
     // If a genome has been given, use this genome, else create a new random genome.
