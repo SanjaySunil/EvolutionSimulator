@@ -1,4 +1,4 @@
-import NeuralNetDiagram from "../components/NeuralNetDiagram";
+import NeuralNetDiagram from "../algorithms/NeuralNetDiagram";
 import { DefaultSimulationConfig } from "../config/simulation.config";
 import { CellStates, Grid } from "../environment/Grid";
 import { Coordinate } from "../models/types/Coordinate";

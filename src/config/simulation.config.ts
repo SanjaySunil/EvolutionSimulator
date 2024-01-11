@@ -34,8 +34,8 @@ const DefaultSimulationConfig: Types = {
   // Total number of genes for organisms
   NUMBER_OF_GENES: 50,
   // Flags indicating whether goal is food or coordinated.
-  GOAL_FOOD: false,
-  GOAL_COORD: true,
+  GOAL_FOOD: true,
+  GOAL_COORD: false,
 
   // Determine the number of available input and output neurons based on imported constants.
   NUMBER_OF_INPUTS: Object.keys(InputNeurons).length,

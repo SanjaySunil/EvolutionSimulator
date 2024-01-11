@@ -1,7 +1,7 @@
 import { DefaultSimulationConfig } from "../config/simulation.config";
 import Canvas from "../controllers/canvas.controller";
 import ChartController from "../controllers/chart.controller";
-import { calculate_and_sort_fitness, select_and_crossover } from "../math/GeneticAlgorithm";
+import { calculate_and_sort_fitness, select_and_crossover } from "../algorithms/GeneticAlgorithm";
 import Gene from "../models/Gene";
 import Organism from "../models/Organism";
 import { Coordinate } from "../models/types/Coordinate";

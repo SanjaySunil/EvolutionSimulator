@@ -2,7 +2,7 @@ import Gene from "../models/Gene";
 import { OutputNeuronSymbols } from "../constants/OutputNeurons";
 import { InputNeuronSymbols } from "../constants/InputNeurons";
 import { Neurons } from "../models/Neurons";
-import { DOMElements } from "./DOMElements";
+import { DOMElements } from "../components/DOMElements";
 
 // This class is responsible for drawing the neural network diagram.
 export default class NeuralNetDiagram {
@@ -181,10 +181,20 @@ export default class NeuralNetDiagram {
   // Public method to draw the neural network diagram.
   public draw(connections: Gene[]): void {
     // Calculate the height of the SVG canvas based on the maximum y-coordinates of different types of nodes.
+    // const height = Math.max(this.last_input_neuron_coord, this.last_output_neuron_coord, this.last_hidden_neuron_coord);
+    // const height = Math.max(
+    //   ...Object.values(this.input_neurons),
+    //   ...Object.values(this.output_neurons),
+    //   ...Object.values(this.hidden_neurons)
+    // );
+
     const height = Math.max(this.last_input_neuron_coord, this.last_output_neuron_coord, this.last_hidden_neuron_coord);
+
+    console.log(...Object.values(this.input_neurons));
 
     // Reset the HTML content of the SVG element with a specific width and calculated height.
     this.svg.innerHTML = `<svg width='400' height='${height}' id='neural-network-svg'></svg>`;
+    this.svg.style.height = height.toString();
 
     // Iterate through each connection to draw lines between connected nodes.
     for (const connection of connections) {
