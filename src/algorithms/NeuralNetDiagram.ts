@@ -7,7 +7,7 @@ const node_radius = 20;
 const node_spacing = 10;
 const svg = DOMElements.neural_network_svg;
 
-// Private function to create an SVG element with specific attributes.
+// Function to create an SVG element with specific attributes.
 function create_element_ns(element_type: string, attributes: Record<string, string>): SVGElement {
   // Create an SVG element with the specified element type.
   const element = document.createElementNS("http://www.w3.org/2000/svg", element_type);
@@ -21,7 +21,7 @@ function create_element_ns(element_type: string, attributes: Record<string, stri
   return element;
 }
 
-// Private function to create an SVG text element with specific attributes.
+// Function to create an SVG text element with specific attributes.
 function create_text(x: number, y: number, text: string, fill: string): SVGElement {
   // Create an object with the attributes for the text element.
   const attributes = {
@@ -40,7 +40,7 @@ function create_text(x: number, y: number, text: string, fill: string): SVGEleme
   return text_element;
 }
 
-// Private method to connect two nodes with a line.
+// Method to connect two nodes with a line.
 function connect_nodes(source: number[], sink: number[], weight: number, is_positive: boolean): void {
   // Define attributes for the line connecting the source and sink nodes.
   const attributes = {
@@ -79,7 +79,7 @@ function connect_nodes(source: number[], sink: number[], weight: number, is_posi
   svg.appendChild(sink_node);
 }
 
-// Define a private function to create an SVG circle element.
+// Function to create an SVG circle element.
 function create_circle(x: number, y: number, r: number, fill: string, stroke = false): SVGElement {
   // Define attributes for the circle element.
   const attributes = {
@@ -104,7 +104,7 @@ function create_circle(x: number, y: number, r: number, fill: string, stroke = f
   return circle;
 }
 
-// Private function to find the y-coordinate of the previous node.
+// Function to find the y-coordinate of the previous node.
 function find_previous_node_y_coord(object, previous): number {
   // If the object is empty, there is no previous node, so return the node spacing plus the node radius as the initial y-coordinate.
   if (Object.keys(object).length == 0) {
@@ -116,7 +116,7 @@ function find_previous_node_y_coord(object, previous): number {
   return previous;
 }
 
-// Private method to create a node for the neural network diagram.
+// Function to create a node for the neural network diagram.
 function create_node(
   node_type: string,
   node_id: number,
@@ -184,7 +184,7 @@ function create_node(
   return [input_neurons, hidden_neurons, output_neurons, last_input_neuron_coord, last_hidden_neuron_coord, last_output_neuron_coord];
 }
 
-// Public method to draw the neural network diagram.
+// Method to draw the neural network diagram.
 export function draw(connections: Gene[]): void {
   let input_neurons = [];
   let hidden_neurons = [];
@@ -206,25 +206,10 @@ export function draw(connections: Gene[]): void {
     let sink;
 
     // Determine the source node based on its type.
-    if (connection.source_type == Neurons.INPUT) {
-      if (input_neurons[connection.source_id]) {
+    if (connection.source_type == Neurons.INPUT || connection.source_type == Neurons.HIDDEN) {
+      if (connection.source_type == Neurons.INPUT && input_neurons[connection.source_id]) {
         source = input_neurons[connection.source_id];
-      } else {
-        results = create_node(
-          connection.source_type == 0 ? "HIDDEN" : "INPUT",
-          connection.source_id,
-          input_neurons,
-          hidden_neurons,
-          output_neurons,
-          last_input_neuron_coord,
-          last_hidden_neuron_coord,
-          last_output_neuron_coord
-        );
-
-        source = input_neurons[connection.source_id];
-      }
-    } else if (connection.source_type == Neurons.HIDDEN) {
-      if (hidden_neurons[connection.source_id]) {
+      } else if (connection.source_type == Neurons.HIDDEN && hidden_neurons[connection.source_id]) {
         source = hidden_neurons[connection.source_id];
       } else {
         results = create_node(
@@ -238,10 +223,15 @@ export function draw(connections: Gene[]): void {
           last_output_neuron_coord
         );
 
-        source = hidden_neurons[connection.source_id];
+        if (connection.source_type == Neurons.INPUT) {
+          source = input_neurons[connection.source_id];
+        } else if (connection.source_type == Neurons.HIDDEN) {
+          source = hidden_neurons[connection.source_id];
+        }
       }
     }
 
+    // Update the input, hidden, and output neurons and their last coordinates.
     input_neurons = results[0];
     hidden_neurons = results[1];
     output_neurons = results[2];
@@ -250,25 +240,10 @@ export function draw(connections: Gene[]): void {
     last_output_neuron_coord = results[5];
 
     // Determine the sink node based on its type.
-    if (connection.sink_type == Neurons.OUTPUT) {
-      if (output_neurons[connection.sink_id]) {
+    if (connection.sink_type == Neurons.OUTPUT || connection.sink_type == Neurons.HIDDEN) {
+      if (connection.sink_type == Neurons.OUTPUT && output_neurons[connection.sink_id]) {
         sink = output_neurons[connection.sink_id];
-      } else {
-        results = create_node(
-          connection.sink_type == 0 ? "HIDDEN" : "OUTPUT",
-          connection.sink_id,
-          input_neurons,
-          hidden_neurons,
-          output_neurons,
-          last_input_neuron_coord,
-          last_hidden_neuron_coord,
-          last_output_neuron_coord
-        );
-
-        sink = output_neurons[connection.sink_id];
-      }
-    } else if (connection.sink_type == Neurons.HIDDEN) {
-      if (hidden_neurons[connection.sink_id]) {
+      } else if (connection.sink_type == Neurons.HIDDEN && hidden_neurons[connection.sink_id]) {
         sink = hidden_neurons[connection.sink_id];
       } else {
         results = create_node(
@@ -282,10 +257,15 @@ export function draw(connections: Gene[]): void {
           last_output_neuron_coord
         );
 
-        sink = hidden_neurons[connection.sink_id];
+        if (connection.sink_type == Neurons.OUTPUT) {
+          sink = output_neurons[connection.sink_id];
+        } else if (connection.sink_type == Neurons.HIDDEN) {
+          sink = hidden_neurons[connection.sink_id];
+        }
       }
     }
 
+    // Update the input, hidden, and output neurons and their last coordinates.
     input_neurons = results[0];
     hidden_neurons = results[1];
     output_neurons = results[2];
@@ -320,17 +300,4 @@ export function draw(connections: Gene[]): void {
   }
 
   svg.style.height = (height + node_radius + node_spacing).toString();
-}
-
-// This class is responsible for drawing the neural network diagram.
-export default class NeuralNetDiagram {
-  public node_radius = 20;
-  public node_spacing = 10;
-  public svg = DOMElements.neural_network_svg;
-  public input_neurons: object = {};
-  public output_neurons: object = {};
-  public hidden_neurons: object = {};
-  public last_input_neuron_coord = 0;
-  public last_output_neuron_coord = 0;
-  public last_hidden_neuron_coord = 0;
 }
