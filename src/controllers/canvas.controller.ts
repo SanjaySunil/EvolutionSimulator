@@ -1,4 +1,4 @@
-import NeuralNetDiagram from "../algorithms/NeuralNetDiagram";
+import { DOMElements } from "../components/DOMElements";
 import { DefaultSimulationConfig } from "../config/simulation.config";
 import { CellStates, Grid } from "../environment/Grid";
 import { Coordinate } from "../types/Coordinate";
@@ -6,7 +6,7 @@ import { max_distance_to_point } from "../utils/get_max_distance";
 import get_style from "../utils/get_style";
 import Mouse from "./mouse.controller";
 import Renderer from "./renderer.controller";
-import { DOMElements } from "../components/DOMElements";
+import { draw } from "../algorithms/NeuralNetDiagram";
 
 // Define the different modes for mouse interaction.
 const Modes = ["IDLE", "PAN", "GOAL", "WALL", "RADIOACTIVE", "REMOVE"];
@@ -145,8 +145,7 @@ export default class Canvas {
           DOMElements.organism_selected.innerHTML = "Organism selected";
           DOMElements.organism_selected_table.style.display = "block";
 
-          const diagram = new NeuralNetDiagram();
-          diagram.draw(cell.owner.brain.connections);
+          draw(cell.owner.brain.connections);
         } else {
           // Clear organism selected message and hide neural network diagram download button.
           DOMElements.organism_selected.innerHTML = "";

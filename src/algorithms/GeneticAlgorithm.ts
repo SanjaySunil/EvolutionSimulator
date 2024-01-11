@@ -1,7 +1,7 @@
 import { DefaultSimulationConfig } from "../config/simulation.config";
+import Gene from "../models/Gene";
 import Organism from "../models/Organism";
 import { euclidean_distance } from "../utils/geometry";
-import Gene from "../models/Gene";
 
 // Merges two sorted arrays of organisms into a single sorted array.
 export function merge(left: Organism[], right: Organism[]): Organism[] {
