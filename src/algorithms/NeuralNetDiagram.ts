@@ -89,7 +89,7 @@ export default class NeuralNetDiagram {
   }
 
   // Define a private function to create an SVG circle element.
-  private create_circle(x: number, y: number, r: number, fill: string): SVGElement {
+  private create_circle(x: number, y: number, r: number, fill: string, stroke = false): SVGElement {
     // Define attributes for the circle element.
     const attributes = {
       // X-coordinate of the centre of the circle.
@@ -101,6 +101,10 @@ export default class NeuralNetDiagram {
       // Fill colour of the circle.
       fill: fill,
     };
+
+    if (stroke) {
+      (attributes["stroke"] = "black"), (attributes["stroke-width"] = "5px");
+    }
 
     // Create a circle SVG element with the defined attributes.
     const circle = this.create_element_ns("circle", attributes);
@@ -167,8 +171,8 @@ export default class NeuralNetDiagram {
     }
 
     // Create circle and text elements for the node.
-    const circle = this.create_circle(x_coord, previous_y_coord, this.node_radius, "black");
-    const text_element = this.create_text(x_coord, previous_y_coord, node_text, "white");
+    const circle = this.create_circle(x_coord, previous_y_coord, this.node_radius, "white", true);
+    const text_element = this.create_text(x_coord, previous_y_coord, node_text, "black");
 
     // Append the circle and text elements to the group element.
     group.appendChild(circle);
@@ -182,21 +186,11 @@ export default class NeuralNetDiagram {
   public draw(connections: Gene[]): void {
     // Calculate the height of the SVG canvas based on the maximum y-coordinates of different types of nodes.
     // const height = Math.max(this.last_input_neuron_coord, this.last_output_neuron_coord, this.last_hidden_neuron_coord);
-    // const height = Math.max(
-    //   ...Object.values(this.input_neurons),
-    //   ...Object.values(this.output_neurons),
-    //   ...Object.values(this.hidden_neurons)
-    // );
-
-    const height = Math.max(this.last_input_neuron_coord, this.last_output_neuron_coord, this.last_hidden_neuron_coord);
-
-    console.log(...Object.values(this.input_neurons));
-
     // Reset the HTML content of the SVG element with a specific width and calculated height.
-    this.svg.innerHTML = `<svg width='400' height='${height}' id='neural-network-svg'></svg>`;
-    this.svg.style.height = height.toString();
+    let height = 400;
+    this.svg.innerHTML = `<svg width='400px' height='${height}px' id='neural-network-svg'></svg>`;
+    this.svg.style.height = height.toString(); // Iterate through each connection to draw lines between connected nodes.
 
-    // Iterate through each connection to draw lines between connected nodes.
     for (const connection of connections) {
       let source;
       let sink;
@@ -248,5 +242,19 @@ export default class NeuralNetDiagram {
       // Draw connections between nodes based on their coordinates and connection weight.
       this.connect_nodes(source, sink, thickness, connection.weight >= 0);
     }
+
+    const input_neurons_size = Object.keys(this.input_neurons).length;
+    const output_neurons_size = Object.keys(this.output_neurons).length;
+    const hidden_neurons_size = Object.keys(this.hidden_neurons).length;
+
+    if (Math.max(input_neurons_size, output_neurons_size, hidden_neurons_size) == input_neurons_size) {
+      height = this.last_input_neuron_coord;
+    } else if (Math.max(input_neurons_size, output_neurons_size, hidden_neurons_size) == output_neurons_size) {
+      height = this.last_output_neuron_coord;
+    } else if (Math.max(input_neurons_size, output_neurons_size, hidden_neurons_size) == hidden_neurons_size) {
+      height = this.last_hidden_neuron_coord;
+    }
+
+    this.svg.style.height = (height + this.node_radius + this.node_spacing).toString();
   }
 }
