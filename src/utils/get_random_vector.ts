@@ -1,4 +1,4 @@
-import { Coordinate } from "../models/types/Coordinate";
+import { Coordinate } from "../types/Coordinate";
 import { make_vector } from "./geometry";
 import get_random_number from "./get_random_number";
 

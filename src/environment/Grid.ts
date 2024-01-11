@@ -1,6 +1,6 @@
 import Renderer from "../controllers/renderer.controller";
 import Organism from "../models/Organism";
-import { Coordinate } from "../models/types/Coordinate";
+import { Coordinate } from "../types/Coordinate";
 import get_random_vector from "../utils/get_random_vector";
 
 // Various Cell States that a GridCell can take.

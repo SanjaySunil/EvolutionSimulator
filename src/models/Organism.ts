@@ -7,7 +7,7 @@ import probability_to_boolean from "../utils/probability_to_boolean";
 import Brain from "./Brain";
 import Gene from "./Gene";
 import Genome from "./Genome";
-import { Coordinate } from "./types/Coordinate";
+import { Coordinate } from "../types/Coordinate";
 
 // Represents an organism in the simulation.
 export default class Organism {

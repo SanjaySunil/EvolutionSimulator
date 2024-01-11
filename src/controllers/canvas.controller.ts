@@ -1,8 +1,8 @@
 import NeuralNetDiagram from "../algorithms/NeuralNetDiagram";
 import { DefaultSimulationConfig } from "../config/simulation.config";
 import { CellStates, Grid } from "../environment/Grid";
-import { Coordinate } from "../models/types/Coordinate";
-import { max_distance } from "../utils/get_max_distance";
+import { Coordinate } from "../types/Coordinate";
+import { max_distance_to_point } from "../utils/get_max_distance";
 import get_style from "../utils/get_style";
 import Mouse from "./mouse.controller";
 import Renderer from "./renderer.controller";
@@ -135,7 +135,7 @@ export default class Canvas {
         } else {
           // Add selected goal coordinate and its max distance
           this.goal_coordinates.push(cell.coordinate);
-          this.max_distances_to_goal.push(max_distance(this.config.GRID_SIZE, cell.coordinate.x, cell.coordinate.y));
+          this.max_distances_to_goal.push(max_distance_to_point(this.config.GRID_SIZE, cell.coordinate.x, cell.coordinate.y));
           this.grid.set_cell_selected(cell.coordinate, true);
         }
       } else if (this.mode == Modes[ModesEnum.IDLE]) {

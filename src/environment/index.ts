@@ -4,7 +4,7 @@ import ChartController from "../controllers/chart.controller";
 import { calculate_and_sort_fitness, select_and_crossover } from "../algorithms/GeneticAlgorithm";
 import Gene from "../models/Gene";
 import Organism from "../models/Organism";
-import { Coordinate } from "../models/types/Coordinate";
+import { Coordinate } from "../types/Coordinate";
 import { add_vector } from "../utils/geometry";
 import get_random_vector from "../utils/get_random_vector";
 import { CellStates } from "./Grid";

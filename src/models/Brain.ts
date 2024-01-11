@@ -6,7 +6,7 @@ import weight_as_float from "../utils/weight_as_float";
 import { add_vector, euclidean_distance } from "../utils/geometry";
 import Gene from "./Gene";
 import { Neuron, Neurons } from "./Neurons";
-import { Coordinate } from "./types/Coordinate";
+import { Coordinate } from "../types/Coordinate";
 
 type ConnectionArray = Array<Gene>;
 type HiddenNeuronMap = Map<number, HiddenNeuron>;

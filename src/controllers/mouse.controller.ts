@@ -1,4 +1,4 @@
-import { Coordinate } from "../models/types/Coordinate";
+import { Coordinate } from "../types/Coordinate";
 import { make_vector } from "../utils/geometry";
 
 // This controller is used to manage mouse events.
