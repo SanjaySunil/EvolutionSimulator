@@ -3,7 +3,7 @@ class QueueNode {
   public value: any;
   public next: QueueNode | null;
 
-  // Builds a new QueueNode instance.
+  /** Builds a new QueueNode instance. */
   constructor(value) {
     // Assign the provided value to the node.
     this.value = value;
@@ -17,7 +17,7 @@ export default class Queue {
   public front: QueueNode | null;
   public rear: QueueNode | null;
 
-  // Builds a new Queue instance.
+  /** Builds a new Queue instance. */
   constructor() {
     // Set the front and rear nodes to null.
     this.front = null;

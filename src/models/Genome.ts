@@ -5,7 +5,7 @@ export default class Genome {
   public data: Gene[] | null;
   public colour: string | null;
 
-  // Builds a new genome from a given set of genes.
+  /** Builds a new genome from a given set of genes. */
   constructor(genome: Gene[]) {
     this.data = genome;
     this.colour = this.get_colour(genome);
