@@ -1,4 +1,8 @@
-// Function to read a file
+/**
+ * Function to read a file.
+ * @param event - The event that triggered the function.
+ * @returns - The data from the file.
+ */
 export function read_file(event: Event): Promise<any> {
   return new Promise((resolve) => {
     const target = event.target as HTMLInputElement;
