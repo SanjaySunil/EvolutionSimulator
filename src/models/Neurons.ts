@@ -5,6 +5,7 @@ export const Neurons = {
   HIDDEN: 0,
 };
 
+/** This class is used to create a neuron that can be used to store information. */
 export class Neuron {
   // Output value of the neuron.
   public output: number;

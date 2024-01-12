@@ -9,7 +9,7 @@ import Gene from "./Gene";
 import Genome from "./Genome";
 import { Coordinate } from "../types/Coordinate";
 
-// Represents an organism in the simulation.
+/** This class is used to represent an organism in the simulation. */
 export default class Organism {
   private _coordinate: Coordinate;
   public genome: Genome;
@@ -42,7 +42,10 @@ export default class Organism {
     this.energy = 0;
   }
 
-  // Sets the coordinate of the organism.
+  /**
+   * Sets the coordinate of the organism.
+   * @param coordinate - The new coordinate of the organism.
+   */
   public set coordinate(coordinate: Coordinate) {
     // Clears the current cell state of the organism's previous coordinate.
     this.grid.clear_cell_state(this.coordinate);
@@ -52,21 +55,31 @@ export default class Organism {
     this._coordinate = coordinate;
   }
 
-  // Gets the coordinate of the organism.
+  /**
+   * Gets the coordinate of the organism.
+   * @returns The coordinate of the organism.
+   */
   public get coordinate(): Coordinate {
     return this._coordinate;
   }
 
-  // Performs an action based on the organism's brain.
+  /**
+   * Performs an action based on the organism's brain.
+   * @returns The coordinate offset of the action.
+   */
   public action(): Coordinate {
     // Perform Neural Network Feed Forward to obtain action levels.
     const action_levels = this.brain.feed_forward();
     // Compute the action to take based on the action levels.
-    return this.compute_action(action_levels);
+    return this.compute_movement_offset(action_levels);
   }
 
-  // Computes the action based on the action levels.
-  public compute_action(action_levels: number[]): Coordinate {
+  /**
+   * Computes the action based on the action levels.
+   * @param action_levels - The action levels to compute the action from.
+   * @returns
+   */
+  public compute_movement_offset(action_levels: number[]): Coordinate {
     // 'move_x' and 'move_y' represent the urge to move in the X and Y direction respectively.
     let move_x = action_levels[OutputNeurons.MOVE_X];
     let move_y = action_levels[OutputNeurons.MOVE_Y];

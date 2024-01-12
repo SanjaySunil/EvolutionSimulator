@@ -1,5 +1,6 @@
 import Gene from "./Gene";
 
+/** This class is used to create a genome that can be used to store information */
 export default class Genome {
   public data: Gene[] | null;
   public colour: string | null;

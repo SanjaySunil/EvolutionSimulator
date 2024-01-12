@@ -1,6 +1,6 @@
 import get_random_number from "../utils/get_random_number";
 
-// Each gene specifies one connection in the neural network.
+/** This class is used to create a gene that can be used to store information */
 export default class Gene {
   // Source of the connection is either an input neuron/hidden neuron.
   public source_type: number;
