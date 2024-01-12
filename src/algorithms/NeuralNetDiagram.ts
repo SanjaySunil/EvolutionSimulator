@@ -7,7 +7,12 @@ const node_radius = 20;
 const node_spacing = 10;
 const svg = DOMElements.neural_network_svg;
 
-// Function to create an SVG element with specific attributes.
+/**
+ * Creates an SVG element with specific attributes.
+ * @param element_type - The type of SVG element to be created.
+ * @param attributes - The attributes of the SVG element.
+ * @returns - The created SVG element.
+ */
 function create_element_ns(element_type: string, attributes: Record<string, string>): SVGElement {
   // Create an SVG element with the specified element type.
   const element = document.createElementNS("http://www.w3.org/2000/svg", element_type);
@@ -21,7 +26,14 @@ function create_element_ns(element_type: string, attributes: Record<string, stri
   return element;
 }
 
-// Function to create an SVG text element with specific attributes.
+/**
+ * Creates an SVG text element with specific attributes.
+ * @param x - x-coordinate of the text element.
+ * @param y - y-coordinate of the text element.
+ * @param text - Text content of the text element.
+ * @param fill - Fill colour of the text element.
+ * @returns - The created SVG text element.
+ */
 function create_text(x: number, y: number, text: string, fill: string): SVGElement {
   // Create an object with the attributes for the text element.
   const attributes = {
@@ -40,7 +52,13 @@ function create_text(x: number, y: number, text: string, fill: string): SVGEleme
   return text_element;
 }
 
-// Method to connect two nodes with a line.
+/**
+ * Connects two nodes with a line.
+ * @param source - The source node.
+ * @param sink - The sink node.
+ * @param weight - The weight of the connection.
+ * @param is_positive - Whether the connection is positive or negative.
+ */
 function connect_nodes(source: number[], sink: number[], weight: number, is_positive: boolean): void {
   // Define attributes for the line connecting the source and sink nodes.
   const attributes = {
@@ -79,7 +97,15 @@ function connect_nodes(source: number[], sink: number[], weight: number, is_posi
   svg.appendChild(sink_node);
 }
 
-// Function to create an SVG circle element.
+/**
+ * Creates an SVG circle element with specific attributes.
+ * @param x - x-coordinate of the centre of the circle.
+ * @param y - y-coordinate of the centre of the circle.
+ * @param r - Radius of the circle.
+ * @param fill - Fill colour of the circle.
+ * @param stroke - Whether the circle has a stroke.
+ * @returns - The created SVG circle element.
+ */
 function create_circle(x: number, y: number, r: number, fill: string, stroke = false): SVGElement {
   // Define attributes for the circle element.
   const attributes = {
@@ -104,7 +130,12 @@ function create_circle(x: number, y: number, r: number, fill: string, stroke = f
   return circle;
 }
 
-// Function to find the y-coordinate of the previous node.
+/**
+ * Finds the y-coordinate of the previous node.
+ * @param object - The object containing the nodes of the current type.
+ * @param previous - The previous y-coordinate.
+ * @returns - The y-coordinate of the previous node.
+ */
 function find_previous_node_y_coord(object, previous): number {
   // If the object is empty, there is no previous node, so return the node spacing plus the node radius as the initial y-coordinate.
   if (Object.keys(object).length == 0) {
@@ -116,7 +147,18 @@ function find_previous_node_y_coord(object, previous): number {
   return previous;
 }
 
-// Function to create a node for the neural network diagram.
+/**
+ * Creates a node for the neural network diagram.
+ * @param node_type - The type of node.
+ * @param node_id - The ID of the node.
+ * @param input_neurons - The input neurons.
+ * @param hidden_neurons - The hidden neurons.
+ * @param output_neurons - The output neurons.
+ * @param last_input_neuron_coord - The last y-coordinate of the input neuron.
+ * @param last_hidden_neuron_coord - The last y-coordinate of the hidden neuron.
+ * @param last_output_neuron_coord - The last y-coordinate of the output neuron.
+ * @returns - The updated input, hidden, and output neurons and their last coordinates.
+ */
 function create_node(
   node_type: string,
   node_id: number,
@@ -184,7 +226,10 @@ function create_node(
   return [input_neurons, hidden_neurons, output_neurons, last_input_neuron_coord, last_hidden_neuron_coord, last_output_neuron_coord];
 }
 
-// Method to draw the neural network diagram.
+/**
+ * Draws the neural network diagram based on the given connections.
+ * @param connections - The connections between nodes in the neural network.
+ */
 export function draw(connections: Gene[]): void {
   let input_neurons = [];
   let hidden_neurons = [];

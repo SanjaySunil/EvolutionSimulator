@@ -1,4 +1,4 @@
-// Constant object defining all the available input neurons.
+/** Constant object defining all the available input neurons. */
 export const InputNeurons = {
   // Input neuron for X-coordinate
   X_COORDINATE: 1,
@@ -22,5 +22,5 @@ export const InputNeurons = {
   LOOK_WEST: 10,
 };
 
-// Array of strings representing abbreviated symbols for Input Neurons
+/** Array of strings representing abbreviated symbols for Input Neurons. */
 export const InputNeuronSymbols = ["XC", "YC", "BN", "BE", "BS", "BW", "LN", "LE", "LS", "LW"];

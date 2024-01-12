@@ -1,7 +1,9 @@
 import Simulation from "../controllers/simulation.controller";
 import { DOMElements } from "./DOMElements";
 
-// Function to register an event listener for downloading the neural network diagram as an SVG.
+/**
+ * Registers an event listener for the download neural network button.
+ */
 export function register_download_neuralnet_button(): void {
   DOMElements.export_neuralnet.addEventListener("click", () => {
     // Get the SVG element from the Document Object Model (DOM)
@@ -23,7 +25,10 @@ export function register_download_neuralnet_button(): void {
   });
 }
 
-// Function to register an event listener for the enable rendering button.
+/**
+ * Registers an event listener for the rendering enabled button.
+ * @param simulation - The simulation object.
+ */
 export function register_rendering_enabled_button(simulation: Simulation): void {
   DOMElements.rendering_enabled.addEventListener("click", () => {
     // When the button is clicked, the rendering enabled property is toggled.
@@ -38,7 +43,9 @@ export function register_rendering_enabled_button(simulation: Simulation): void 
   });
 }
 
-// Function to register an event listener for the restart button.
+/**
+ * Registers an event listener for the restart button.
+ */
 export function register_sim_restart_button(): void {
   DOMElements.sim_restart.addEventListener("click", () => {
     // Creates a confirmation dialog box asking the user whether they want to restart the simulation.
@@ -50,7 +57,10 @@ export function register_sim_restart_button(): void {
   });
 }
 
-// Function to register an event listener for the start/stop button.
+/**
+ * Registers an event listener for the start/stop button.
+ * @param simulation - The simulation object.
+ */
 export function register_sim_start_stop_button(simulation: Simulation): void {
   // When the button is clicked, the simulation is either started or stopped.
   DOMElements.sim_start_stop.addEventListener("click", () => {
@@ -66,7 +76,9 @@ export function register_sim_start_stop_button(simulation: Simulation): void {
   });
 }
 
-// Function to register an event listener for the show controls button.
+/**
+ * Registers an event listener for the show controls button.
+ */
 export function register_show_controls(): void {
   let control_window_shown = false;
 
@@ -81,7 +93,11 @@ export function register_show_controls(): void {
   });
 }
 
-// Function to register an event listener for the FPS slider.
+/**
+ * Registers an event listener for the FPS slider.
+ * @param simulation - The simulation object.
+ * @param config - The simulation configuration.
+ */
 export function register_fps_slider(simulation, config): void {
   // Set the slider's min, max, and initial value.
   DOMElements.target_update_fps_slider.max = config.TARGET_UPDATE_MAX_FPS.toString();
@@ -110,6 +126,10 @@ export function register_fps_slider(simulation, config): void {
   });
 }
 
+/**
+ * Registers an event listener for the chart switcher.
+ * @param simulation - The simulation object.
+ */
 export function register_switch_chart(simulation: Simulation): void {
   DOMElements.switch_chart.addEventListener("change", () => {
     const index = parseInt(DOMElements.switch_chart.value);

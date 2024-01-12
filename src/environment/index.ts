@@ -47,7 +47,12 @@ export class Environment extends Canvas {
     this.chart.switch_chart(0);
   }
 
-  // Adds an Organism to the environment and configures knowledge.
+  /**
+   * Adds an Organism to the environment and configures knowledge.
+   * @param gene_data - The gene data to be used to create the organism.
+   * @param coordinate - The coordinate to place the organism at.
+   * @returns Whether the addition was successful.
+   */
   public add_organism(gene_data: Gene[], coordinate?: Coordinate): boolean {
     // Check if the population size has exceeded the configured limit.
     if (this.population.length > this.config.POPULATION) {
@@ -73,7 +78,7 @@ export class Environment extends Canvas {
     return true;
   }
 
-  // Drops food randomly within a defined area in the grid.
+  /** Drops food randomly within a defined area in the grid. */
   public drop_food(): void {
     // Loop to drop food 1000 times.
     for (let i = 0; i < 1000; i++) {
@@ -84,7 +89,7 @@ export class Environment extends Canvas {
     }
   }
 
-  // Updates the simulation chart.
+  /** Updates the simulation chart. */
   public update_charts(): void {
     // Adds data points to the chart.
     this.best_fitness_data_points.push({
@@ -103,7 +108,7 @@ export class Environment extends Canvas {
     this.chart.chart.render();
   }
 
-  // Initializes a new environment by populating it with organisms.
+  /** Initializes the environment. */
   public init(): void {
     // Populate the environment until the desired population size is reached.
     while (this.population.length != this.config.POPULATION) {
@@ -122,7 +127,7 @@ export class Environment extends Canvas {
     }
   }
 
-  // Updates the environment based on the configured goals and conditions.
+  /** Updates the environment based on the configured goals and conditions. */
   public update(): void {
     if (this.ticks > this.config.TICKS_PER_GENERATION) {
       // Calculate fitness of all individuals based on the configured goals.
@@ -210,20 +215,20 @@ export class Environment extends Canvas {
     this.ticks++;
   }
 
-  // Renders the environment on the canvas.
+  /** Renders the environment on the canvas. */
   public render(): void {
     // Clear cells that are not selected and fill others based on to_clear and to_fill lists.
     let cell = this.renderer.to_clear.dequeue();
     while (cell != null) {
       if (!cell.is_selected) this.renderer.clear_cell(cell);
-      else this.renderer.fill_cell(cell);
+      else this.renderer.render_cell(cell);
       cell = this.renderer.to_clear.dequeue();
     }
 
     cell = this.renderer.to_fill.dequeue();
     // Fill cells based on the to_fill list.
     while (cell != null) {
-      this.renderer.fill_cell(cell);
+      this.renderer.render_cell(cell);
       cell = this.renderer.to_fill.dequeue();
     }
   }

@@ -7,7 +7,12 @@ import { read_file } from "../utils/read_file";
 import { DOMElements } from "./DOMElements";
 import { render_settings } from "./Settings";
 
-// Function to export all organisms in the simulation.
+/**
+ * Exports all organisms in the simulation.
+ * @param population - The population to be exported.
+ * @param with_coordinates - Whether or not to export the coordinates of the organisms.
+ * @returns An object containing the exported population.
+ */
 export function export_population(population: Organism[], with_coordinates: boolean): object {
   // Create an array to store the exported population.
   const population_export: any = [];
@@ -30,7 +35,10 @@ export function export_population(population: Organism[], with_coordinates: bool
   return population_export;
 }
 
-// Function to register an event listener for the export population button.
+/**
+ * Registers an event listener for the export population button.
+ * @param simulation - The simulation object.
+ */
 export function export_population_button(simulation: Simulation): void {
   // Register an event listener for the export population button.
   DOMElements.export_population.addEventListener("click", () => {
@@ -48,7 +56,10 @@ export function export_population_button(simulation: Simulation): void {
   });
 }
 
-// Function to register event listeners for the export config button.
+/**
+ * Registers an event listener for the export config button.
+ * @param config - The simulation configuration.
+ */
 export function register_export_config_button(config: typeof DefaultSimulationConfig): void {
   // Register an event listener for the export config button.
   DOMElements.export_config.addEventListener("click", () => {
@@ -57,7 +68,11 @@ export function register_export_config_button(config: typeof DefaultSimulationCo
   });
 }
 
-// Function to register an event listener for the export simulation button.
+/**
+ * Registers an event listener for the export simulation button.
+ * @param simulation - The simulation object.
+ * @param config - The simulation configuration.
+ */
 export function register_export_simulation_button(simulation: Simulation, config: typeof DefaultSimulationConfig): void {
   // Register an event listener for the export simulation button.
   DOMElements.export_simulation.addEventListener("click", () => {
@@ -85,7 +100,10 @@ export function register_export_simulation_button(simulation: Simulation, config
   });
 }
 
-// Function to register an event listener for the export environment button.
+/**
+ * Registers an event listener for the export environment button.
+ * @param simulation - The simulation object.
+ */
 export function register_export_environment_button(simulation: Simulation): void {
   // Register an event listener for the export environment button.
   DOMElements.export_environment.addEventListener("click", () => {
@@ -106,7 +124,10 @@ export function register_export_environment_button(simulation: Simulation): void
   });
 }
 
-// Function to register an event listener for the import config button.
+/**
+ * Registers an event listener for the import config button.
+ * @param simulation - The simulation object.
+ */
 export function register_import_config_button(simulation: Simulation): void {
   // Register an event listener for the import config button.
   DOMElements.import_config.addEventListener("change", (event: Event) => {
@@ -129,7 +150,10 @@ export function register_import_config_button(simulation: Simulation): void {
   });
 }
 
-// Function to register an event listener for the import organisms button.
+/**
+ * Registers an event listener for the import organisms button.
+ * @param simulation - The simulation object.
+ */
 export function register_import_organisms_button(simulation: Simulation): void {
   // Register an event listener for the import organisms button.
   DOMElements.import_organisms.addEventListener("change", (event: Event) => {
@@ -160,7 +184,10 @@ export function register_import_organisms_button(simulation: Simulation): void {
   });
 }
 
-// Function to register an event listener for the import simulation button.
+/**
+ * Registers an event listener for the import simulation button.
+ * @param simulation - The simulation object.
+ */
 export function register_import_simulation_button(simulation: Simulation): void {
   // Register an event listener for the import simulation button.
   DOMElements.import_simulation.addEventListener("change", (event: Event) => {
@@ -217,7 +244,10 @@ export function register_import_simulation_button(simulation: Simulation): void 
   });
 }
 
-// Function to register an event listener for importing environment button.
+/**
+ * Registers an event listener for the import environment button.
+ * @param simulation - The simulation object.
+ */
 export function register_import_environment_button(simulation): void {
   // Event listener for import environment button.
   DOMElements.import_environment.addEventListener("change", (event: Event) => {

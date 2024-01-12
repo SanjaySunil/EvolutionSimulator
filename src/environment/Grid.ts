@@ -15,7 +15,7 @@ export const CellStates = {
 // Create an array of the keys of the CellStates.
 export const AllCellStates = Object.keys(CellStates);
 
-// GridCell class.
+/** This class is used to create a grid cell that can be used to represent a cell in the grid. */
 export class GridCell {
   public coordinate: Coordinate;
   private _owner: Organism | null;
@@ -24,7 +24,12 @@ export class GridCell {
   public is_highlighted: boolean;
   public energy: number;
 
-  // Builds a new GridCell.
+  /**
+   * Builds a new grid cell.
+   * @param x - The x-coordinate of the cell.
+   * @param y - The y-coordinate of the cell.
+   * @param state - The state of the cell.
+   */
   constructor(x: number, y: number, state = CellStates.EMPTY) {
     this.coordinate = { x, y };
     this._owner = null;
@@ -34,7 +39,7 @@ export class GridCell {
     this.energy = 0;
   }
 
-  // Clears the GridCell.
+  /** This method is used to clear the grid cell. */
   public clear(): void {
     // Reset the owner of the cell to null
     this._owner = null;
@@ -43,13 +48,19 @@ export class GridCell {
     this._state = CellStates.EMPTY;
   }
 
-  // Returns owner of GridCell.
+  /**
+   * This method is used to get the owner of the grid cell.
+   * @returns The owner of the grid cell.
+   */
   public get owner(): Organism | null {
     // Retrieve and return the owner of the GridCell
     return this._owner;
   }
 
-  // Sets owner to specified Organism, and changes state of GridCell.
+  /**
+   * This method is used to set the owner of the grid cell.
+   * @param owner - The owner of the grid cell.
+   */
   public set owner(owner: Organism | null) {
     // Check if an owner is provided
     if (owner) {
@@ -64,27 +75,37 @@ export class GridCell {
     }
   }
 
-  // Returns state of GridCell.
+  /**
+   * This method is used to get the state of the grid cell.
+   * @returns The state of the grid cell.
+   */
   public get state(): number {
     // Retrieve and return the state of the GridCell
     return this._state;
   }
 
-  // Sets the state of GridCell.
+  /**
+   * This method is used to set the state of the grid cell.
+   * @param state - The state of the grid cell.
+   */
   public set state(state: number) {
     // Set the state of the GridCell to the provided state value
     this._state = state;
   }
 }
 
-// Grid Class.
+/** This class is used to create a grid that can be used to represent the environment. */
 export class Grid {
   private _data: GridCell[][];
   public grid_size: number;
   public renderer: Renderer;
   public occupied: number;
 
-  // Builds a new Grid.
+  /**
+   * Builds a new grid.
+   * @param grid_size - The size of the grid.
+   * @param renderer - The renderer to use for rendering the grid.
+   */
   constructor(grid_size: number, renderer: Renderer) {
     this._data = new Array(grid_size);
     this.renderer = renderer;
@@ -93,7 +114,7 @@ export class Grid {
     this.init();
   }
 
-  // Initializes the grid.
+  /** This method is used to initialize the grid. */
   public init(): void {
     // Loop through each row (x-axis) of the grid
     for (let x = 0; x < this.grid_size; x++) {
@@ -114,7 +135,7 @@ export class Grid {
     }
   }
 
-  // Clears the grid.
+  /** This method is used to clear the grid. */
   public clear_grid(): void {
     // Reset the grid data to an empty array
     this._data = [];
@@ -123,13 +144,21 @@ export class Grid {
     this.init();
   }
 
-  // Checks if specified cell is valid.
+  /**
+   * This method is used to check if the specified cell is valid.
+   * @param coordinate - The coordinate to check.
+   * @returns Whether the specified cell is valid.
+   */
   public is_valid_cell_at(coordinate: Coordinate): boolean {
     // Check if the specified coordinate is within the grid boundaries
     return coordinate.x >= 0 && coordinate.y >= 0 && coordinate.x < this.grid_size && coordinate.y < this.grid_size;
   }
 
-  // Checks if specified cell is empty.
+  /**
+   * This method is used to check if the specified cell is empty.
+   * @param coordinate - The coordinate to check.
+   * @returns Whether the specified cell is empty.
+   */
   public is_cell_empty(coordinate: Coordinate): boolean {
     // Check if the provided cell coordinate is valid within the grid
     if (this.is_valid_cell_at(coordinate)) {
@@ -141,7 +170,11 @@ export class Grid {
     }
   }
 
-  // Returns cell at specified Coordinate.
+  /**
+   * This method is used to get the cell at the specified coordinate.
+   * @param coordinate - The coordinate to check.
+   * @returns The cell at the specified coordinate.
+   */
   public get_cell_at(coordinate: Coordinate): GridCell {
     // Check if the provided cell coordinate is within the grid
     if (this.is_valid_cell_at(coordinate)) {
@@ -153,7 +186,11 @@ export class Grid {
     }
   }
 
-  // Sets the owner of a cell.
+  /**
+   * Sets the owner of a cell.
+   * @param coordinate - The coordinate of the cell to set the owner of.
+   * @param owner - The owner to set.
+   */
   public set_cell_owner(coordinate: Coordinate, owner: Organism): void {
     // Check if the provided cell coordinate is within the grid
     if (this.is_valid_cell_at(coordinate)) {
@@ -171,7 +208,11 @@ export class Grid {
     }
   }
 
-  // Sets the state of a cell.
+  /**
+   * Sets the state of a cell.
+   * @param coordinate The coordinate of the cell to set the state of.
+   * @param state The state to set.
+   */
   public set_cell_state(coordinate: Coordinate, state: number): void {
     // Check if the provided cell coordinate is within the grid
     if (this.is_valid_cell_at(coordinate)) {
@@ -197,7 +238,11 @@ export class Grid {
     }
   }
 
-  // Sets the selected state of a cell.
+  /**
+   * Sets the selected state of a cell.
+   * @param coordinate - The coordinate of the cell to set the selected state of.
+   * @param selected - The selected state to set.
+   */
   public set_cell_selected(coordinate: Coordinate, selected: boolean): void {
     // Check if the provided cell coordinate is within the grid
     if (this.is_valid_cell_at(coordinate)) {
@@ -211,7 +256,12 @@ export class Grid {
       this.renderer.to_fill.enqueue(cell);
     }
   }
-  // Sets the highlighted state of a cell.
+
+  /**
+   * Sets the highlighted state of a cell.
+   * @param coordinate - The coordinate of the cell to set the highlighted state of.
+   * @param highlighted - The highlighted state to set.
+   */
   public set_cell_highlighted(coordinate: Coordinate, highlighted: boolean): void {
     // Check if the provided cell coordinate is within the grid
     if (this.is_valid_cell_at(coordinate)) {
@@ -226,7 +276,10 @@ export class Grid {
     }
   }
 
-  // Clears the state of a cell.
+  /**
+   * Clears the state of a cell.
+   * @param coordinate - The coordinate of the cell to clear the state of.
+   */
   public clear_cell_state(coordinate: Coordinate): void {
     // Check if the provided cell coordinate is within the grid
     if (this.is_valid_cell_at(coordinate)) {
@@ -253,7 +306,10 @@ export class Grid {
     }
   }
 
-  // Fetches a random empty cell from the grid.
+  /**
+   * This method is used to fetch a random empty cell from the grid.
+   * @returns A random empty cell from the grid.
+   */
   public fetch_empty_cell(): Coordinate {
     // Check if the grid is fully occupied, throw an error if no empty cells are available
     if (this.occupied === this.grid_size ** 2) {

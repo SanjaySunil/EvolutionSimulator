@@ -19,7 +19,7 @@ const ModesEnum = {
   REMOVE: 5,
 };
 
-// Controller used to manage canvas events.
+/** Class to handle canvas-related events. */
 export default class Canvas {
   public canvas: HTMLCanvasElement;
   public ctx: CanvasRenderingContext2D;
@@ -64,7 +64,9 @@ export default class Canvas {
     this.renderer.clear_canvas();
   }
 
-  // Function to register mouse events.
+  /**
+   * Registers mouse events on the canvas.
+   */
   public register_mouse_events(): void {
     // Register mouse events on the canvas.
     this.canvas.addEventListener("mousemove", (e) => this.mouse_move(e));
@@ -75,7 +77,9 @@ export default class Canvas {
     this.canvas.addEventListener("wheel", (e) => this.wheel(e));
   }
 
-  // Register keyboard events
+  /**
+   * Registers keyboard events on the window.
+   */
   public register_keyboard_events(): void {
     // Register keyboard events on the window
     window.addEventListener("keydown", (e) => {
@@ -83,6 +87,10 @@ export default class Canvas {
     });
   }
 
+  /**
+   * Handles mouse move event.
+   * @param event - The mouse move event.
+   */
   public mouse_move(event: MouseEvent): void {
     // Handle mouse move event
     this.mouse.mouse_move(event);
@@ -90,29 +98,47 @@ export default class Canvas {
     this.check_mouse_events();
   }
 
+  /**
+   * Handles mouse up event.
+   * @param event - The mouse up event.
+   */
   public mouse_up(event: MouseEvent): void {
     // Handle mouse up event
     this.mouse.mouse_up(event);
   }
 
+  /**
+   * Handles mouse down event.
+   * @param event - The mouse down event.
+   */
   public mouse_down(event: MouseEvent): void {
-    // Handle mouse down event
     this.mouse.mouse_down(event);
     this.check_mouse_events();
   }
 
+  /**
+   * Handles mouse enter event.
+   * @param event - The mouse enter event.
+   */
   public mouse_enter(event: MouseEvent): void {
     // Handle mouse enter event
     this.mouse.mouse_enter(event);
     this.handle_mouse_move();
   }
 
+  /**
+   * Handles mouse leave event.
+   * @param event - The mouse leave event.
+   */
   public mouse_leave(): void {
-    // Handle mouse leave event
     this.mouse.mouse_leave();
     this.handle_mouse_leave();
   }
 
+  /**
+   * Handles mouse wheel event.
+   * @param event - The mouse wheel event.
+   */
   public wheel(event: WheelEvent): void {
     // Handle mouse wheel event
     this.handle_mouse_wheel(event);
@@ -177,7 +203,10 @@ export default class Canvas {
     }
   }
 
-  // Handles keyboard key press events
+  /**
+   * Handles keyboard key down events.
+   * @param event - The keyboard event.
+   */
   public handle_key_down(event: KeyboardEvent): void {
     // Obtain canvas top and left style values
     const canvas_top = parseInt(get_style("canvas", "top"));

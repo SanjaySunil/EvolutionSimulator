@@ -3,7 +3,12 @@ import Simulation from "../controllers/simulation.controller";
 import { Grid } from "../environment/Grid";
 import { DOMElements } from "./DOMElements";
 
-// Function to check for changes in the config object
+/**
+ * Checks for changes in the config object and applies them to the simulation.
+ * @param simulation - The simulation object.
+ * @param config - The config object.
+ * @param key - The key in the config object that was changed.
+ */
 function check_config_changes(simulation, config, key): void {
   // Check if the key in the config object is "GRID_SIZE"
   if (key === "GRID_SIZE") {
@@ -34,13 +39,21 @@ function check_config_changes(simulation, config, key): void {
   }
 }
 
-// Function to render frames per second (FPS) element on the HTML page
+/**
+ * Renders the FPS element on the HTML page.
+ * @param element - The HTML element to render the FPS element in.
+ * @param fps - The FPS value to display.
+ */
 export function render_fps_element(element: HTMLElement, fps: number): void {
   // Set the inner HTML of the specified HTML element to display the rounded FPS value as a string
   element.innerHTML = Math.round(fps).toString();
 }
 
-// Function to render the settings based on the provided config object
+/**
+ * Renders the settings element on the HTML page.
+ * @param simulation - The simulation object.
+ * @param config - The config object.
+ */
 export function render_settings(simulation: Simulation, config: object): void {
   // Function to handle changes in the input
   function handle_change(e: Event): void {

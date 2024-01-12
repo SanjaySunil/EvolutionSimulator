@@ -3,7 +3,7 @@ import { CellStates, GridCell } from "../environment/Grid";
 import Queue from "../structures/Queue";
 import { to_angle } from "../utils/geometry";
 
-// Class to handle rendering of the simulation.
+/** This class is used to create a renderer that can be used to render the simulation. */
 export default class Renderer {
   public canvas;
   public ctx;
@@ -19,8 +19,16 @@ export default class Renderer {
     this.to_clear = new Queue();
   }
 
-  // Renders a specific cell in the grid.
-  private draw(cell: GridCell, x: number, y: number, width: number, height: number, colour: string): void {
+  /**
+   * Draws a rectangle on the canvas.
+   * @param cell - The cell to render.
+   * @param x - The x-coordinate to start drawing from.
+   * @param y - The y-coordinate to start drawing from.
+   * @param width - The width the component to draw.
+   * @param height - The height of the component to draw.
+   * @param colour - The colour of the component to draw.
+   */
+  private draw_rect(cell: GridCell, x: number, y: number, width: number, height: number, colour: string): void {
     // Set the fill style to the specified colour.
     this.ctx.fillStyle = colour;
 
@@ -28,8 +36,12 @@ export default class Renderer {
     this.ctx.fillRect(cell.coordinate.x * 15 + x, cell.coordinate.y * 15 + y, width, height);
   }
 
-  // Renders an organism with rotation degrees specified.
-  public render_organism_cell(cell, rotationDegrees): void {
+  /**
+   * Renders an organism with rotation degrees specified.
+   * @param cell - The cell to render.
+   * @param degrees_to_rotate - The rotation degrees of the organism.
+   */
+  public render_organism_cell(cell, degrees_to_rotate): void {
     const cell_x = cell.coordinate.x * this.pixel_size;
     const cell_y = cell.coordinate.y * this.pixel_size;
 
@@ -38,7 +50,7 @@ export default class Renderer {
     // Translate to the center of the cell.
     this.ctx.translate(cell_x + this.pixel_size / 2, cell_y + this.pixel_size / 2);
     // Rotate the entire cell by rotationDegrees.
-    this.ctx.rotate((rotationDegrees * Math.PI) / 180);
+    this.ctx.rotate((degrees_to_rotate * Math.PI) / 180);
     // Draw a rectangle centered at (0, 0) to represent the organism.
 
     this.ctx.fillRect(-this.pixel_size / 2, -this.pixel_size / 2, this.pixel_size, this.pixel_size); // Draw a rectangle centered at (0, 0)
@@ -82,7 +94,14 @@ export default class Renderer {
     this.ctx.restore();
   }
 
-  // Function to draw a sub-shape within a grid cell
+  /**
+   * Draws a sub-shape within a grid cell.
+   * @param x - The x-coordinate of the sub-shape.
+   * @param y - The y-coordinate of the sub-shape.
+   * @param width - The width of the sub-shape.
+   * @param height - The height of the sub-shape.
+   * @param colour - The colour of the sub-shape.
+   */
   public draw_sub_shape(x, y, width, height, colour): void {
     // Set the fill colour for the sub-shape
     this.ctx.fillStyle = colour;
@@ -90,48 +109,34 @@ export default class Renderer {
     this.ctx.fillRect(x - this.pixel_size / 2, y - this.pixel_size / 2, width, height);
   }
 
-  // Renders a food cell.
+  /**
+   * Renders a food cell.
+   * @param cell - The cell to render.
+   */
   public render_food_cell(cell: GridCell): void {
     const transparent = "#282a36";
     const food = "#44475a";
 
     // Render the food cell with specific shapes and colours at various positions within the cell
-    this.draw(cell, 0, 0, 15, 15, transparent);
-    this.draw(cell, 6, 3, 3, 9, food);
-    this.draw(cell, 4, 4, 2, 7, food);
-    this.draw(cell, 9, 4, 2, 7, food);
-    this.draw(cell, 3, 6, 1, 3, food);
-    this.draw(cell, 11, 6, 1, 3, food);
+    this.draw_rect(cell, 0, 0, 15, 15, transparent);
+    this.draw_rect(cell, 6, 3, 3, 9, food);
+    this.draw_rect(cell, 4, 4, 2, 7, food);
+    this.draw_rect(cell, 9, 4, 2, 7, food);
+    this.draw_rect(cell, 3, 6, 1, 3, food);
+    this.draw_rect(cell, 11, 6, 1, 3, food);
   }
 
-  // Renders a radioactive cell.
-  public render_radioactive_cell(cell: GridCell): void {
-    // Render the radioactive cell with a specific colour defined in the ThemeConfig
-    this.draw(cell, 0, 0, 15, 15, ThemeConfig.RADIOACTIVE);
-  }
-
-  // Define a method named 'render_wall_cell' that takes a 'cell' parameter of type 'GridCell'
-  public render_wall_cell(cell: GridCell): void {
-    // Call the 'draw' method with the provided parameters to render a wall cell
-    this.draw(cell, 0, 0, 15, 15, ThemeConfig.WALL);
-  }
-
-  // Define a method named 'render_empty_cell' that takes a 'cell' parameter of type 'GridCell'
-  public render_empty_cell(cell: GridCell): void {
-    // Call the 'draw' method with the provided parameters to render an empty cell
-    this.draw(cell, 0, 0, 15, 15, ThemeConfig.EMPTY);
-  }
-
-  // Define a method named 'fill_cell' that takes a 'cell' parameter of type 'GridCell'
-  public fill_cell(cell: GridCell): void {
+  /**
+   * Renders a cell.
+   * @param cell - The cell to render.
+   */
+  public render_cell(cell: GridCell): void {
     // Check if the cell is highlighted and, if so, call the 'highlight_cell' method and return
-    if (cell.is_highlighted) return this.highlight_cell(cell);
-
+    if (cell.is_highlighted) this.draw_cell(cell, ThemeConfig.HIGHLIGHTED);
     // Check if the cell is selected and, if so, call the 'select_cell' method and return
-    if (cell.is_selected) return this.select_cell(cell);
-
+    else if (cell.is_selected) this.draw_cell(cell, ThemeConfig.SELECTED);
     // Check if the cell contains an organism
-    if (cell.state == CellStates.ORGANISM) {
+    else if (cell.state == CellStates.ORGANISM) {
       // Check if the organism's owner is alive before rendering the organism cell
       if (cell.owner && cell.owner.alive) {
         // Calculate the rotation angle based on the owner's direction
@@ -148,48 +153,44 @@ export default class Renderer {
       }
     } else if (cell.state == CellStates.EMPTY) {
       // Render an empty cell if the cell state is 'EMPTY'
-      this.render_empty_cell(cell);
+      this.draw_cell(cell, ThemeConfig.EMPTY);
     } else if (cell.state == CellStates.FOOD) {
       // Render a food cell if the cell state is 'FOOD'
       this.render_food_cell(cell);
     } else if (cell.state == CellStates.RADIOACTIVE) {
       // Render a radioactive cell if the cell state is 'RADIOACTIVE'
-      this.render_radioactive_cell(cell);
+      this.draw_cell(cell, ThemeConfig.RADIOACTIVE);
     } else if (cell.state == CellStates.WALL) {
       // Render a wall cell if the cell state is 'WALL'
-      this.render_wall_cell(cell);
+      this.draw_cell(cell, ThemeConfig.WALL);
     }
   }
 
-  // Define a method named 'highlight_cell' that takes a 'cell' parameter of type 'GridCell'
-  public highlight_cell(cell: GridCell): void {
+  /**
+   * Draws a cell on the canvas.
+   * @param cell - The cell to render.
+   * @param colour - The colour to render the cell with.
+   */
+  public draw_cell(cell: GridCell, colour): void {
     // Set the fill style to a yellow colour
-    this.ctx.fillStyle = "#f1fa8c";
+    this.ctx.fillStyle = colour;
     // Fill the cell with the specified colour at the cell's coordinates using the pixel size
     this.ctx.fillRect(cell.coordinate.x * this.pixel_size, cell.coordinate.y * this.pixel_size, this.pixel_size, this.pixel_size);
   }
 
-  // Define a method named 'select_cell' that takes a 'cell' parameter of type 'GridCell'
-  public select_cell(cell: GridCell): void {
-    // Set the fill style to white
-    this.ctx.fillStyle = "white";
-    // Fill the cell with the specified colour at the cell's coordinates using the pixel size
-    this.ctx.fillRect(cell.coordinate.x * this.pixel_size, cell.coordinate.y * this.pixel_size, this.pixel_size, this.pixel_size);
-  }
-
-  // Define a method named 'clear_cell' that takes a 'cell' parameter of type 'GridCell'
-  public clear_cell(cell: GridCell): void {
-    // Set the fill style to a dark colour
-    this.ctx.fillStyle = "#282a36";
-    // Fill the cell with the specified colour at the cell's coordinates using the pixel size
-    this.ctx.fillRect(cell.coordinate.x * this.pixel_size, cell.coordinate.y * this.pixel_size, this.pixel_size, this.pixel_size);
-  }
-
-  // Define a method named 'clear_canvas'
+  /** Clears the canvas. */
   public clear_canvas(): void {
     // Set the fill style to a dark colour
     this.ctx.fillStyle = "#282a36";
     // Fill the entire canvas with the specified colour
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  /**
+   * Clears a cell on the canvas.
+   * @param cell - The cell to clear.
+   */
+  public clear_cell(cell: GridCell): void {
+    this.draw_cell(cell, ThemeConfig.EMPTY);
   }
 }

@@ -1,8 +1,12 @@
 import { Coordinate } from "../types/Coordinate";
 import { make_vector, rotate_point } from "../utils/geometry";
 
+/**
+ * This class is a collection of static vectors representing different directions. It also
+ * contains methods to calculate the forward, backward, left and right directions based on
+ * the given angle.
+ */
 export default class Directions {
-  // Define static vectors representing different directions
   // No movement vector
   public static IDLE = make_vector(0, 0);
   // Vector pointing north
@@ -22,32 +26,48 @@ export default class Directions {
   // Vector pointing southwest
   public static SOUTH_WEST = make_vector(-1, -1);
 
-  // Calculate the forward direction based on the given angle
+  /**
+   * Calculates the forward direction based on the given angle.
+   * @param angle - The angle to calculate the forward direction from .
+   * @returns The forward direction based on the given angle.
+   */
   public static forward(angle): Coordinate {
     // Rotate North vector by the given angle
     return rotate_point(this.NORTH, make_vector(0, 0), angle);
   }
 
-  // Calculate the backward direction based on the given angle
+  /**
+   * Calculates the backward direction based on the given angle.
+   * @param angle - The angle to calculate the backward direction from.
+   * @returns The backward direction based on the given angle.
+   */
   public static backward(angle): Coordinate {
     // Rotate South vector by the given angle
     return rotate_point(this.SOUTH, make_vector(0, 0), angle);
   }
 
-  // Calculate the left direction based on the given angle
+  /**
+   * Calculates the left direction based on the given angle.
+   * @param angle - The angle to calculate the left direction from.
+   * @returns The left direction based on the given angle.
+   */
   public static left(angle): Coordinate {
     // Rotate Left vector by 90 degrees from North
     return rotate_point(this.NORTH, make_vector(0, 0), angle - Math.PI / 2);
   }
 
-  // Calculate the right direction based on the given angle
+  /**
+   * Calculates the right direction based on the given angle.
+   * @param angle - The angle to calculate the right direction from.
+   * @returns The right direction based on the given angle.
+   */
   public static right(angle): Coordinate {
     // Rotate Right vector by 90 degrees from North
     return rotate_point(this.NORTH, make_vector(0, 0), angle + Math.PI / 2);
   }
 }
 
-// Define angles for each cardinal direction
+/** Constant angles for each cardinal direction. */
 export const Angles = {
   // Angle for facing North
   NORTH: 0,

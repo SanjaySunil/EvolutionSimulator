@@ -3,7 +3,7 @@ import { DefaultSimulationConfig } from "../config/simulation.config";
 import { Environment } from "../environment";
 import { DOMElements } from "../components/DOMElements";
 
-// Define the Simulation class
+/** This class is used to create a simulation that can be used to simulate the environment. */
 export default class Simulation {
   // Define properties for update loop
   public current_update_fps: number;
@@ -63,7 +63,10 @@ export default class Simulation {
     render_fps_element(DOMElements.target_render_fps, this.config.TARGET_RENDER_FPS);
   }
 
-  // Runs prechecks to validate the configuration before execution.
+  /**
+   * Runs prechecks to validate the configuration before execution.
+   * @returns A boolean value indicating whether the prechecks have passed.
+   */
   public run_prechecks(): boolean {
     // Check if the population size exceeds the maximum allowed grid size
     if (this.config.POPULATION > this.config.GRID_SIZE ** 2) {
@@ -94,7 +97,9 @@ export default class Simulation {
     return true;
   }
 
-  // Method to initialize the simulation
+  /**
+   * Initializes the simulation.
+   */
   public init(): void {
     // Initialize the environment
     this.environment.init();
@@ -102,7 +107,7 @@ export default class Simulation {
     this.started_simulation = true;
   }
 
-  // Setup the render loop
+  /** Sets up the render loop. */
   public setup_render_loop(): void {
     // Check if rendering is enabled
     if (this.rendering_enabled) {
@@ -113,7 +118,10 @@ export default class Simulation {
     }
   }
 
-  // Function to start the simulation engine.
+  /**
+   * Starts the simulation engine.
+   * @returns A boolean value indicating whether the simulation engine has started.
+   */
   public start_engine(): boolean {
     // Run prechecks to validate the configuration before execution.
     if (!this.run_prechecks()) return false;
@@ -158,7 +166,7 @@ export default class Simulation {
     return true;
   }
 
-  // Method to stop the simulation engine.
+  /** Stops the simulation engine. */
   public stop_engine(): void {
     if (this.is_running) {
       this.is_running = false;
@@ -168,13 +176,13 @@ export default class Simulation {
     }
   }
 
-  // Method or restart the simulation engine.
+  /** Restarts the simulation engine. */
   public restart_engine(): void {
     this.stop_engine();
     this.start_engine();
   }
 
-  // Method to update the simulation.
+  /** Updates the simulation. */
   public update_simulation(): void {
     // Calculate the time since the last update by subtracting the current time from the last update time.
     this.last_update_dt = window.performance.now() - this.last_update_time;
@@ -195,7 +203,7 @@ export default class Simulation {
     }
   }
 
-  // Method to render the simulation.
+  /** Renders the simulation. */
   public render_simulation(): void {
     // Check if the render loop is running.
     if (this.render_loop) {

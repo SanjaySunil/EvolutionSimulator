@@ -1,7 +1,7 @@
 import { Coordinate } from "../types/Coordinate";
 import { make_vector } from "../utils/geometry";
 
-// This controller is used to manage mouse events.
+/** This class is used to create a mouse controller that can be used to manage mouse events. */
 export default class Mouse {
   public grid_size: number;
   public middle_click: boolean;
@@ -25,7 +25,10 @@ export default class Mouse {
     this.pixel_size = pixel_size;
   }
 
-  // This method is triggered when the mouse moves in the canvas.
+  /**
+   * This method is triggered when the mouse moves in the canvas.
+   * @param event - The mouse move event.
+   */
   public mouse_move(event: MouseEvent): void {
     event.preventDefault();
 
@@ -48,7 +51,10 @@ export default class Mouse {
     if (this.grid_coord.y <= 0) this.grid_coord.y = 0;
   }
 
-  // This method is triggered when the mouse click is released.
+  /**
+   * This method is triggered when the mouse click is released.
+   * @param event - The mouse up event.
+   */
   public mouse_up(event: MouseEvent): void {
     event.preventDefault();
 
@@ -58,7 +64,10 @@ export default class Mouse {
     if (event.button === 2) this.right_click = false; // Right mouse button released
   }
 
-  // This method is triggered when the mouse is clicked.
+  /**
+   * This method is triggered when the mouse is clicked.
+   * @param event - The mouse down event.
+   */
   public mouse_down(event: MouseEvent): void {
     event.preventDefault();
 
@@ -72,7 +81,10 @@ export default class Mouse {
     this.clicked_coord.y = this.canvas_coord.y;
   }
 
-  // This method is triggered when the mouse enters the canvas.
+  /**
+   * This method is triggered when the mouse enters the canvas.
+   * @param event - The mouse enter event.
+   */
   public mouse_enter(event: MouseEvent): void {
     // Identify and set flags for different mouse buttons upon entering the canvas.
     this.left_click = !!(event.buttons & 1); // Left mouse button clicked
@@ -84,11 +96,13 @@ export default class Mouse {
     this.clicked_coord.y = this.canvas_coord.y;
   }
 
-  // This method is triggered when the mouse leaves the canvas.
+  /** This method is triggered when the mouse leaves the canvas. */
   public mouse_leave(): void {
-    // Reset flags for different mouse buttons when the mouse leaves the canvas.
-    this.left_click = false; // Left mouse button released
-    this.middle_click = false; // Middle mouse button released
-    this.right_click = false; // Right mouse button released
+    // Left mouse button released
+    this.left_click = false;
+    // Middle mouse button released
+    this.middle_click = false;
+    // Right mouse button released
+    this.right_click = false;
   }
 }

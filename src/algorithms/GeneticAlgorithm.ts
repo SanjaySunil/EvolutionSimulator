@@ -3,7 +3,12 @@ import Gene from "../models/Gene";
 import Organism from "../models/Organism";
 import { euclidean_distance } from "../utils/geometry";
 
-// Merges two sorted arrays of organisms into a single sorted array.
+/**
+ * Merges two sorted arrays of organisms into a single sorted array.
+ * @param left - the left array of organisms.
+ * @param right - the right array of organisms.
+ * @returns A single sorted array of organisms.
+ */
 export function merge(left: Organism[], right: Organism[]): Organism[] {
   const result: Organism[] = [];
   let left_index = 0;
@@ -24,7 +29,11 @@ export function merge(left: Organism[], right: Organism[]): Organism[] {
   return result.concat(left.slice(left_index)).concat(right.slice(right_index));
 }
 
-// Performs merge sort on an array of organisms.
+/**
+ * Performs merge sort on an array of organisms.
+ * @param arr - The array of organisms to be sorted.
+ * @returns A sorted array of organisms.
+ */
 export function merge_sort(arr: Organism[]): Organism[] {
   if (arr.length <= 1) return arr;
 
@@ -39,7 +48,13 @@ export function merge_sort(arr: Organism[]): Organism[] {
   return merge(left, right);
 }
 
-// Function to sort the population of organisms based on their fitness and calculate their fitness values.
+/**
+ * Sorts an array of organisms based on their fitness and calculates their fitness values.
+ * @param population - The array of organisms to be sorted.
+ * @param goal - The goal of the simulation.
+ * @param params - Parameters containing goal coordinates and maximum distances to goal for fitness calculation.
+ * @returns A sorted array of organisms.
+ */
 export function calculate_and_sort_fitness(population: Organism[], goal: string, params?: any): Organism[] {
   // Calculate fitness values for organisms based on the specified goal.
   if (goal === "food") {

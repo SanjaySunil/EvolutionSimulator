@@ -7,6 +7,8 @@ const ThemeConfig: Types = {
   WALL: "#44475a",
   FOOD: "#44475a",
   RADIOACTIVE: "#ff5555",
+  HIGHLIGHTED: "#f1fa8c",
+  SELECTED: "#ffffff",
 };
 
 export default ThemeConfig;
