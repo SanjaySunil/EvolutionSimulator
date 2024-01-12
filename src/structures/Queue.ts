@@ -1,4 +1,4 @@
-// Queue node class.
+/** Represents a node in a queue. */
 class QueueNode {
   public value: any;
   public next: QueueNode | null;
@@ -11,7 +11,7 @@ class QueueNode {
   }
 }
 
-// Queue class.
+/** Class for creating a queue. */
 export default class Queue {
   public front: QueueNode | null;
   public rear: QueueNode | null;
@@ -22,6 +22,10 @@ export default class Queue {
     // Set the rear node to null.
     this.rear = null;
   }
+  /**
+   * Adds a value to the queue.
+   * @param value - The value to enqueue.
+   */
   public enqueue(value: any): void {
     const node = new QueueNode(value);
 
@@ -33,6 +37,10 @@ export default class Queue {
       this.rear = node;
     }
   }
+  /**
+   * Removes a value from the queue.
+   * @returns The value at the front of the queue.
+   */
   public dequeue(): any {
     if (this.front === null) {
       this.rear = null;
