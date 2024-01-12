@@ -2,6 +2,7 @@
 class QueueNode {
   public value: any;
   public next: QueueNode | null;
+
   // Builds a new QueueNode instance.
   constructor(value) {
     // Assign the provided value to the node.
@@ -15,6 +16,7 @@ class QueueNode {
 export default class Queue {
   public front: QueueNode | null;
   public rear: QueueNode | null;
+
   // Builds a new Queue instance.
   constructor() {
     // Set the front and rear nodes to null.
@@ -22,6 +24,7 @@ export default class Queue {
     // Set the rear node to null.
     this.rear = null;
   }
+
   /**
    * Adds a value to the queue.
    * @param value - The value to enqueue.
@@ -37,6 +40,7 @@ export default class Queue {
       this.rear = node;
     }
   }
+
   /**
    * Removes a value from the queue.
    * @returns The value at the front of the queue.
