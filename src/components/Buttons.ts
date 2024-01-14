@@ -64,10 +64,12 @@ export function register_sim_restart_button(): void {
 export function register_sim_start_stop_button(simulation: Simulation): void {
   // When the button is clicked, the simulation is either started or stopped.
   DOMElements.sim_start_stop.addEventListener("click", () => {
+    // If the simulation is running, stop the engine and update the button text.
     if (simulation.is_running) {
       simulation.stop_engine();
       DOMElements.sim_start_stop.innerHTML = "START";
     } else {
+      // If the simulation is not running, start the engine and update the button text.
       const engine_started = simulation.start_engine();
       if (engine_started) {
         DOMElements.sim_start_stop.innerHTML = "STOP";
