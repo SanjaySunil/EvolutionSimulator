@@ -36,6 +36,30 @@ export function export_population(population: Organism[], with_coordinates: bool
 }
 
 /**
+ * Exports the environment.
+ * @param grid - The grid to export.
+ * @returns - An array containing the obstacles in the grid.
+ */
+export function export_environment(grid: Grid): number[][] {
+  // Create an array to store the obstacles.
+  const obstacles: number[][] = [];
+
+  // Iterate over all cells in the grid.
+  for (let i = 0; i < grid.grid_size; i++) {
+    for (let j = 0; j < grid.grid_size; j++) {
+      // Get the state of the cell.
+      const state = grid.get_cell_at({ x: i, y: j }).state;
+      // If the cell is a wall or radioactive, push the cell to the obstacles array.
+      if (state == CellStates.WALL || state == CellStates.RADIOACTIVE) {
+        obstacles.push([i, j, state]);
+      }
+    }
+  }
+
+  return obstacles;
+}
+
+/**
  * Registers an event listener for the export population button.
  * @param simulation - The simulation object.
  */
@@ -77,10 +101,10 @@ export function register_export_simulation_button(simulation: Simulation, config
   // Register an event listener for the export simulation button.
   DOMElements.export_simulation.addEventListener("click", () => {
     // Create an object to store the export.
-    const export_object: any = {};
+    const simulation_export: any = {};
 
     // Assign the simulation config to the export object.
-    export_object["simulation_config"] = config;
+    simulation_export["simulation_config"] = config;
 
     // Get the population from the simulation.
     const population = simulation.environment.population;
@@ -88,16 +112,20 @@ export function register_export_simulation_button(simulation: Simulation, config
     // If the population exists, export it.
     if (population) {
       const exported_population = export_population(population, true);
-      export_object.population = exported_population;
+      simulation_export.population = exported_population;
     }
 
+    // Exports the environment.
+    const obstacles = export_environment(simulation.environment.grid);
+
     // Push the generation, ticks and file type to the export object.
-    export_object["generation"] = simulation.environment.generation;
-    export_object["ticks"] = simulation.environment.ticks;
-    export_object["file_type"] = "simulation_export";
+    simulation_export["generation"] = simulation.environment.generation;
+    simulation_export["ticks"] = simulation.environment.ticks;
+    simulation_export["file_type"] = "simulation_export";
+    simulation_export["obstacles"] = obstacles;
 
     // Export the simulation.
-    export_object(export_object, "simulation");
+    export_object(simulation_export, "simulation");
   });
 }
 
@@ -108,19 +136,8 @@ export function register_export_simulation_button(simulation: Simulation, config
 export function register_export_environment_button(simulation: Simulation): void {
   // Register an event listener for the export environment button.
   DOMElements.export_environment.addEventListener("click", () => {
-    // Create an array to store the obstacles.
-    const obstacles: number[][] = [];
-    // Iterate over all cells in the grid.
-    for (let i = 0; i < simulation.environment.grid_size; i++) {
-      for (let j = 0; j < simulation.environment.grid_size; j++) {
-        // Get the state of the cell.
-        const state = simulation.environment.grid.get_cell_at({ x: i, y: j }).state;
-        // If the cell is a wall or radioactive, push the cell to the obstacles array.
-        if (state == CellStates.WALL || state == CellStates.RADIOACTIVE) {
-          obstacles.push([i, j, state]);
-        }
-      }
-    }
+    // Exports the environment.
+    const obstacles = export_environment(simulation.environment.grid);
 
     // Export the obstacles.
     export_object({ file_type: "obstacles", obstacles: obstacles }, "obstacles");
@@ -205,6 +222,13 @@ export function register_import_simulation_button(simulation: Simulation): void 
         } else {
           // Alert if simulation config is missing.
           alert("Failed to read simulation config from file.");
+        }
+
+        // If obstacles data exists, add obstacles to the simulation.
+        if (data.obstacles) {
+          for (const obstacle of data.obstacles) {
+            simulation.environment.grid.set_cell_state({ x: obstacle[0], y: obstacle[1] }, obstacle[2]);
+          }
         }
 
         // If population data exists, add organisms to the simulation.
