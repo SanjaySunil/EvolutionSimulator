@@ -127,7 +127,6 @@ export default class Simulation {
     if (!this.run_prechecks()) return false;
     // Check if simulation has been started before.
     if (!this.has_started) this.init();
-
     // Check if render loop is running and stop it if it is.
     if (this.render_loop != undefined) {
       clearInterval(this.render_loop);
@@ -138,7 +137,6 @@ export default class Simulation {
     if (!this.is_running) {
       // Set the is_running flag to true.
       this.is_running = true;
-
       // Start the update loop
       this.update_loop = setInterval(() => {
         // Update the simulation
