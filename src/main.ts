@@ -28,12 +28,16 @@ const config = ConfigController.get_instance();
 config.config = DefaultSimulationConfig;
 const simulation = new Simulation(config.config);
 
-// Render settings and register event listeners for buttons.
+// Render settings
 render_settings(simulation, config.config);
+
+// Register event listeners for the four main buttons.
 register_show_controls();
 register_rendering_enabled_button(simulation);
 register_sim_restart_button();
 register_sim_start_stop_button(simulation);
+
+// Other buttons in the control menu.
 register_download_neuralnet_button();
 register_fps_slider(simulation, config.config);
 register_switch_chart(simulation);
