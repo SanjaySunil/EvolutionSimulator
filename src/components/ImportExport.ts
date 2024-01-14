@@ -77,9 +77,10 @@ export function register_export_simulation_button(simulation: Simulation, config
   // Register an event listener for the export simulation button.
   DOMElements.export_simulation.addEventListener("click", () => {
     // Create an object to store the export.
-    const export_object: any = { simulation_config: [] };
-    // Push the simulation config to the export object.
-    export_object.simulation_config.push(config);
+    const export_object: any = {};
+
+    // Assign the simulation config to the export object.
+    export_object["simulation_config"] = config;
 
     // Get the population from the simulation.
     const population = simulation.environment.population;
@@ -199,7 +200,7 @@ export function register_import_simulation_button(simulation: Simulation): void 
       if (data && data.file_type == "simulation_export") {
         // If simulation config exists, update the simulation config and render settings.
         if (data.simulation_config) {
-          simulation.config = data.simulation_config[0];
+          simulation.config = data.simulation_config;
           render_settings(simulation, simulation.config);
         } else {
           // Alert if simulation config is missing.
