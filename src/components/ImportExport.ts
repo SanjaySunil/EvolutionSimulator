@@ -199,7 +199,10 @@ export function register_import_simulation_button(simulation: Simulation): void 
         if (data.simulation_config) {
           simulation.config = data.simulation_config[0];
           render_settings(simulation, simulation.config);
-        } else alert("Failed to read simulation config from file."); // Alert if simulation config is missing.
+        } else {
+          // Alert if simulation config is missing.
+          alert("Failed to read simulation config from file.");
+        }
 
         // If population data exists, add organisms to the simulation.
         if (data.population) {
