@@ -2,10 +2,10 @@ import { Coordinate } from "../types/Coordinate";
 import { make_vector } from "../utils/geometry";
 
 // Define the different modes for mouse interaction.
-export const MouseModes = ["IDLE", "PAN", "GOAL", "WALL", "RADIOACTIVE", "REMOVE"];
+export const MouseModeSymbols = ["IDLE", "PAN", "GOAL", "WALL", "RADIOACTIVE", "REMOVE"];
 
 // ModesEnum is used to access the different modes by index.
-export const MouseModesEnum = {
+export const MouseModes = {
   IDLE: 0,
   PAN: 1,
   GOAL: 2,
@@ -37,7 +37,7 @@ export class Mouse {
     this.left_click = false;
     this.right_click = false;
     this.pixel_size = pixel_size;
-    this.mode = MouseModesEnum.IDLE;
+    this.mode = MouseModes.IDLE;
   }
 
   /**

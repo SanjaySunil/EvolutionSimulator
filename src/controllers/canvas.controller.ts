@@ -5,7 +5,7 @@ import { CellStates, Grid } from "../environment/Grid";
 import { Coordinate } from "../types/Coordinate";
 import { max_distance_to_point } from "../utils/get_max_distance";
 import get_style from "../utils/get_style";
-import { Mouse, MouseModes, MouseModesEnum } from "./mouse.controller";
+import { Mouse, MouseModeSymbols, MouseModes } from "./mouse.controller";
 import Renderer from "./renderer.controller";
 
 /** Class to handle canvas-related events. */
@@ -135,7 +135,7 @@ export default class Canvas {
       const cell = this.grid.get_cell_at(this.mouse.grid_coord);
 
       // If the current mode is goal, check if the cell is selected, and add or remove it from the goal coordinates.
-      if (this.mouse.mode == MouseModesEnum.GOAL) {
+      if (this.mouse.mode == MouseModes.GOAL) {
         if (cell.is_selected) {
           // Remove selected goal coordinate and its max distance
           this.goal_coordinates.splice(this.goal_coordinates.indexOf(cell.coordinate), 1);
@@ -147,7 +147,7 @@ export default class Canvas {
           this.max_distances_to_goal.push(max_distance_to_point(this.config.GRID_SIZE, cell.coordinate.x, cell.coordinate.y));
           this.grid.set_cell_selected(cell.coordinate, true);
         }
-      } else if (this.mouse.mode == MouseModesEnum.IDLE) {
+      } else if (this.mouse.mode == MouseModes.IDLE) {
         // If the current mode is idle, check if the cell is an organism, and create its neural network diagram.
         if (cell.state == CellStates.ORGANISM && cell.owner?.brain.connections) {
           // Display selected organism's neural network diagram
@@ -160,24 +160,24 @@ export default class Canvas {
           DOMElements.organism_selected.innerHTML = "";
           DOMElements.organism_selected_table.style.display = "none";
         }
-      } else if (this.mouse.mode == MouseModesEnum.PAN) {
+      } else if (this.mouse.mode == MouseModes.PAN) {
         // If the current mode is pan, move the canvas based on the mouse movement.
         const canvas_top = parseInt(get_style("canvas", "top"));
         const canvas_left = parseInt(get_style("canvas", "left"));
         // Add the difference between the current mouse position and the clicked mouse position to the canvas position.
         this.canvas.style.top = canvas_top + (this.mouse.canvas_coord.y - this.mouse.clicked_coord.y) * this.zoom_level + "px";
         this.canvas.style.left = canvas_left + (this.mouse.canvas_coord.x - this.mouse.clicked_coord.x) * this.zoom_level + "px";
-      } else if (this.mouse.mode == MouseModesEnum.WALL) {
+      } else if (this.mouse.mode == MouseModes.WALL) {
         // If the current mode is wall and there is no owner in the selected cell, set the cell state to wall.
         if (!cell.owner) {
           this.grid.set_cell_state(this.mouse.grid_coord, CellStates.WALL);
         }
-      } else if (this.mouse.mode == MouseModesEnum.RADIOACTIVE) {
+      } else if (this.mouse.mode == MouseModes.RADIOACTIVE) {
         // If the current mode is radioactive and there is no owner in the selected cell, set the cell state to radioactive.
         if (!cell.owner) {
           this.grid.set_cell_state(this.mouse.grid_coord, CellStates.RADIOACTIVE);
         }
-      } else if (this.mouse.mode == MouseModesEnum.REMOVE) {
+      } else if (this.mouse.mode == MouseModes.REMOVE) {
         // If the current mode is remove and there is no owner in the selected cell, clear the cell state.
         if (!cell.owner) {
           this.grid.clear_cell_state(this.mouse.grid_coord);
@@ -201,15 +201,15 @@ export default class Canvas {
     else if (event.code == "KeyS") this.canvas.style.top = canvas_top - this.pan_amount + "px";
     else if (event.code == "KeyW") this.canvas.style.top = canvas_top + this.pan_amount + "px";
     // If the 1-6 keys are pressed, change the current mode.
-    else if (event.code == "Digit1") this.mouse.mode = MouseModesEnum.IDLE;
-    else if (event.code == "Digit2") this.mouse.mode = MouseModesEnum.PAN;
-    else if (event.code == "Digit3") this.mouse.mode = MouseModesEnum.GOAL;
-    else if (event.code == "Digit4") this.mouse.mode = MouseModesEnum.WALL;
-    else if (event.code == "Digit5") this.mouse.mode = MouseModesEnum.RADIOACTIVE;
-    else if (event.code == "Digit6") this.mouse.mode = MouseModesEnum.REMOVE;
+    else if (event.code == "Digit1") this.mouse.mode = MouseModes.IDLE;
+    else if (event.code == "Digit2") this.mouse.mode = MouseModes.PAN;
+    else if (event.code == "Digit3") this.mouse.mode = MouseModes.GOAL;
+    else if (event.code == "Digit4") this.mouse.mode = MouseModes.WALL;
+    else if (event.code == "Digit5") this.mouse.mode = MouseModes.RADIOACTIVE;
+    else if (event.code == "Digit6") this.mouse.mode = MouseModes.REMOVE;
 
     // Display the current mode on the DOM
-    DOMElements.mode.innerHTML = MouseModes[this.mouse.mode];
+    DOMElements.mode.innerHTML = MouseModeSymbols[this.mouse.mode];
   }
 
   // Handles mouse wheel event for zooming and panning
