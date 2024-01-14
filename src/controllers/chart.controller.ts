@@ -43,7 +43,7 @@ export default class ChartController {
         {
           name: "Data",
           type: "area",
-          color: "rgba(0, 102, 204, 0.5)",
+          color: "rgba(69,65,88,0.5)",
           markerSize: 0,
           dataPoints: data_points,
         },
