@@ -78,9 +78,7 @@ export function register_sim_start_stop_button(simulation: Simulation): void {
   });
 }
 
-/**
- * Registers an event listener for the show controls button.
- */
+/** Registers an event listener for the show controls button. */
 export function register_show_controls(): void {
   let control_window_shown = false;
 
