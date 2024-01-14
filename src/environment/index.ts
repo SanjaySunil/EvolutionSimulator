@@ -127,57 +127,62 @@ export class Environment extends Canvas {
     }
   }
 
+  /** Resets the environment for the next generation. */
+  public next_generation(): void {
+    // Calculate fitness of all individuals based on the configured goals.
+    if (this.config.GOAL_COORD) {
+      this.population = calculate_and_sort_fitness(this.population, "coord", {
+        goal_coordinates: this.goal_coordinates,
+        max_distances_to_goal: this.max_distances_to_goal,
+      });
+    } else if (this.config.GOAL_FOOD) {
+      this.population = calculate_and_sort_fitness(this.population, "food");
+    }
+
+    let best_found = false;
+    let fitness_sum = 0;
+
+    // Find the best individual and calculate the fitness sum, which is to be used to calculate the overall fitness.
+    for (const organism of this.population) {
+      // Add the organism's colour to the species set.
+      if (organism.genome.colour) this.species.add(organism.genome.colour);
+      if (organism.alive) fitness_sum += organism.fitness!;
+      if (!best_found && organism.alive) {
+        this.best_fitness = organism.fitness!;
+        best_found = true;
+      }
+      this.grid.clear_cell_state(organism.coordinate);
+    }
+
+    // Calculate the overall fitness of the population.
+    this.overall_fitness = this.alive > 0 ? fitness_sum / this.alive : 0;
+
+    // Select and crossover individuals based on the configured genetic algorithm.
+    this.population = select_and_crossover(this.population, this.config);
+
+    // Reset tick count and increment generation count.
+    this.species_count = this.species.size;
+    this.update_charts();
+    this.ticks = 0;
+    this.generation++;
+
+    // Update HTML elements with simulation data.
+    DOMElements.best_fitness.innerHTML = this.best_fitness.toPrecision(3).toString();
+    DOMElements.overall_fitness.innerHTML = this.overall_fitness.toPrecision(3).toString();
+    DOMElements.number_of_species.innerHTML = this.species_count.toString();
+
+    this.species = new Set();
+
+    // If the goal is to distribute food, do so within the environment.
+    if (this.config.GOAL_FOOD) {
+      this.drop_food();
+    }
+  }
+
   /** Updates the environment based on the configured goals and conditions. */
   public update(): void {
     if (this.ticks > this.config.TICKS_PER_GENERATION) {
-      // Calculate fitness of all individuals based on the configured goals.
-      if (this.config.GOAL_COORD) {
-        this.population = calculate_and_sort_fitness(this.population, "coord", {
-          goal_coordinates: this.goal_coordinates,
-          max_distances_to_goal: this.max_distances_to_goal,
-        });
-      } else if (this.config.GOAL_FOOD) {
-        this.population = calculate_and_sort_fitness(this.population, "food");
-      }
-
-      let best_found = false;
-      let fitness_sum = 0;
-
-      // Find the best individual and calculate the fitness sum, which is to be used to calculate the overall fitness.
-      for (const organism of this.population) {
-        // Add the organism's colour to the species set.
-        if (organism.genome.colour) this.species.add(organism.genome.colour);
-        if (organism.alive) fitness_sum += organism.fitness!;
-        if (!best_found && organism.alive) {
-          this.best_fitness = organism.fitness!;
-          best_found = true;
-        }
-        this.grid.clear_cell_state(organism.coordinate);
-      }
-
-      // Calculate the overall fitness of the population.
-      this.overall_fitness = this.alive > 0 ? fitness_sum / this.alive : 0;
-
-      // Select and crossover individuals based on the configured genetic algorithm.
-      this.population = select_and_crossover(this.population, this.config);
-
-      // Reset tick count and increment generation count.
-      this.species_count = this.species.size;
-      this.update_charts();
-      this.ticks = 0;
-      this.generation++;
-
-      // Update HTML elements with simulation data.
-      DOMElements.best_fitness.innerHTML = this.best_fitness.toPrecision(3).toString();
-      DOMElements.overall_fitness.innerHTML = this.overall_fitness.toPrecision(3).toString();
-      DOMElements.number_of_species.innerHTML = this.species_count.toString();
-
-      this.species = new Set();
-
-      // If the goal is to distribute food, do so within the environment.
-      if (this.config.GOAL_FOOD) {
-        this.drop_food();
-      }
+      this.next_generation();
     } else {
       this.alive = 0;
 
