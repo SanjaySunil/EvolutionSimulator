@@ -231,19 +231,24 @@ function create_node(
  * @param connections - The connections between nodes in the neural network.
  */
 export function draw_neural_net_brain(connections: Gene[]): void {
+  // Lists to store the input, hidden, and output neurons.
   let input_neurons = [];
   let hidden_neurons = [];
   let output_neurons = [];
+  // Variables to store the last y coordinates of the input, hidden, and output neurons.
   let last_input_neuron_coord = 0;
   let last_hidden_neuron_coord = 0;
   let last_output_neuron_coord = 0;
+  // Variable to store the updated coordinates of the input, hidden, and output neurons plus their last coordinates.
   let updated_coordinates;
 
 
+  // Set the initial height of the SVG.
   let height = 400;
   svg.innerHTML = `<svg width='400px' height='${height}px' id='neural-network-svg'></svg>`;
   svg.style.height = height.toString(); // Iterate through each connection to draw lines between connected nodes.
 
+  // Iterate through each connection to draw lines between connected nodes.
   for (const connection of connections) {
     let source;
     let sink;
@@ -255,6 +260,7 @@ export function draw_neural_net_brain(connections: Gene[]): void {
       } else if (connection.source_type == Neurons.HIDDEN && hidden_neurons[connection.source_id]) {
         source = hidden_neurons[connection.source_id];
       } else {
+        // If the source node does not exist, create it.
         updated_coordinates = create_node(
           connection.source_type == 0 ? "HIDDEN" : "INPUT",
           connection.source_id,
@@ -289,6 +295,7 @@ export function draw_neural_net_brain(connections: Gene[]): void {
       } else if (connection.sink_type == Neurons.HIDDEN && hidden_neurons[connection.sink_id]) {
         sink = hidden_neurons[connection.sink_id];
       } else {
+        // If the sink node does not exist, create it.
         updated_coordinates = create_node(
           connection.sink_type == 0 ? "HIDDEN" : "OUTPUT",
           connection.sink_id,
@@ -330,10 +337,13 @@ export function draw_neural_net_brain(connections: Gene[]): void {
     connect_nodes(source, sink, thickness, connection.weight >= 0);
   }
 
+  // Obtain the number of input, hidden, and output neurons.
   const input_neurons_size = Object.keys(input_neurons).length;
   const output_neurons_size = Object.keys(output_neurons).length;
   const hidden_neurons_size = Object.keys(hidden_neurons).length;
 
+  // Determine the height of the SVG based on the number of input, hidden, and output neurons.
+  // The maximum of the three is used to determine the height of the SVG.
   if (Math.max(input_neurons_size, output_neurons_size, hidden_neurons_size) == input_neurons_size) {
     height = last_input_neuron_coord;
   } else if (Math.max(input_neurons_size, output_neurons_size, hidden_neurons_size) == output_neurons_size) {
@@ -342,5 +352,6 @@ export function draw_neural_net_brain(connections: Gene[]): void {
     height = last_hidden_neuron_coord;
   }
 
+  // Set the height of the SVG.
   svg.style.height = (height + node_radius + node_spacing).toString();
 }
