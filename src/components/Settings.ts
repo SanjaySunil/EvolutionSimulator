@@ -3,6 +3,24 @@ import Simulation from "../controllers/simulation.controller";
 import { Grid } from "../environment/Grid";
 import { DOMElements } from "./DOMElements";
 
+/** These are the only parameters that can only be changed whilst the simulation is running. */
+const live_params = ["MUTATION_PERCENT", "ELITISM_PERCENT", "TICKS_PER_GENERATION"];
+
+/*
+ * Checks if the parameter is a live parameter and alerts the user if it is.
+ * @param started - Whether the simulation has started.
+ * @param key - The key in the config object that was changed.
+ * @returns - Whether the parameter is a live parameter.
+ */
+function check_if_live_param(started: boolean, key: string): boolean {
+  if (started && !live_params.includes(key)) {
+    alert(`The ${key} parameter cannot be changed when the simulation has already started.`);
+    return false;
+  } else {
+    return true;
+  }
+}
+
 /**
  * Checks for changes in the config object and applies them to the simulation.
  * @param simulation - The simulation object.
@@ -61,15 +79,21 @@ export function render_settings(simulation: Simulation, config: object): void {
     const key = target.id;
     const value = target.value;
 
-    // Update the config object based on the input type
-    if (typeof config[key] === "number") {
-      config[key] = parseInt(value);
-    } else if (typeof config[key] === "boolean") {
-      config[key] = target.checked;
-    }
+    // Check if the key is a live parameter before updating simulation config.
+    if (check_if_live_param(simulation.has_started, key)) {
+      // Update the config object based on the input type
+      if (typeof config[key] === "number") {
+        config[key] = parseInt(value);
+      } else if (typeof config[key] === "boolean") {
+        config[key] = target.checked;
+      }
 
-    // Trigger function to check and apply config changes
-    check_config_changes(simulation, config, key);
+      // Trigger function to check and apply config changes
+      check_config_changes(simulation, config, key);
+    } else {
+      // Reset the input value to the config value
+      target.value = config[key].toString();
+    }
   }
 
   // Retrieve all keys from the config object

@@ -18,7 +18,7 @@ export default class Simulation {
   // Define other properties
   public is_running: boolean;
   public rendering_enabled: boolean;
-  public started_simulation: boolean;
+  public has_started: boolean;
 
   // Define configuration and loop variables
   public config: typeof DefaultSimulationConfig;
@@ -46,7 +46,7 @@ export default class Simulation {
     // Initialize other properties
     this.is_running = false;
     this.rendering_enabled = true;
-    this.started_simulation = false;
+    this.has_started = false;
 
     // Initialize loop variables
     this.update_loop = undefined;
@@ -104,7 +104,7 @@ export default class Simulation {
     // Initialize the environment
     this.environment.init();
     // Set the started_simulation flag to true.
-    this.started_simulation = true;
+    this.has_started = true;
   }
 
   /** Sets up the render loop. */
@@ -126,7 +126,7 @@ export default class Simulation {
     // Run prechecks to validate the configuration before execution.
     if (!this.run_prechecks()) return false;
     // Check if simulation has been started before.
-    if (!this.started_simulation) this.init();
+    if (!this.has_started) this.init();
 
     // Check if render loop is running and stop it if it is.
     if (this.render_loop != undefined) {
