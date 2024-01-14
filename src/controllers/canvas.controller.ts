@@ -10,6 +10,8 @@ import { draw } from "../algorithms/NeuralNetDiagram";
 
 // Define the different modes for mouse interaction.
 const Modes = ["IDLE", "PAN", "GOAL", "WALL", "RADIOACTIVE", "REMOVE"];
+
+// ModesEnum is used to access the different modes by index.
 const ModesEnum = {
   IDLE: 0,
   PAN: 1,
@@ -64,9 +66,7 @@ export default class Canvas {
     this.renderer.clear_canvas();
   }
 
-  /**
-   * Registers mouse events on the canvas.
-   */
+  /** Registers mouse events on the canvas. */
   public register_mouse_events(): void {
     // Register mouse events on the canvas.
     this.canvas.addEventListener("mousemove", (e) => this.mouse_move(e));
@@ -77,9 +77,7 @@ export default class Canvas {
     this.canvas.addEventListener("wheel", (e) => this.wheel(e));
   }
 
-  /**
-   * Registers keyboard events on the window.
-   */
+  /** Registers keyboard events on the window. */
   public register_keyboard_events(): void {
     // Register keyboard events on the window
     window.addEventListener("keydown", (e) => {

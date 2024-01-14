@@ -5,7 +5,7 @@ import { InputNeurons } from "../constants/InputNeurons";
 // Defining Types for DefaultSimulationConfig
 type Types = Record<string, any>;
 
-// Default configuration object containing various simulation parameters.
+/** Default simulation settings. */
 const DefaultSimulationConfig: Types = {
   // Grid size for the simulation
   GRID_SIZE: 128,
