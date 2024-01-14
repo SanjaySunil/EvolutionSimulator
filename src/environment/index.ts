@@ -1,14 +1,14 @@
+import { calculate_and_sort_fitness, select_and_crossover } from "../algorithms/GeneticAlgorithm";
+import { DOMElements } from "../components/DOMElements";
 import { DefaultSimulationConfig } from "../config/simulation.config";
 import Canvas from "../controllers/canvas.controller";
 import ChartController from "../controllers/chart.controller";
-import { calculate_and_sort_fitness, select_and_crossover } from "../algorithms/GeneticAlgorithm";
 import Gene from "../models/Gene";
 import Organism from "../models/Organism";
 import { Coordinate } from "../types/Coordinate";
 import { add_vector } from "../utils/geometry";
 import get_random_vector from "../utils/get_random_vector";
 import { CellStates } from "./Grid";
-import { DOMElements } from "../components/DOMElements";
 
 // Environment class.
 export class Environment extends Canvas {
