@@ -230,7 +230,7 @@ function create_node(
  * Draws the neural network diagram based on the given connections.
  * @param connections - The connections between nodes in the neural network.
  */
-export function draw(connections: Gene[]): void {
+export function draw_neural_net_brain(connections: Gene[]): void {
   let input_neurons = [];
   let hidden_neurons = [];
   let output_neurons = [];

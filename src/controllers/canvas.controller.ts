@@ -6,7 +6,7 @@ import { max_distance_to_point } from "../utils/get_max_distance";
 import get_style from "../utils/get_style";
 import Mouse from "./mouse.controller";
 import Renderer from "./renderer.controller";
-import { draw } from "../algorithms/NeuralNetDiagram";
+import { draw_neural_net_brain } from "../algorithms/NeuralNetDiagram";
 
 // Define the different modes for mouse interaction.
 const Modes = ["IDLE", "PAN", "GOAL", "WALL", "RADIOACTIVE", "REMOVE"];
@@ -142,7 +142,7 @@ export default class Canvas {
     this.handle_mouse_wheel(event);
   }
 
-  // Checks and performs mouse-related actions based on the current mode
+  /** Checks and performs mouse-related actions based on the current mode */
   public check_mouse_events(): void {
     // Check if the left mouse button is clicked
     if (this.mouse.left_click) {
@@ -169,7 +169,7 @@ export default class Canvas {
           DOMElements.organism_selected.innerHTML = "Organism selected";
           DOMElements.organism_selected_table.style.display = "block";
 
-          draw(cell.owner.brain.connections);
+          draw_neural_net_brain(cell.owner.brain.connections);
         } else {
           // Clear organism selected message and hide neural network diagram download button.
           DOMElements.organism_selected.innerHTML = "";
