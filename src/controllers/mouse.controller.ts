@@ -1,13 +1,27 @@
 import { Coordinate } from "../types/Coordinate";
 import { make_vector } from "../utils/geometry";
 
+// Define the different modes for mouse interaction.
+export const MouseModes = ["IDLE", "PAN", "GOAL", "WALL", "RADIOACTIVE", "REMOVE"];
+
+// ModesEnum is used to access the different modes by index.
+export const MouseModesEnum = {
+  IDLE: 0,
+  PAN: 1,
+  GOAL: 2,
+  WALL: 3,
+  RADIOACTIVE: 4,
+  REMOVE: 5,
+};
+
 /** This class is used to create a mouse controller that can be used to manage mouse events. */
-export default class Mouse {
+export class Mouse {
   public grid_size: number;
   public middle_click: boolean;
   public left_click: boolean;
   public right_click: boolean;
   public pixel_size: number;
+  public mode: number;
   public grid_coord: Coordinate;
   public prev_grid_coord: Coordinate;
   public canvas_coord: Coordinate;
@@ -23,6 +37,7 @@ export default class Mouse {
     this.left_click = false;
     this.right_click = false;
     this.pixel_size = pixel_size;
+    this.mode = MouseModesEnum.IDLE;
   }
 
   /**
