@@ -230,6 +230,9 @@ export function register_import_simulation_button(simulation: Simulation): void 
           for (const obstacle of data.obstacles) {
             simulation.environment.grid.set_cell_state({ x: obstacle[0], y: obstacle[1] }, obstacle[2]);
           }
+        } else {
+          // Alert if obstacles data is missing.
+          alert("Failed to read obstacles from file.");
         }
 
         // If population data exists, add organisms to the simulation.
