@@ -86,7 +86,9 @@ export function register_show_controls(): void {
 
   // When the button is clicked, the control window is either shown or hidden.
   DOMElements.button.addEventListener("click", () => {
+    // Toggle the control window's visibility.
     control_window_shown = !control_window_shown;
+    // If the control window is shown, display the sidebar, else hide it.
     if (control_window_shown) {
       DOMElements.sidebar.style.display = "block";
     } else {
