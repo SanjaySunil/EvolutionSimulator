@@ -6,7 +6,7 @@ import { DOMElements } from "./DOMElements";
 /** These are the only parameters that can only be changed whilst the simulation is running. */
 const live_params = ["MUTATION_PERCENT", "ELITISM_PERCENT", "TICKS_PER_GENERATION"];
 
-/*
+/**
  * Checks if the parameter is a live parameter and alerts the user if it is.
  * @param started - Whether the simulation has started.
  * @param key - The key in the config object that was changed.
