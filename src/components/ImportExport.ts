@@ -6,6 +6,7 @@ import export_object from "../utils/export_object";
 import { read_file } from "../utils/read_file";
 import { DOMElements } from "./DOMElements";
 import { render_settings } from "./Settings";
+import { Grid } from "../environment/Grid";
 
 /**
  * Exports all organisms in the simulation.
