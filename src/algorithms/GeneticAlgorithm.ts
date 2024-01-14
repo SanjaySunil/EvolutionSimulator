@@ -7,7 +7,7 @@ import { euclidean_distance } from "../utils/geometry";
  * Merges two sorted arrays of organisms into a single sorted array.
  * @param left - the left array of organisms.
  * @param right - the right array of organisms.
- * @returns A single sorted array of organisms.
+ * @returns - A single sorted array of organisms.
  */
 export function merge(left: Organism[], right: Organism[]): Organism[] {
   const result: Organism[] = [];
@@ -32,7 +32,7 @@ export function merge(left: Organism[], right: Organism[]): Organism[] {
 /**
  * Performs merge sort on an array of organisms.
  * @param arr - The array of organisms to be sorted.
- * @returns A sorted array of organisms.
+ * @returns - A sorted array of organisms.
  */
 export function merge_sort(arr: Organism[]): Organism[] {
   if (arr.length <= 1) return arr;
@@ -53,7 +53,7 @@ export function merge_sort(arr: Organism[]): Organism[] {
  * @param population - The array of organisms to be sorted.
  * @param goal - The goal of the simulation.
  * @param params - Parameters containing goal coordinates and maximum distances to goal for fitness calculation.
- * @returns A sorted array of organisms.
+ * @returns - A sorted array of organisms.
  */
 export function calculate_and_sort_fitness(population: Organism[], goal: string, params?: any): Organism[] {
   // Calculate fitness values for organisms based on the specified goal.
@@ -74,7 +74,7 @@ export function calculate_and_sort_fitness(population: Organism[], goal: string,
 /**
  * Calculates the fitness value of an organism based on its energy level.
  * @param organism - The organism for which fitness is being calculated.
- * @returns The calculated fitness value based on the organism's energy level.
+ * @returns - The calculated fitness value based on the organism's energy level.
  */
 export function calculate_fitness_by_food(organism: any): number {
   return 1 - organism.energy / organism.config.MAX_ENERGY;
@@ -84,7 +84,7 @@ export function calculate_fitness_by_food(organism: any): number {
  * Calculates the fitness value of an organism based on its proximity to specified coordinates.
  * @param organism - The organism for which fitness is being calculated.
  * @param params - Parameters containing goal coordinates and maximum distances to goal for fitness calculation.
- * @returns The calculated fitness value based on the organism's proximity to the goal coordinates.
+ * @returns - The calculated fitness value based on the organism's proximity to the goal coordinates.
  */
 export function calculate_fitness_by_coord(organism: any, params: any): number {
   const results: number[] = [];
@@ -107,7 +107,7 @@ export function calculate_fitness_by_coord(organism: any, params: any): number {
  * Selects organisms for crossover and creates a new generation based on the provided population and configuration.
  * @param population - The array of organisms from which selection for crossover is performed.
  * @param config - The configuration object defining parameters for selection and crossover.
- * @returns A new generation of organisms created through crossover and reproduction.
+ * @returns - A new generation of organisms created through crossover and reproduction.
  */
 export function select_and_crossover(population: Organism[], config: typeof DefaultSimulationConfig): Organism[] {
   const new_generation: Organism[] = [];
@@ -140,7 +140,7 @@ export function select_and_crossover(population: Organism[], config: typeof Defa
  * @param parent - The first parent organism.
  * @param partner - The second parent organism.
  * @param id - The ID of the child organism.
- * @returns A new child organism resulting from the mating process of the parent organisms.
+ * @returns - A new child organism resulting from the mating process of the parent organisms.
  */
 function mate(parent, partner: Organism, id): Organism {
   // Create an array to store the child organism's genome

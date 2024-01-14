@@ -18,8 +18,12 @@
             <div class="button_actions">
               <button class="button" id="open_sidebar">Controls</button>
               <div style="display: flex">
-                <button class="button" id="sim_start_stop">Start Simulation</button>
-                <button class="button" id="sim_restart">Reset Simulation</button>
+                <button class="button" id="sim_start_stop">Start Sim</button>
+                <label class="button">
+                  <input id="import_simulation" type="file" />
+                  Import Sim
+                </label>
+                <button class="button" id="sim_restart">Reset Sim</button>
               </div>
               <button class="button" id="render_on_off">RENDERING ON</button>
             </div>
@@ -126,10 +130,6 @@
                         <label class="button">
                           <input id="import_config" type="file" />
                           Import Simulation Config
-                        </label>
-                        <label class="button">
-                          <input id="import_simulation" type="file" />
-                          Import Simulation
                         </label>
                       </td>
                     </tr>

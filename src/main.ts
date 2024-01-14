@@ -26,7 +26,6 @@ const config = ConfigController.get_instance();
 
 // Set the default configuration.
 config.config = DefaultSimulationConfig;
-
 const simulation = new Simulation(config.config);
 
 // Render settings and register event listeners for buttons.

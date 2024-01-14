@@ -197,7 +197,7 @@ export function register_import_simulation_button(simulation: Simulation): void 
       if (data && data.file_type == "simulation_export") {
         // If simulation config exists, update the simulation config and render settings.
         if (data.simulation_config) {
-          simulation.config = data.simulation_config;
+          simulation.config = data.simulation_config[0];
           render_settings(simulation, simulation.config);
         } else alert("Failed to read simulation config from file."); // Alert if simulation config is missing.
 
