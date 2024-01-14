@@ -237,11 +237,9 @@ export function draw_neural_net_brain(connections: Gene[]): void {
   let last_input_neuron_coord = 0;
   let last_hidden_neuron_coord = 0;
   let last_output_neuron_coord = 0;
-  let results;
+  let updated_coordinates;
 
-  // Calculate the height of the SVG canvas based on the maximum y-coordinates of different types of nodes.
-  // const height = Math.max(last_input_neuron_coord, last_output_neuron_coord, last_hidden_neuron_coord);
-  // Reset the HTML content of the SVG element with a specific width and calculated height.
+
   let height = 400;
   svg.innerHTML = `<svg width='400px' height='${height}px' id='neural-network-svg'></svg>`;
   svg.style.height = height.toString(); // Iterate through each connection to draw lines between connected nodes.
@@ -257,7 +255,7 @@ export function draw_neural_net_brain(connections: Gene[]): void {
       } else if (connection.source_type == Neurons.HIDDEN && hidden_neurons[connection.source_id]) {
         source = hidden_neurons[connection.source_id];
       } else {
-        results = create_node(
+        updated_coordinates = create_node(
           connection.source_type == 0 ? "HIDDEN" : "INPUT",
           connection.source_id,
           input_neurons,
@@ -277,12 +275,12 @@ export function draw_neural_net_brain(connections: Gene[]): void {
     }
 
     // Update the input, hidden, and output neurons and their last coordinates.
-    input_neurons = results[0];
-    hidden_neurons = results[1];
-    output_neurons = results[2];
-    last_input_neuron_coord = results[3];
-    last_hidden_neuron_coord = results[4];
-    last_output_neuron_coord = results[5];
+    input_neurons = updated_coordinates[0];
+    hidden_neurons = updated_coordinates[1];
+    output_neurons = updated_coordinates[2];
+    last_input_neuron_coord = updated_coordinates[3];
+    last_hidden_neuron_coord = updated_coordinates[4];
+    last_output_neuron_coord = updated_coordinates[5];
 
     // Determine the sink node based on its type.
     if (connection.sink_type == Neurons.OUTPUT || connection.sink_type == Neurons.HIDDEN) {
@@ -291,7 +289,7 @@ export function draw_neural_net_brain(connections: Gene[]): void {
       } else if (connection.sink_type == Neurons.HIDDEN && hidden_neurons[connection.sink_id]) {
         sink = hidden_neurons[connection.sink_id];
       } else {
-        results = create_node(
+        updated_coordinates = create_node(
           connection.sink_type == 0 ? "HIDDEN" : "OUTPUT",
           connection.sink_id,
           input_neurons,
@@ -311,12 +309,12 @@ export function draw_neural_net_brain(connections: Gene[]): void {
     }
 
     // Update the input, hidden, and output neurons and their last coordinates.
-    input_neurons = results[0];
-    hidden_neurons = results[1];
-    output_neurons = results[2];
-    last_input_neuron_coord = results[3];
-    last_hidden_neuron_coord = results[4];
-    last_output_neuron_coord = results[5];
+    input_neurons = updated_coordinates[0];
+    hidden_neurons = updated_coordinates[1];
+    output_neurons = updated_coordinates[2];
+    last_input_neuron_coord = updated_coordinates[3];
+    last_hidden_neuron_coord = updated_coordinates[4];
+    last_output_neuron_coord = updated_coordinates[5];
 
     // Define constants for line thickness calculation based on the weight of the connection.
     const max_thickness = 2.5;
