@@ -28,7 +28,7 @@ const DefaultSimulationConfig: Types = {
   // Flag for enabling sexual reproduction
   SEXUAL_REPRODUCTION: true,
   // Total number of neurons in the simulation.
-  NUMBER_OF_HIDDEN_NEURONS: 127,
+  NUMBER_OF_HIDDEN_NEURONS: 15, // 127
   // Maximum energy each organism can have.
   MAX_ENERGY: 1,
   // Total number of genes for organisms

@@ -112,9 +112,11 @@ export function register_export_environment_button(simulation: Simulation): void
     // Iterate over all cells in the grid.
     for (let i = 0; i < simulation.environment.grid_size; i++) {
       for (let j = 0; j < simulation.environment.grid_size; j++) {
-        // If the cell is a wall, push its coordinates to the obstacles array.
-        if (simulation.environment.grid.get_cell_at({ x: i, y: j }).state == CellStates.WALL) {
-          obstacles.push([i, j]);
+        // Get the state of the cell.
+        const state = simulation.environment.grid.get_cell_at({ x: i, y: j }).state;
+        // If the cell is a wall or radioactive, push the cell to the obstacles array.
+        if (state == CellStates.WALL || state == CellStates.RADIOACTIVE) {
+          obstacles.push([i, j, state]);
         }
       }
     }
@@ -258,9 +260,10 @@ export function register_import_environment_button(simulation): void {
     read_file(event).then((data) => {
       // Check if obstacles data exists and the file type is obstacles.
       if (data.obstacles && data.file_type == "obstacles") {
-        // Iterate through each obstacle and set its state as WALL in the grid.
+        // Iterate over all obstacles in the file.
         for (const obstacle of data.obstacles) {
-          simulation.environment.grid.set_cell_state({ x: obstacle[0], y: obstacle[1] }, CellStates.WALL);
+          // Set the cell state of the obstacle.
+          simulation.environment.grid.set_cell_state({ x: obstacle[0], y: obstacle[1] }, obstacle[2]);
         }
         // Alert on successful import of environment.
         alert("Successfully imported environment.");
