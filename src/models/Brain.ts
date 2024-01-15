@@ -2,7 +2,7 @@ import { cloneDeep } from "lodash";
 import Directions from "../constants/Directions";
 import { InputNeurons } from "../constants/InputNeurons";
 import { AllCellStates, Grid } from "../environment/Grid";
-import weight_as_float from "../utils/weight_as_float";
+import normalise_weight from "../utils/weight_as_float";
 import { add_vector, euclidean_distance } from "../utils/geometry";
 import Gene from "./Gene";
 import { Neuron, Neurons } from "./Neurons";
@@ -173,12 +173,17 @@ export default class Brain {
     // The weighted inputs to each neuron are accumulated in neuron_accumulators.
     const neuron_accumulators = new Array(this.hidden_neurons.length).fill(0.0);
 
+    // Flag to track if the output of neurons has been computed.
     let neuron_outputs_computed = false;
+
+    // Iterate through each connection in the connection list.
     for (const connection of this.connections) {
+      // Check if sink type is an output neuron and whether the neuron outputs have been computed.
       if (connection.sink_type == Neurons.OUTPUT && !neuron_outputs_computed) {
-        // Compute the output of neurons in the range (-1.0..1.0) using the hyperbolic tangent function.
         for (let neuron_index = 0; neuron_index < this.hidden_neurons.length; neuron_index++) {
+          // Check if the neuron is driven by any input.
           if (this.hidden_neurons[neuron_index].driven) {
+            // Compute the output of neurons in the range (-1.0..1.0) using the hyperbolic tangent function.
             this.hidden_neurons[neuron_index].output = Math.tanh(neuron_accumulators[neuron_index]);
           }
         }
@@ -197,9 +202,9 @@ export default class Brain {
 
       // Weight the connection's value and add it to the accumulator of the corresponding neuron or action.
       if (connection.sink_type == Neurons.OUTPUT) {
-        action_levels[connection.sink_id] += input_val * weight_as_float(connection.weight);
+        action_levels[connection.sink_id] += input_val * normalise_weight(connection.weight);
       } else {
-        neuron_accumulators[connection.sink_id] += input_val * weight_as_float(connection.weight);
+        neuron_accumulators[connection.sink_id] += input_val * normalise_weight(connection.weight);
       }
     }
     return action_levels;
