@@ -41,7 +41,7 @@ export default class Renderer {
    * @param cell - The cell to render.
    * @param degrees_to_rotate - The rotation degrees of the organism.
    */
-  public render_organism_cell(cell, degrees_to_rotate): void {
+  private render_organism_cell(cell, degrees_to_rotate): void {
     const cell_x = cell.coordinate.x * this.pixel_size;
     const cell_y = cell.coordinate.y * this.pixel_size;
 
@@ -102,7 +102,7 @@ export default class Renderer {
    * @param height - The height of the sub-shape.
    * @param colour - The colour of the sub-shape.
    */
-  public draw_sub_shape(x, y, width, height, colour): void {
+  private draw_sub_shape(x, y, width, height, colour): void {
     // Set the fill colour for the sub-shape
     this.ctx.fillStyle = colour;
     // Draw the sub-shape starting from the top-left corner
@@ -113,7 +113,7 @@ export default class Renderer {
    * Renders a food cell.
    * @param cell - The cell to render.
    */
-  public render_food_cell(cell: GridCell): void {
+  private render_food_cell(cell: GridCell): void {
     const transparent = "#282a36";
     const food = "#44475a";
 
@@ -171,7 +171,7 @@ export default class Renderer {
    * @param cell - The cell to render.
    * @param colour - The colour to render the cell with.
    */
-  public draw_cell(cell: GridCell, colour): void {
+  private draw_cell(cell: GridCell, colour): void {
     // Set the fill style to a yellow colour
     this.ctx.fillStyle = colour;
     // Fill the cell with the specified colour at the cell's coordinates using the pixel size

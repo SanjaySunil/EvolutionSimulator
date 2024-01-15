@@ -52,7 +52,7 @@ export default class Canvas {
   }
 
   /** Registers mouse events on the canvas. */
-  public register_mouse_events(): void {
+  private register_mouse_events(): void {
     // Register mouse events on the canvas.
     this.canvas.addEventListener("mousemove", (e) => this.mouse_move(e));
     this.canvas.addEventListener("mouseup", (e) => this.mouse_up(e));
@@ -63,7 +63,7 @@ export default class Canvas {
   }
 
   /** Registers keyboard events on the window. */
-  public register_keyboard_events(): void {
+  private register_keyboard_events(): void {
     // Register keyboard events on the window
     window.addEventListener("keydown", (e) => {
       this.handle_key_down(e);
@@ -74,7 +74,7 @@ export default class Canvas {
    * Handles mouse move event.
    * @param event - The mouse move event.
    */
-  public mouse_move(event: MouseEvent): void {
+  private mouse_move(event: MouseEvent): void {
     // Handle mouse move event
     this.mouse.mouse_move(event);
     this.handle_mouse_move();
@@ -85,7 +85,7 @@ export default class Canvas {
    * Handles mouse up event.
    * @param event - The mouse up event.
    */
-  public mouse_up(event: MouseEvent): void {
+  private mouse_up(event: MouseEvent): void {
     // Handle mouse up event
     this.mouse.mouse_up(event);
   }
@@ -94,7 +94,7 @@ export default class Canvas {
    * Handles mouse down event.
    * @param event - The mouse down event.
    */
-  public mouse_down(event: MouseEvent): void {
+  private mouse_down(event: MouseEvent): void {
     this.mouse.mouse_down(event);
     this.check_mouse_events();
   }
@@ -103,7 +103,7 @@ export default class Canvas {
    * Handles mouse enter event.
    * @param event - The mouse enter event.
    */
-  public mouse_enter(event: MouseEvent): void {
+  private mouse_enter(event: MouseEvent): void {
     // Handle mouse enter event
     this.mouse.mouse_enter(event);
     this.handle_mouse_move();
@@ -113,7 +113,7 @@ export default class Canvas {
    * Handles mouse leave event.
    * @param event - The mouse leave event.
    */
-  public mouse_leave(): void {
+  private mouse_leave(): void {
     this.mouse.mouse_leave();
     this.handle_mouse_leave();
   }
@@ -122,13 +122,13 @@ export default class Canvas {
    * Handles mouse wheel event.
    * @param event - The mouse wheel event.
    */
-  public wheel(event: WheelEvent): void {
+  private wheel(event: WheelEvent): void {
     // Handle mouse wheel event
     this.handle_mouse_wheel(event);
   }
 
   /** Checks and performs mouse-related actions based on the current mode */
-  public check_mouse_events(): void {
+  private check_mouse_events(): void {
     // Check if the left mouse button is clicked
     if (this.mouse.left_click) {
       // Get the cell at the current mouse position
@@ -189,7 +189,7 @@ export default class Canvas {
    * Handles keyboard key down events.
    * @param event - The keyboard event.
    */
-  public handle_key_down(event: KeyboardEvent): void {
+  private handle_key_down(event: KeyboardEvent): void {
     // Obtain canvas top and left style values
     const canvas_top = parseInt(get_style("canvas", "top"));
     const canvas_left = parseInt(get_style("canvas", "left"));
@@ -212,7 +212,7 @@ export default class Canvas {
   }
 
   // Handles mouse wheel event for zooming and panning
-  public handle_mouse_wheel(event: WheelEvent): void {
+  private handle_mouse_wheel(event: WheelEvent): void {
     // Determine the direction of mouse wheel scroll
     const sign = -Math.sign(event.deltaY);
 
@@ -237,7 +237,7 @@ export default class Canvas {
   }
 
   // Handles the action to highlight cells upon mouse move.
-  public handle_mouse_move(): void {
+  private handle_mouse_move(): void {
     // Clear the highlight from the previously highlighted cell
     this.grid.set_cell_highlighted(this.mouse.prev_grid_coord, false);
     // Set the current cell under the mouse pointer as highlighted
@@ -245,7 +245,7 @@ export default class Canvas {
   }
 
   // Handle mouse leave canvas.
-  public handle_mouse_leave(): void {
+  private handle_mouse_leave(): void {
     // Handle mouse leave event
     // const cell = this.grid.get_cell_at(this.mouse.grid_coord);
     // if (cell.is_highlighted) {

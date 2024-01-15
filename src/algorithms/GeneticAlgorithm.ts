@@ -128,7 +128,7 @@ export function select_and_crossover(population: Organism[], config: typeof Defa
   for (let i = 0; i < mating_size; i++) {
     const parent1: Organism = population[Math.floor(Math.random() * ((config.TOP_PERCENT_TO_REPRODUCE / 100) * population.length))];
     const parent2: Organism = population[Math.floor(Math.random() * ((config.TOP_PERCENT_TO_REPRODUCE / 100) * population.length))];
-    const child: Organism = mate(parent1, parent2, population.length);
+    const child: Organism = mate(parent1, parent2);
     new_generation.push(child);
   }
 
@@ -142,7 +142,7 @@ export function select_and_crossover(population: Organism[], config: typeof Defa
  * @param id - The ID of the child organism.
  * @returns - A new child organism resulting from the mating process of the parent organisms.
  */
-function mate(parent, partner: Organism, id): Organism {
+function mate(parent, partner: Organism): Organism {
   // Create an array to store the child organism's genome
   const child_genome: Gene[] = new Array(parent.genome.data.length);
 
@@ -175,5 +175,5 @@ function mate(parent, partner: Organism, id): Organism {
   const random_coord = parent.grid.fetch_empty_cell();
 
   // Create and return a new organism with the generated genome and a random empty cell coordinate
-  return new Organism(random_coord, child_genome, parent.grid, parent.config, id);
+  return new Organism(random_coord, child_genome, parent.grid, parent.config);
 }

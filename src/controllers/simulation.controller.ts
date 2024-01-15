@@ -67,7 +67,7 @@ export default class Simulation {
    * Runs prechecks to validate the configuration before execution.
    * @returns A boolean value indicating whether the prechecks have passed.
    */
-  public run_prechecks(): boolean {
+  private run_prechecks(): boolean {
     // Check if the population size exceeds the maximum allowed grid size
     if (this.config.POPULATION > this.config.GRID_SIZE ** 2) {
       const error = "Population size cannot be greater than Grid size squared.";
@@ -100,7 +100,7 @@ export default class Simulation {
   /**
    * Initializes the simulation.
    */
-  public init(): void {
+  private init(): void {
     // Initialize the environment
     this.environment.init();
     // Set the started_simulation flag to true.
@@ -108,7 +108,7 @@ export default class Simulation {
   }
 
   /** Sets up the render loop. */
-  public setup_render_loop(): void {
+  private setup_render_loop(): void {
     // Check if rendering is enabled
     if (this.rendering_enabled) {
       // Setup the render loop
@@ -181,7 +181,7 @@ export default class Simulation {
   }
 
   /** Updates the simulation. */
-  public update_simulation(): void {
+  private update_simulation(): void {
     // Calculate the time since the last update by subtracting the current time from the last update time.
     this.last_update_dt = window.performance.now() - this.last_update_time;
     // Set the last update time to the current time.
@@ -202,7 +202,7 @@ export default class Simulation {
   }
 
   /** Renders the simulation. */
-  public render_simulation(): void {
+  private render_simulation(): void {
     // Check if the render loop is running.
     if (this.render_loop) {
       // Calculate the time since the last render by subtracting the current time from the last render time.
