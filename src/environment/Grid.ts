@@ -2,6 +2,7 @@ import Renderer from "../controllers/renderer.controller";
 import Organism from "../models/Organism";
 import { Coordinate } from "../types/Coordinate";
 import get_random_vector from "../utils/get_random_vector";
+import create_obstructions from "../algorithms/EnvironmentGenerator";
 
 // Various Cell States that a GridCell can take.
 export const CellStates = {
@@ -121,10 +122,15 @@ export class Grid {
       // Create a new array to represent a column of grid cells
       const column: GridCell[] = new Array(this.grid_size);
 
+      const obstructions = create_obstructions(this.grid_size, this.grid_size, 0.75);
+
       // Loop through each column (y-axis) of the grid
       for (let y = 0; y < this.grid_size; y++) {
         // Create a new GridCell instance with the current x and y coordinates
         const cell = new GridCell(x, y);
+
+        cell.state = obstructions[x][y] == 1 ? CellStates.WALL : CellStates.EMPTY;
+        if (cell.state == CellStates.WALL) this.renderer.to_fill.enqueue(cell);
 
         // Assign the cell to the current column in the grid
         column[y] = cell;
