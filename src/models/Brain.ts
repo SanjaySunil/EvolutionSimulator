@@ -393,16 +393,16 @@ export default class Brain {
     // Process connections from sensor/neuron to an action.
     for (const connection of connection_array) {
       if (connection.sink_type == Neurons.OUTPUT) {
-        const new_conn = cloneDeep(connection);
+        const new_connection = cloneDeep(connection);
 
         // If the source is a hidden neuron, fix its number using the updated node map.
-        if (new_conn.source_type === Neurons.HIDDEN) {
-          const node = hidden_neuron_map.get(new_conn.source_id);
-          if (node) new_conn.source_id = node.identifer;
+        if (new_connection.source_type === Neurons.HIDDEN) {
+          const node = hidden_neuron_map.get(new_connection.source_id);
+          if (node) new_connection.source_id = node.identifer;
         }
 
         // Add the modified connection to the updated connections array.
-        this.connections.push(new_conn);
+        this.connections.push(new_connection);
       }
 
       // Group input neurons, hidden neurons, and output neurons into their respective sets.
