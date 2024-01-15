@@ -153,7 +153,6 @@ export class Environment extends Canvas {
       }
       this.grid.clear_cell_state(organism.coordinate);
     }
-
     // Calculate the overall fitness of the population.
     this.overall_fitness = this.alive > 0 ? fitness_sum / this.alive : 0;
 

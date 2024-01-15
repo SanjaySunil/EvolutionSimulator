@@ -133,7 +133,6 @@ export default class Canvas {
     if (this.mouse.left_click) {
       // Get the cell at the current mouse position
       const cell = this.grid.get_cell_at(this.mouse.grid_coord);
-
       // If the current mode is goal, check if the cell is selected, and add or remove it from the goal coordinates.
       if (this.mouse.mode == MouseModes.GOAL) {
         if (cell.is_selected) {
