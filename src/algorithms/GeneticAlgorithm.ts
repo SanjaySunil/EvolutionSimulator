@@ -167,7 +167,7 @@ function mate(parent, partner: Organism): Organism {
       child_genome[i] = partner_gene;
     } else {
       // If no gene is selected, create a new gene
-      child_genome[i] = new Gene(parent.config.NUMBER_OF_HIDDEN_NEURONS);
+      child_genome[i] = new Gene();
     }
   }
 

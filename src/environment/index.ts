@@ -115,7 +115,7 @@ export class Environment extends Canvas {
       const data: Gene[] = [];
       // Generate genes for each organism.
       for (let i = 0; i < this.config.NUMBER_OF_GENES; i++) {
-        data.push(new Gene(this.config.NUMBER_OF_HIDDEN_NEURONS));
+        data.push(new Gene());
       }
       // Add an organism with generated genes to the environment.
       this.add_organism(data);

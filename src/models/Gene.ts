@@ -14,11 +14,11 @@ export default class Gene {
   public weight: number;
 
   // Builds a new gene.
-  constructor(NUMBER_OF_HIDDEN_NEURONS: number) {
+  constructor() {
     this.source_type = get_random_number(0, 1);
-    this.source_id = get_random_number(0, 0x7fff) % NUMBER_OF_HIDDEN_NEURONS;
+    this.source_id = get_random_number(0, 0x7fff);
     this.sink_type = get_random_number(0, 1);
-    this.sink_id = get_random_number(0, 0x7fff) % NUMBER_OF_HIDDEN_NEURONS;
-    this.weight = Math.round(Math.random() * 0xffff) - 0x8000;
+    this.sink_id = get_random_number(0, 0x7fff);
+    this.weight = get_random_number(-0x8000, 0x7fff);
   }
 }
