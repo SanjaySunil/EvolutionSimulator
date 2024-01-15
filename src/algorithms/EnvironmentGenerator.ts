@@ -5,7 +5,7 @@
  * @param threshold - The threshold for making a cell a wall.
  * @returns - A grid of 0s and 1s.
  */
-export default function generate_obstructions(width: number, height: number, threshold): number[][] {
+export default function create_obstructions(width: number, height: number, threshold): number[][] {
   const obstructions: number[][] = [];
 
   for (let i = 0; i < width; i++) {
