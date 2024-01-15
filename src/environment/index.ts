@@ -109,7 +109,7 @@ export class Environment extends Canvas {
   }
 
   /** Initializes the environment. */
-  private init(): void {
+  public init(): void {
     // Populate the environment until the desired population size is reached.
     while (this.population.length != this.config.POPULATION) {
       const data: Gene[] = [];
