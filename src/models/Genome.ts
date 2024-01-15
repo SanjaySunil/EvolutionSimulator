@@ -12,7 +12,7 @@ export default class Genome {
   }
 
   // Obtains a colour for the organism based on its genome.
-  public get_colour(genome): string {
+  private get_colour(genome): string {
     let genome_string = "";
 
     // Convert each individual gene into a genome string.

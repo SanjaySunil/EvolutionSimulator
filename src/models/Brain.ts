@@ -58,7 +58,7 @@ export default class Brain {
   }
 
   /** This method is used to convert an organism's genome into a neural network brain. */
-  public wire_brain(): void {
+  private wire_brain(): void {
     // List to store neural network connections.
     const connections: ConnectionArray = this.obtain_connections();
 
@@ -78,7 +78,7 @@ export default class Brain {
    * @param direction - The direction to look in.
    * @returns The normalized state of the cell.
    */
-  public observation_sensor(direction: number): number {
+  private observation_sensor(direction: number): number {
     let current_vector = { x: this.coordinate.x, y: this.coordinate.y };
     let vector: Coordinate;
 
@@ -111,7 +111,7 @@ export default class Brain {
    * @param sensor - The sensor to use.
    * @returns The normalized value of the sensor.
    */
-  public coordinate_sensor(sensor: number): number {
+  private coordinate_sensor(sensor: number): number {
     if (sensor == InputNeurons.X_COORDINATE && this.grid.grid_size) {
       // Calculate and return the normalized x-coordinate.
       return this.coordinate.x / this.grid.grid_size;
@@ -141,7 +141,7 @@ export default class Brain {
    * @param sensor_id - The sensor identifier.
    * @returns - The value of the sensor.
    */
-  public get_sensor(sensor_id: number): number {
+  private get_sensor(sensor_id: number): number {
     if (
       [
         InputNeurons.X_COORDINATE,
@@ -209,7 +209,7 @@ export default class Brain {
    * Obtains a list of connections from the genome.
    * @returns A list of connections from the genome.
    */
-  public obtain_connections(): any[] {
+  private obtain_connections(): any[] {
     // Initialize an array to store connections.
     const connection_array: ConnectionArray = [];
 
@@ -245,7 +245,7 @@ export default class Brain {
    * @param connection_array - The connection array to process.
    * @returns A map of hidden neurons and their corresponding input and output counts.
    */
-  public create_hidden_neuron_map(connection_array: ConnectionArray): HiddenNeuronMap {
+  private create_hidden_neuron_map(connection_array: ConnectionArray): HiddenNeuronMap {
     // Initialize a map to store hidden neurons and their input/output counts.
     const hidden_neuron_map: HiddenNeuronMap = new Map();
 
@@ -302,7 +302,7 @@ export default class Brain {
    * @param hidden_neuron_map - The hidden neuron map to update.
    * @param neuron_number - The neuron number to remove connections to.
    */
-  public remove_connections_to_neuron(connection_array: ConnectionArray, hidden_neuron_map: HiddenNeuronMap, neuron_number: number): void {
+  private remove_connections_to_neuron(connection_array: ConnectionArray, hidden_neuron_map: HiddenNeuronMap, neuron_number: number): void {
     // Loop through the connection array.
     for (let i = 0; i < connection_array.length; ) {
       const neuron = connection_array[i];
@@ -331,7 +331,7 @@ export default class Brain {
    * @param connections - The connection array to process.
    * @param hidden_neuron_map - The hidden neuron map to update.
    */
-  public prune_connections(connections: ConnectionArray, hidden_neuron_map: HiddenNeuronMap): void {
+  private prune_connections(connections: ConnectionArray, hidden_neuron_map: HiddenNeuronMap): void {
     // Flag to track if connections are pruned.
     let connections_pruned = false;
 
@@ -362,7 +362,7 @@ export default class Brain {
    * @param connection_array - The connection array to process.
    * @param hidden_neuron_map - The hidden neuron map to update.
    */
-  public create_connections(connection_array: ConnectionArray, hidden_neuron_map: HiddenNeuronMap): void {
+  private create_connections(connection_array: ConnectionArray, hidden_neuron_map: HiddenNeuronMap): void {
     let new_number = 0;
 
     // Renumber neurons in the hidden_neuron_map.
@@ -419,7 +419,7 @@ export default class Brain {
    * @param hidden_neuron_map - The hidden neuron map to process.
    * @returns A hidden neuron array based on the node map.
    */
-  public create_hidden_neuron_array(hidden_neuron_map: HiddenNeuronMap): Neuron[] {
+  private create_hidden_neuron_array(hidden_neuron_map: HiddenNeuronMap): Neuron[] {
     // Loop through each node in the hidden_neuron_map.
     for (const node of hidden_neuron_map.values()) {
       // Create a new Neuron instance.

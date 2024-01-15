@@ -79,7 +79,7 @@ export default class Organism {
    * @param action_levels - The action levels to compute the action from.
    * @returns
    */
-  public compute_movement_offset(action_levels: number[]): Coordinate {
+  private compute_movement_offset(action_levels: number[]): Coordinate {
     // 'move_x' and 'move_y' represent the urge to move in the X and Y direction respectively.
     let move_x = action_levels[OutputNeurons.MOVE_X];
     let move_y = action_levels[OutputNeurons.MOVE_Y];
