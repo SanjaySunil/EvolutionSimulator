@@ -115,7 +115,7 @@ export class Grid {
   }
 
   /** This method is used to initialize the grid. */
-  public init(): void {
+  private init(): void {
     // Loop through each row (x-axis) of the grid
     for (let x = 0; x < this.grid_size; x++) {
       // Create a new array to represent a column of grid cells
@@ -133,15 +133,6 @@ export class Grid {
       // Assign the column to the grid data at the current x position
       this._data[x] = column;
     }
-  }
-
-  /** This method is used to clear the grid. */
-  public clear_grid(): void {
-    // Reset the grid data to an empty array
-    this._data = [];
-
-    // Re-initialize the grid to clear all grid cells
-    this.init();
   }
 
   /**

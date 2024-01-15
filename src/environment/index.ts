@@ -79,7 +79,7 @@ export class Environment extends Canvas {
   }
 
   /** Drops food randomly within a defined area in the grid. */
-  public drop_food(): void {
+  private drop_food(): void {
     // Loop to drop food 1000 times.
     for (let i = 0; i < 1000; i++) {
       // Calculate the center of the grid.
@@ -90,7 +90,7 @@ export class Environment extends Canvas {
   }
 
   /** Updates the simulation chart. */
-  public update_charts(): void {
+  private update_charts(): void {
     // Adds data points to the chart.
     this.best_fitness_data_points.push({
       x: this.generation,
@@ -109,7 +109,7 @@ export class Environment extends Canvas {
   }
 
   /** Initializes the environment. */
-  public init(): void {
+  private init(): void {
     // Populate the environment until the desired population size is reached.
     while (this.population.length != this.config.POPULATION) {
       const data: Gene[] = [];
@@ -128,7 +128,7 @@ export class Environment extends Canvas {
   }
 
   /** Resets the environment for the next generation. */
-  public next_generation(): void {
+  private next_generation(): void {
     // Calculate fitness of all individuals based on the configured goals.
     if (this.config.GOAL_COORD) {
       this.population = calculate_and_sort_fitness(this.population, "coord", {
