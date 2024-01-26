@@ -10,7 +10,7 @@ import { add_vector } from "../utils/geometry";
 import get_random_vector from "../utils/get_random_vector";
 import { CellStates } from "./Grid";
 
-// Environment class.
+/** Environment class. */
 export class Environment extends Canvas {
   public population: Organism[];
   public ticks: number;
