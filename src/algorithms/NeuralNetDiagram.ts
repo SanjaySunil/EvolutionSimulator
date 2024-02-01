@@ -242,7 +242,6 @@ export function draw_neural_net_brain(connections: Gene[]): void {
   // Variable to store the updated coordinates of the input, hidden, and output neurons plus their last coordinates.
   let updated_coordinates;
 
-
   // Set the initial height of the SVG.
   let height = 400;
   svg.innerHTML = `<svg width='400px' height='${height}px' id='neural-network-svg'></svg>`;

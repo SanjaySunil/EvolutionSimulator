@@ -35,12 +35,39 @@ export class GridCell {
   }
 
   /**
+   * This method is used to set the owner of the grid cell.
+   * @param owner - The owner of the grid cell.
+   */
+  public set owner(owner: Organism | null) {
+    // Check if an owner is provided
+    if (owner) {
+      // If an owner is provided, set the owner of the GridCell
+      this._owner = owner;
+
+      // Update the state of the GridCell to indicate it's occupied by an organism
+      this._state = CellStates.ORGANISM;
+    } else {
+      // If no owner is provided, reset the owner to null
+      this._owner = null;
+    }
+  }
+
+  /**
    * This method is used to get the state of the grid cell.
    * @returns The state of the grid cell.
    */
   public get state(): number {
     // Retrieve and return the state of the GridCell
     return this._state;
+  }
+
+  /**
+   * This method is used to set the state of the grid cell.
+   * @param state - The state of the grid cell.
+   */
+  public set state(state: number) {
+    // Set the state of the GridCell to the provided state value
+    this._state = state;
   }
 
   /**
@@ -65,33 +92,6 @@ export class GridCell {
 
     // Set the state of the cell to EMPTY
     this._state = CellStates.EMPTY;
-  }
-
-  /**
-   * This method is used to set the owner of the grid cell.
-   * @param owner - The owner of the grid cell.
-   */
-  public set owner(owner: Organism | null) {
-    // Check if an owner is provided
-    if (owner) {
-      // If an owner is provided, set the owner of the GridCell
-      this._owner = owner;
-
-      // Update the state of the GridCell to indicate it's occupied by an organism
-      this._state = CellStates.ORGANISM;
-    } else {
-      // If no owner is provided, reset the owner to null
-      this._owner = null;
-    }
-  }
-
-  /**
-   * This method is used to set the state of the grid cell.
-   * @param state - The state of the grid cell.
-   */
-  public set state(state: number) {
-    // Set the state of the GridCell to the provided state value
-    this._state = state;
   }
 }
 
