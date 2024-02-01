@@ -3,19 +3,13 @@ import CanvasJS from "@canvasjs/charts";
 /** This class is used to create a chart controller that can be used to switch between charts. */
 export default class ChartController {
   public chart: CanvasJS.Chart;
-  public configs: object[];
   public chart_id: string;
+  public configs: object[];
   constructor(chart_id: string) {
     this.configs = [];
     this.chart_id = chart_id;
   }
-  /**
-   * Switches the chart to the specified index.
-   * @param index - The index of the chart to switch to.
-   */
-  public switch_chart(index: number): void {
-    this.chart = new CanvasJS.Chart(this.chart_id, this.configs[index]);
-  }
+
   /**
    * Adds a chart configuration to the chart controller.
    * @param title - The title of the chart.
@@ -49,5 +43,13 @@ export default class ChartController {
         },
       ],
     });
+  }
+
+  /**
+   * Switches the chart to the specified index.
+   * @param index - The index of the chart to switch to.
+   */
+  public switch_chart(index: number): void {
+    this.chart = new CanvasJS.Chart(this.chart_id, this.configs[index]);
   }
 }

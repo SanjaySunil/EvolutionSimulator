@@ -12,20 +12,19 @@ import { CellStates } from "./Grid";
 
 /** Environment class. */
 export class Environment extends Canvas {
-  public population: Organism[];
-  public ticks: number;
-  public generation: number;
-  public overall_fitness: number;
-  public best_fitness: number;
-  public species_count: number;
   public alive: number;
+  public best_fitness: number;
   public best_fitness_data_points: Coordinate[];
-  public overall_fitness_data_points: Coordinate[];
-  public number_of_species_data_points: Coordinate[];
-  public species_data_points: any;
-  public species: Set<string>;
   public chart: ChartController;
-
+  public generation: number;
+  public number_of_species_data_points: Coordinate[];
+  public overall_fitness: number;
+  public overall_fitness_data_points: Coordinate[];
+  public population: Organism[];
+  public species: Set<string>;
+  public species_count: number;
+  public species_data_points: any;
+  public ticks: number;
   // Builds a new Environment instance.
   constructor(canvas_id: string, config: typeof DefaultSimulationConfig) {
     super(canvas_id, config);

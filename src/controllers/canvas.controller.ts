@@ -11,20 +11,19 @@ import Renderer from "./renderer.controller";
 /** Class to handle canvas-related events. */
 export default class Canvas {
   public canvas: HTMLCanvasElement;
+  public config: typeof DefaultSimulationConfig;
   public ctx: CanvasRenderingContext2D;
+  public goal_coordinates: Coordinate[];
+  public grid: Grid;
   public grid_size: number;
+  public max_distances_to_goal: number[];
+  public min_zoom: number;
+  public mouse: Mouse;
+  public pan_amount: number;
   public pixel_size: number;
+  public renderer: Renderer;
   public zoom_level: number;
   public zoom_speed: number;
-  public min_zoom: number;
-  public pan_amount: number;
-  public mouse: Mouse;
-  public renderer: Renderer;
-  public grid: Grid;
-  public config: typeof DefaultSimulationConfig;
-  public goal_coordinates: Coordinate[];
-  public max_distances_to_goal: number[];
-
   constructor(canvas_id: string, config: typeof DefaultSimulationConfig) {
     this.config = config;
     // Get the canvas element and its 2D rendering context
@@ -49,82 +48,6 @@ export default class Canvas {
     this.register_mouse_events();
     this.register_keyboard_events();
     this.renderer.clear_canvas();
-  }
-
-  /** Registers mouse events on the canvas. */
-  private register_mouse_events(): void {
-    // Register mouse events on the canvas.
-    this.canvas.addEventListener("mousemove", (e) => this.mouse_move(e));
-    this.canvas.addEventListener("mouseup", (e) => this.mouse_up(e));
-    this.canvas.addEventListener("mousedown", (e) => this.mouse_down(e));
-    this.canvas.addEventListener("mouseenter", (e) => this.mouse_enter(e));
-    this.canvas.addEventListener("mouseleave", () => this.mouse_leave());
-    this.canvas.addEventListener("wheel", (e) => this.wheel(e));
-  }
-
-  /** Registers keyboard events on the window. */
-  private register_keyboard_events(): void {
-    // Register keyboard events on the window
-    window.addEventListener("keydown", (e) => {
-      this.handle_key_down(e);
-    });
-  }
-
-  /**
-   * Handles mouse move event.
-   * @param event - The mouse move event.
-   */
-  private mouse_move(event: MouseEvent): void {
-    // Handle mouse move event
-    this.mouse.mouse_move(event);
-    this.handle_mouse_move();
-    this.check_mouse_events();
-  }
-
-  /**
-   * Handles mouse up event.
-   * @param event - The mouse up event.
-   */
-  private mouse_up(event: MouseEvent): void {
-    // Handle mouse up event
-    this.mouse.mouse_up(event);
-  }
-
-  /**
-   * Handles mouse down event.
-   * @param event - The mouse down event.
-   */
-  private mouse_down(event: MouseEvent): void {
-    this.mouse.mouse_down(event);
-    this.check_mouse_events();
-  }
-
-  /**
-   * Handles mouse enter event.
-   * @param event - The mouse enter event.
-   */
-  private mouse_enter(event: MouseEvent): void {
-    // Handle mouse enter event
-    this.mouse.mouse_enter(event);
-    this.handle_mouse_move();
-  }
-
-  /**
-   * Handles mouse leave event.
-   * @param event - The mouse leave event.
-   */
-  private mouse_leave(): void {
-    this.mouse.mouse_leave();
-    this.handle_mouse_leave();
-  }
-
-  /**
-   * Handles mouse wheel event.
-   * @param event - The mouse wheel event.
-   */
-  private wheel(event: WheelEvent): void {
-    // Handle mouse wheel event
-    this.handle_mouse_wheel(event);
   }
 
   /** Checks and performs mouse-related actions based on the current mode */
@@ -209,6 +132,82 @@ export default class Canvas {
 
     // Display the current mode on the DOM
     DOMElements.mode.innerHTML = MouseModeSymbols[this.mouse.mode];
+  }
+
+  /** Registers mouse events on the canvas. */
+  private register_mouse_events(): void {
+    // Register mouse events on the canvas.
+    this.canvas.addEventListener("mousemove", (e) => this.mouse_move(e));
+    this.canvas.addEventListener("mouseup", (e) => this.mouse_up(e));
+    this.canvas.addEventListener("mousedown", (e) => this.mouse_down(e));
+    this.canvas.addEventListener("mouseenter", (e) => this.mouse_enter(e));
+    this.canvas.addEventListener("mouseleave", () => this.mouse_leave());
+    this.canvas.addEventListener("wheel", (e) => this.wheel(e));
+  }
+
+  /** Registers keyboard events on the window. */
+  private register_keyboard_events(): void {
+    // Register keyboard events on the window
+    window.addEventListener("keydown", (e) => {
+      this.handle_key_down(e);
+    });
+  }
+
+  /**
+   * Handles mouse move event.
+   * @param event - The mouse move event.
+   */
+  private mouse_move(event: MouseEvent): void {
+    // Handle mouse move event
+    this.mouse.mouse_move(event);
+    this.handle_mouse_move();
+    this.check_mouse_events();
+  }
+
+  /**
+   * Handles mouse up event.
+   * @param event - The mouse up event.
+   */
+  private mouse_up(event: MouseEvent): void {
+    // Handle mouse up event
+    this.mouse.mouse_up(event);
+  }
+
+  /**
+   * Handles mouse down event.
+   * @param event - The mouse down event.
+   */
+  private mouse_down(event: MouseEvent): void {
+    this.mouse.mouse_down(event);
+    this.check_mouse_events();
+  }
+
+  /**
+   * Handles mouse enter event.
+   * @param event - The mouse enter event.
+   */
+  private mouse_enter(event: MouseEvent): void {
+    // Handle mouse enter event
+    this.mouse.mouse_enter(event);
+    this.handle_mouse_move();
+  }
+
+  /**
+   * Handles mouse leave event.
+   * @param event - The mouse leave event.
+   */
+  private mouse_leave(): void {
+    this.mouse.mouse_leave();
+    this.handle_mouse_leave();
+  }
+
+  /**
+   * Handles mouse wheel event.
+   * @param event - The mouse wheel event.
+   */
+  private wheel(event: WheelEvent): void {
+    // Handle mouse wheel event
+    this.handle_mouse_wheel(event);
   }
 
   // Handles mouse wheel event for zooming and panning

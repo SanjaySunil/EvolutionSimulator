@@ -32,7 +32,7 @@ const DefaultSimulationConfig: Types = {
   // Maximum energy each organism can have.
   MAX_ENERGY: 1,
   // Total number of genes for organisms
-  NUMBER_OF_GENES: 50,
+  NUMBER_OF_GENES: 10,
   // Flags indicating whether goal is food or coordinated.
   GOAL_FOOD: false,
   GOAL_COORD: true,

@@ -16,17 +16,16 @@ export const MouseModes = {
 
 /** This class is used to create a mouse controller that can be used to manage mouse events. */
 export class Mouse {
-  public grid_size: number;
-  public middle_click: boolean;
-  public left_click: boolean;
-  public right_click: boolean;
-  public pixel_size: number;
-  public mode: number;
-  public grid_coord: Coordinate;
-  public prev_grid_coord: Coordinate;
   public canvas_coord: Coordinate;
   public clicked_coord: Coordinate;
-
+  public grid_coord: Coordinate;
+  public grid_size: number;
+  public left_click: boolean;
+  public middle_click: boolean;
+  public mode: number;
+  public pixel_size: number;
+  public prev_grid_coord: Coordinate;
+  public right_click: boolean;
   constructor(pixel_size: number, grid_size: number) {
     this.grid_size = grid_size;
     this.grid_coord = make_vector(0, 0);
@@ -38,45 +37,6 @@ export class Mouse {
     this.right_click = false;
     this.pixel_size = pixel_size;
     this.mode = MouseModes.IDLE;
-  }
-
-  /**
-   * This method is triggered when the mouse moves in the canvas.
-   * @param event - The mouse move event.
-   */
-  public mouse_move(event: MouseEvent): void {
-    event.preventDefault();
-
-    // Update the coordinates based on mouse position.
-    this.canvas_coord.x = event.offsetX;
-    this.canvas_coord.y = event.offsetY;
-
-    // Store the previous grid coordinates.
-    this.prev_grid_coord.x = this.grid_coord.x;
-    this.prev_grid_coord.y = this.grid_coord.y;
-
-    // Calculate new grid coordinates based on the canvas and pixel size.
-    this.grid_coord.x = Math.floor(this.canvas_coord.x / this.pixel_size);
-    this.grid_coord.y = Math.floor(this.canvas_coord.y / this.pixel_size);
-
-    // Fix grid coordinates within canvas boundaries.
-    if (this.grid_coord.x >= this.grid_size) this.grid_coord.x -= 1;
-    if (this.grid_coord.y >= this.grid_size) this.grid_coord.y -= 1;
-    if (this.grid_coord.x <= 0) this.grid_coord.x = 0;
-    if (this.grid_coord.y <= 0) this.grid_coord.y = 0;
-  }
-
-  /**
-   * This method is triggered when the mouse click is released.
-   * @param event - The mouse up event.
-   */
-  public mouse_up(event: MouseEvent): void {
-    event.preventDefault();
-
-    // Identify and handle different mouse buttons upon release.
-    if (event.button === 0) this.left_click = false; // Left mouse button released
-    if (event.button === 1) this.middle_click = false; // Middle mouse button released
-    if (event.button === 2) this.right_click = false; // Right mouse button released
   }
 
   /**
@@ -119,5 +79,44 @@ export class Mouse {
     this.middle_click = false;
     // Right mouse button released
     this.right_click = false;
+  }
+
+  /**
+   * This method is triggered when the mouse moves in the canvas.
+   * @param event - The mouse move event.
+   */
+  public mouse_move(event: MouseEvent): void {
+    event.preventDefault();
+
+    // Update the coordinates based on mouse position.
+    this.canvas_coord.x = event.offsetX;
+    this.canvas_coord.y = event.offsetY;
+
+    // Store the previous grid coordinates.
+    this.prev_grid_coord.x = this.grid_coord.x;
+    this.prev_grid_coord.y = this.grid_coord.y;
+
+    // Calculate new grid coordinates based on the canvas and pixel size.
+    this.grid_coord.x = Math.floor(this.canvas_coord.x / this.pixel_size);
+    this.grid_coord.y = Math.floor(this.canvas_coord.y / this.pixel_size);
+
+    // Fix grid coordinates within canvas boundaries.
+    if (this.grid_coord.x >= this.grid_size) this.grid_coord.x -= 1;
+    if (this.grid_coord.y >= this.grid_size) this.grid_coord.y -= 1;
+    if (this.grid_coord.x <= 0) this.grid_coord.x = 0;
+    if (this.grid_coord.y <= 0) this.grid_coord.y = 0;
+  }
+
+  /**
+   * This method is triggered when the mouse click is released.
+   * @param event - The mouse up event.
+   */
+  public mouse_up(event: MouseEvent): void {
+    event.preventDefault();
+
+    // Identify and handle different mouse buttons upon release.
+    if (event.button === 0) this.left_click = false; // Left mouse button released
+    if (event.button === 1) this.middle_click = false; // Middle mouse button released
+    if (event.button === 2) this.right_click = false; // Right mouse button released
   }
 }

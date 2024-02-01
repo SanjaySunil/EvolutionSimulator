@@ -8,15 +8,26 @@ export default class Renderer {
   public canvas;
   public ctx;
   public pixel_size;
-  public to_fill: Queue;
   public to_clear: Queue;
-
+  public to_fill: Queue;
   constructor(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, pixel_size: number) {
     this.canvas = canvas;
     this.ctx = ctx;
     this.pixel_size = pixel_size;
     this.to_fill = new Queue();
     this.to_clear = new Queue();
+  }
+
+  /**
+   * Draws a cell on the canvas.
+   * @param cell - The cell to render.
+   * @param colour - The colour to render the cell with.
+   */
+  private draw_cell(cell: GridCell, colour): void {
+    // Set the fill style to a yellow colour
+    this.ctx.fillStyle = colour;
+    // Fill the cell with the specified colour at the cell's coordinates using the pixel size
+    this.ctx.fillRect(cell.coordinate.x * this.pixel_size, cell.coordinate.y * this.pixel_size, this.pixel_size, this.pixel_size);
   }
 
   /**
@@ -34,6 +45,38 @@ export default class Renderer {
 
     // Fill a rectangle on the canvas representing the cell.
     this.ctx.fillRect(cell.coordinate.x * 15 + x, cell.coordinate.y * 15 + y, width, height);
+  }
+
+  /**
+   * Draws a sub-shape within a grid cell.
+   * @param x - The x-coordinate of the sub-shape.
+   * @param y - The y-coordinate of the sub-shape.
+   * @param width - The width of the sub-shape.
+   * @param height - The height of the sub-shape.
+   * @param colour - The colour of the sub-shape.
+   */
+  private draw_sub_shape(x, y, width, height, colour): void {
+    // Set the fill colour for the sub-shape
+    this.ctx.fillStyle = colour;
+    // Draw the sub-shape starting from the top-left corner
+    this.ctx.fillRect(x - this.pixel_size / 2, y - this.pixel_size / 2, width, height);
+  }
+
+  /**
+   * Renders a food cell.
+   * @param cell - The cell to render.
+   */
+  private render_food_cell(cell: GridCell): void {
+    const transparent = "#282a36";
+    const food = "#44475a";
+
+    // Render the food cell with specific shapes and colours at various positions within the cell
+    this.draw_rect(cell, 0, 0, 15, 15, transparent);
+    this.draw_rect(cell, 6, 3, 3, 9, food);
+    this.draw_rect(cell, 4, 4, 2, 7, food);
+    this.draw_rect(cell, 9, 4, 2, 7, food);
+    this.draw_rect(cell, 3, 6, 1, 3, food);
+    this.draw_rect(cell, 11, 6, 1, 3, food);
   }
 
   /**
@@ -94,36 +137,20 @@ export default class Renderer {
     this.ctx.restore();
   }
 
-  /**
-   * Draws a sub-shape within a grid cell.
-   * @param x - The x-coordinate of the sub-shape.
-   * @param y - The y-coordinate of the sub-shape.
-   * @param width - The width of the sub-shape.
-   * @param height - The height of the sub-shape.
-   * @param colour - The colour of the sub-shape.
-   */
-  private draw_sub_shape(x, y, width, height, colour): void {
-    // Set the fill colour for the sub-shape
-    this.ctx.fillStyle = colour;
-    // Draw the sub-shape starting from the top-left corner
-    this.ctx.fillRect(x - this.pixel_size / 2, y - this.pixel_size / 2, width, height);
+  /** Clears the canvas. */
+  public clear_canvas(): void {
+    // Set the fill style to a dark colour
+    this.ctx.fillStyle = "#282a36";
+    // Fill the entire canvas with the specified colour
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
   /**
-   * Renders a food cell.
-   * @param cell - The cell to render.
+   * Clears a cell on the canvas.
+   * @param cell - The cell to clear.
    */
-  private render_food_cell(cell: GridCell): void {
-    const transparent = "#282a36";
-    const food = "#44475a";
-
-    // Render the food cell with specific shapes and colours at various positions within the cell
-    this.draw_rect(cell, 0, 0, 15, 15, transparent);
-    this.draw_rect(cell, 6, 3, 3, 9, food);
-    this.draw_rect(cell, 4, 4, 2, 7, food);
-    this.draw_rect(cell, 9, 4, 2, 7, food);
-    this.draw_rect(cell, 3, 6, 1, 3, food);
-    this.draw_rect(cell, 11, 6, 1, 3, food);
+  public clear_cell(cell: GridCell): void {
+    this.draw_cell(cell, ThemeConfig.EMPTY);
   }
 
   /**
@@ -164,33 +191,5 @@ export default class Renderer {
       // Render a wall cell if the cell state is 'WALL'
       this.draw_cell(cell, ThemeConfig.WALL);
     }
-  }
-
-  /**
-   * Draws a cell on the canvas.
-   * @param cell - The cell to render.
-   * @param colour - The colour to render the cell with.
-   */
-  private draw_cell(cell: GridCell, colour): void {
-    // Set the fill style to a yellow colour
-    this.ctx.fillStyle = colour;
-    // Fill the cell with the specified colour at the cell's coordinates using the pixel size
-    this.ctx.fillRect(cell.coordinate.x * this.pixel_size, cell.coordinate.y * this.pixel_size, this.pixel_size, this.pixel_size);
-  }
-
-  /** Clears the canvas. */
-  public clear_canvas(): void {
-    // Set the fill style to a dark colour
-    this.ctx.fillStyle = "#282a36";
-    // Fill the entire canvas with the specified colour
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-  }
-
-  /**
-   * Clears a cell on the canvas.
-   * @param cell - The cell to clear.
-   */
-  public clear_cell(cell: GridCell): void {
-    this.draw_cell(cell, ThemeConfig.EMPTY);
   }
 }

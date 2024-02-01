@@ -24,7 +24,7 @@ export function export_population(population: Organism[], with_coordinates: bool
       // Create an object to store the organism's genome and coordinates.
       const organism_export: any = {};
       organism_export["genome"] = organism.genome.data;
-      organism_export["coordinates"] = organism.coordinate;
+      organism_export["coordinates"] = [organism.coordinate.x, organism.coordinate.y];
       population_export.push(organism_export);
     } else {
       // Otherwise, only export the genome.
@@ -238,7 +238,7 @@ export function register_import_simulation_button(simulation: Simulation): void 
         // If population data exists, add organisms to the simulation.
         if (data.population) {
           for (const organism of data.population) {
-            const result = simulation.environment.add_organism(organism.genome, organism.coordinates);
+            const result = simulation.environment.add_organism(organism.genome, { x: organism.coordinates[0], y: organism.coordinates[1] });
             if (!result) {
               alert("Failed to import all organisms.");
               return;

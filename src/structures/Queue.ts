@@ -26,6 +26,21 @@ export default class Queue {
   }
 
   /**
+   * Removes a value from the queue.
+   * @returns The value at the front of the queue.
+   */
+  public dequeue(): any {
+    if (this.front === null) {
+      this.rear = null;
+      return null;
+    } else {
+      const node = this.front;
+      this.front = this.front.next;
+      return node.value;
+    }
+  }
+
+  /**
    * Adds a value to the queue.
    * @param value - The value to enqueue.
    */
@@ -38,21 +53,6 @@ export default class Queue {
     } else {
       this.rear.next = node;
       this.rear = node;
-    }
-  }
-
-  /**
-   * Removes a value from the queue.
-   * @returns The value at the front of the queue.
-   */
-  public dequeue(): any {
-    if (this.front === null) {
-      this.rear = null;
-      return null;
-    } else {
-      const node = this.front;
-      this.front = this.front.next;
-      return node.value;
     }
   }
 }

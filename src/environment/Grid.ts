@@ -18,12 +18,30 @@ export const AllCellStates = Object.keys(CellStates);
 
 /** This class is used to create a grid cell that can be used to represent a cell in the grid. */
 export class GridCell {
-  public coordinate: Coordinate;
   private _owner: Organism | null;
   private _state: number;
-  public is_selected: boolean;
-  public is_highlighted: boolean;
+  public coordinate: Coordinate;
   public energy: number;
+  public is_highlighted: boolean;
+  public is_selected: boolean;
+
+  /**
+   * This method is used to get the owner of the grid cell.
+   * @returns The owner of the grid cell.
+   */
+  public get owner(): Organism | null {
+    // Retrieve and return the owner of the GridCell
+    return this._owner;
+  }
+
+  /**
+   * This method is used to get the state of the grid cell.
+   * @returns The state of the grid cell.
+   */
+  public get state(): number {
+    // Retrieve and return the state of the GridCell
+    return this._state;
+  }
 
   /**
    * Builds a new grid cell.
@@ -50,15 +68,6 @@ export class GridCell {
   }
 
   /**
-   * This method is used to get the owner of the grid cell.
-   * @returns The owner of the grid cell.
-   */
-  public get owner(): Organism | null {
-    // Retrieve and return the owner of the GridCell
-    return this._owner;
-  }
-
-  /**
    * This method is used to set the owner of the grid cell.
    * @param owner - The owner of the grid cell.
    */
@@ -77,15 +86,6 @@ export class GridCell {
   }
 
   /**
-   * This method is used to get the state of the grid cell.
-   * @returns The state of the grid cell.
-   */
-  public get state(): number {
-    // Retrieve and return the state of the GridCell
-    return this._state;
-  }
-
-  /**
    * This method is used to set the state of the grid cell.
    * @param state - The state of the grid cell.
    */
@@ -99,9 +99,8 @@ export class GridCell {
 export class Grid {
   private _data: GridCell[][];
   public grid_size: number;
-  public renderer: Renderer;
   public occupied: number;
-
+  public renderer: Renderer;
   /**
    * Builds a new grid.
    * @param grid_size - The size of the grid.
@@ -138,138 +137,6 @@ export class Grid {
 
       // Assign the column to the grid data at the current x position
       this._data[x] = column;
-    }
-  }
-
-  /**
-   * This method is used to check if the specified cell is valid.
-   * @param coordinate - The coordinate to check.
-   * @returns Whether the specified cell is valid.
-   */
-  public is_valid_cell_at(coordinate: Coordinate): boolean {
-    // Check if the specified coordinate is within the grid boundaries
-    return coordinate.x >= 0 && coordinate.y >= 0 && coordinate.x < this.grid_size && coordinate.y < this.grid_size;
-  }
-
-  /**
-   * This method is used to check if the specified cell is empty.
-   * @param coordinate - The coordinate to check.
-   * @returns Whether the specified cell is empty.
-   */
-  public is_cell_empty(coordinate: Coordinate): boolean {
-    // Check if the provided cell coordinate is valid within the grid
-    if (this.is_valid_cell_at(coordinate)) {
-      // Retrieve the state of the cell at the specified coordinate and check if it's empty
-      return this._data[coordinate.x][coordinate.y].state == CellStates.EMPTY;
-    } else {
-      // Throw an error if the provided cell coordinate is not valid
-      throw Error(`Not a valid cell. ${coordinate.x} ${coordinate.y}`);
-    }
-  }
-
-  /**
-   * This method is used to get the cell at the specified coordinate.
-   * @param coordinate - The coordinate to check.
-   * @returns The cell at the specified coordinate.
-   */
-  public get_cell_at(coordinate: Coordinate): GridCell {
-    // Check if the provided cell coordinate is within the grid
-    if (this.is_valid_cell_at(coordinate)) {
-      // Retrieve and return the GridCell at the specified coordinate
-      return this._data[coordinate.x][coordinate.y];
-    } else {
-      // Throw an error if the provided cell coordinate is not valid
-      throw Error(`Not a valid cell. ${coordinate.x} ${coordinate.y}`);
-    }
-  }
-
-  /**
-   * Sets the owner of a cell.
-   * @param coordinate - The coordinate of the cell to set the owner of.
-   * @param owner - The owner to set.
-   */
-  public set_cell_owner(coordinate: Coordinate, owner: Organism): void {
-    // Check if the provided cell coordinate is within the grid
-    if (this.is_valid_cell_at(coordinate)) {
-      // Retrieve the cell at the specified coordinate
-      const cell = this.get_cell_at(coordinate);
-
-      // Set the owner of the cell to the specified organism
-      cell.owner = owner;
-
-      // Add the cell to the 'to_fill' set in the renderer
-      this.renderer.to_fill.enqueue(cell);
-
-      // Increment the count of occupied cells
-      this.occupied += 1;
-    }
-  }
-
-  /**
-   * Sets the state of a cell.
-   * @param coordinate The coordinate of the cell to set the state of.
-   * @param state The state to set.
-   */
-  public set_cell_state(coordinate: Coordinate, state: number): void {
-    // Check if the provided cell coordinate is within the grid
-    if (this.is_valid_cell_at(coordinate)) {
-      // Retrieve the cell at the specified coordinate
-      const cell = this.get_cell_at(coordinate);
-
-      // Set the state of the cell to the provided state
-      cell.state = state;
-
-      // If the cell state is 'FOOD', set its energy to 1 and clear its owner
-      if (cell.state == CellStates.FOOD) {
-        cell.energy = 1;
-      }
-
-      // Clear the owner of the cell
-      cell.owner = null;
-
-      // Add the cell to the 'to_fill' set in the renderer
-      this.renderer.to_fill.enqueue(cell);
-
-      // Increment the count of occupied cells
-      this.occupied += 1;
-    }
-  }
-
-  /**
-   * Sets the selected state of a cell.
-   * @param coordinate - The coordinate of the cell to set the selected state of.
-   * @param selected - The selected state to set.
-   */
-  public set_cell_selected(coordinate: Coordinate, selected: boolean): void {
-    // Check if the provided cell coordinate is within the grid
-    if (this.is_valid_cell_at(coordinate)) {
-      // Retrieve the cell at the specified coordinate
-      const cell = this.get_cell_at(coordinate);
-
-      // Set the 'is_selected' property of the cell to the provided value
-      cell.is_selected = selected;
-
-      // Add the cell to the 'to_fill' set in the renderer for rendering purposes
-      this.renderer.to_fill.enqueue(cell);
-    }
-  }
-
-  /**
-   * Sets the highlighted state of a cell.
-   * @param coordinate - The coordinate of the cell to set the highlighted state of.
-   * @param highlighted - The highlighted state to set.
-   */
-  public set_cell_highlighted(coordinate: Coordinate, highlighted: boolean): void {
-    // Check if the provided cell coordinate is within the grid
-    if (this.is_valid_cell_at(coordinate)) {
-      // Retrieve the cell at the specified coordinate
-      const cell = this.get_cell_at(coordinate);
-
-      // Set the 'is_highlighted' property of the cell to the provided value
-      cell.is_highlighted = highlighted;
-
-      // Add the cell to the 'to_fill' set in the renderer for rendering purposes
-      this.renderer.to_fill.enqueue(cell);
     }
   }
 
@@ -323,5 +190,137 @@ export class Grid {
     }
 
     return random_coord; // Return the coordinates of the found empty cell
+  }
+
+  /**
+   * This method is used to get the cell at the specified coordinate.
+   * @param coordinate - The coordinate to check.
+   * @returns The cell at the specified coordinate.
+   */
+  public get_cell_at(coordinate: Coordinate): GridCell {
+    // Check if the provided cell coordinate is within the grid
+    if (this.is_valid_cell_at(coordinate)) {
+      // Retrieve and return the GridCell at the specified coordinate
+      return this._data[coordinate.x][coordinate.y];
+    } else {
+      // Throw an error if the provided cell coordinate is not valid
+      throw Error(`Not a valid cell. ${coordinate.x} ${coordinate.y}`);
+    }
+  }
+
+  /**
+   * This method is used to check if the specified cell is empty.
+   * @param coordinate - The coordinate to check.
+   * @returns Whether the specified cell is empty.
+   */
+  public is_cell_empty(coordinate: Coordinate): boolean {
+    // Check if the provided cell coordinate is valid within the grid
+    if (this.is_valid_cell_at(coordinate)) {
+      // Retrieve the state of the cell at the specified coordinate and check if it's empty
+      return this._data[coordinate.x][coordinate.y].state == CellStates.EMPTY;
+    } else {
+      // Throw an error if the provided cell coordinate is not valid
+      throw Error(`Not a valid cell. ${coordinate.x} ${coordinate.y}`);
+    }
+  }
+
+  /**
+   * This method is used to check if the specified cell is valid.
+   * @param coordinate - The coordinate to check.
+   * @returns Whether the specified cell is valid.
+   */
+  public is_valid_cell_at(coordinate: Coordinate): boolean {
+    // Check if the specified coordinate is within the grid boundaries
+    return coordinate.x >= 0 && coordinate.y >= 0 && coordinate.x < this.grid_size && coordinate.y < this.grid_size;
+  }
+
+  /**
+   * Sets the highlighted state of a cell.
+   * @param coordinate - The coordinate of the cell to set the highlighted state of.
+   * @param highlighted - The highlighted state to set.
+   */
+  public set_cell_highlighted(coordinate: Coordinate, highlighted: boolean): void {
+    // Check if the provided cell coordinate is within the grid
+    if (this.is_valid_cell_at(coordinate)) {
+      // Retrieve the cell at the specified coordinate
+      const cell = this.get_cell_at(coordinate);
+
+      // Set the 'is_highlighted' property of the cell to the provided value
+      cell.is_highlighted = highlighted;
+
+      // Add the cell to the 'to_fill' set in the renderer for rendering purposes
+      this.renderer.to_fill.enqueue(cell);
+    }
+  }
+
+  /**
+   * Sets the owner of a cell.
+   * @param coordinate - The coordinate of the cell to set the owner of.
+   * @param owner - The owner to set.
+   */
+  public set_cell_owner(coordinate: Coordinate, owner: Organism): void {
+    // Check if the provided cell coordinate is within the grid
+    if (this.is_valid_cell_at(coordinate)) {
+      // Retrieve the cell at the specified coordinate
+      const cell = this.get_cell_at(coordinate);
+
+      // Set the owner of the cell to the specified organism
+      cell.owner = owner;
+
+      // Add the cell to the 'to_fill' set in the renderer
+      this.renderer.to_fill.enqueue(cell);
+
+      // Increment the count of occupied cells
+      this.occupied += 1;
+    }
+  }
+
+  /**
+   * Sets the selected state of a cell.
+   * @param coordinate - The coordinate of the cell to set the selected state of.
+   * @param selected - The selected state to set.
+   */
+  public set_cell_selected(coordinate: Coordinate, selected: boolean): void {
+    // Check if the provided cell coordinate is within the grid
+    if (this.is_valid_cell_at(coordinate)) {
+      // Retrieve the cell at the specified coordinate
+      const cell = this.get_cell_at(coordinate);
+
+      // Set the 'is_selected' property of the cell to the provided value
+      cell.is_selected = selected;
+
+      // Add the cell to the 'to_fill' set in the renderer for rendering purposes
+      this.renderer.to_fill.enqueue(cell);
+    }
+  }
+
+  /**
+   * Sets the state of a cell.
+   * @param coordinate The coordinate of the cell to set the state of.
+   * @param state The state to set.
+   */
+  public set_cell_state(coordinate: Coordinate, state: number): void {
+    // Check if the provided cell coordinate is within the grid
+    if (this.is_valid_cell_at(coordinate)) {
+      // Retrieve the cell at the specified coordinate
+      const cell = this.get_cell_at(coordinate);
+
+      // Set the state of the cell to the provided state
+      cell.state = state;
+
+      // If the cell state is 'FOOD', set its energy to 1 and clear its owner
+      if (cell.state == CellStates.FOOD) {
+        cell.energy = 1;
+      }
+
+      // Clear the owner of the cell
+      cell.owner = null;
+
+      // Add the cell to the 'to_fill' set in the renderer
+      this.renderer.to_fill.enqueue(cell);
+
+      // Increment the count of occupied cells
+      this.occupied += 1;
+    }
   }
 }

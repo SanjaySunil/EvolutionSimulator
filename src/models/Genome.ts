@@ -2,9 +2,8 @@ import Gene from "./Gene";
 
 /** This class is used to create a genome that can be used to store information */
 export default class Genome {
-  public data: Gene[] | null;
   public colour: string | null;
-
+  public data: Gene[] | null;
   /** Builds a new genome from a given set of genes. */
   constructor(genome: Gene[]) {
     this.data = genome;
@@ -17,7 +16,7 @@ export default class Genome {
 
     // Convert each individual gene into a genome string.
     for (const gene of genome) {
-      genome_string += `${gene.source_type},${gene.source_id},${gene.sink_type},${gene.sink_id},${gene.weight}`;
+      genome_string += `${gene.source_type},${gene.source_id},${gene.sink_type},${gene.sink_id}`;
     }
 
     // Create a unique hash from the genome string.
