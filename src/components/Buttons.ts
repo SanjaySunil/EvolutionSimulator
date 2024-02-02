@@ -138,3 +138,23 @@ export function register_switch_chart(simulation: Simulation): void {
     simulation.environment.chart.switch_chart(index);
   });
 }
+
+/**
+ * Registers an event listener for the generate obstructions button.
+ * @param simulation - The simulation object.
+ */
+export function register_generate_obstructions_button(simulation: Simulation): void {
+  DOMElements.generate_obstructions_button.addEventListener("click", () => {
+    simulation.environment.grid.generate_obstructions();
+  });
+}
+
+/**
+ * Registers an event listener for the clear obstructions button.
+ * @param simulation - The simulation object.
+ */
+export function register_clear_obstructions_button(simulation: Simulation): void {
+  DOMElements.clear_obstructions_button.addEventListener("click", () => {
+    simulation.environment.grid.clear_obstructions();
+  });
+}

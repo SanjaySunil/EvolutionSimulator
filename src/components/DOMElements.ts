@@ -7,7 +7,6 @@ export const DOMElements = {
   sim_restart: document.getElementById("sim_restart") as HTMLButtonElement,
   sim_start_stop: document.getElementById("sim_start_stop") as HTMLButtonElement,
   slider_label: document.getElementById("target_update_fps") as HTMLSpanElement,
-
   target_update_fps_slider: document.getElementById("target_update_fps_slider") as HTMLInputElement,
   export_population: document.getElementById("export_all_organisms") as HTMLButtonElement,
   export_config: document.getElementById("export_config") as HTMLButtonElement,
@@ -22,7 +21,6 @@ export const DOMElements = {
   mode: document.getElementById("mode") as HTMLSpanElement,
   organism_selected: document.getElementById("organism_selected") as HTMLParagraphElement,
   organism_selected_table: document.getElementById("export_neuralnet") as HTMLTableElement,
-
   target_update_fps: document.getElementById("target_update_fps") as HTMLInputElement,
   target_render_fps: document.getElementById("target_render_fps") as HTMLInputElement,
   current_update_fps: document.getElementById("current_update_fps") as HTMLInputElement,
@@ -32,7 +30,8 @@ export const DOMElements = {
   best_fitness: document.getElementById("best_fitness") as HTMLSpanElement,
   overall_fitness: document.getElementById("overall_fitness") as HTMLSpanElement,
   organisms_alive: document.getElementById("organisms_alive") as HTMLSpanElement,
-
   switch_chart: document.getElementById("switch_chart") as HTMLButtonElement,
   number_of_species: document.getElementById("number_of_species") as HTMLSpanElement,
+  clear_obstructions_button: document.getElementById("clear_obstructions") as HTMLButtonElement,
+  generate_obstructions_button: document.getElementById("generate_obstructions") as HTMLButtonElement,
 };

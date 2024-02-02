@@ -121,15 +121,10 @@ export class Grid {
       // Create a new array to represent a column of grid cells
       const column: GridCell[] = new Array(this.grid_size);
 
-      const obstructions = create_obstructions(this.grid_size, this.grid_size, 0.75);
-
       // Loop through each column (y-axis) of the grid
       for (let y = 0; y < this.grid_size; y++) {
         // Create a new GridCell instance with the current x and y coordinates
         const cell = new GridCell(x, y);
-
-        cell.state = obstructions[x][y] == 1 ? CellStates.WALL : CellStates.EMPTY;
-        if (cell.state == CellStates.WALL) this.renderer.to_fill.enqueue(cell);
 
         // Assign the cell to the current column in the grid
         column[y] = cell;
@@ -137,6 +132,31 @@ export class Grid {
 
       // Assign the column to the grid data at the current x position
       this._data[x] = column;
+    }
+  }
+
+  /** This method is used to generate obstructions in the grid. */
+  public generate_obstructions(): void {
+    const obstructions = create_obstructions(this.grid_size, this.grid_size, 0.75);
+
+    for (let x = 0; x < this.grid_size; x++) {
+      for (let y = 0; y < this.grid_size; y++) {
+        const cell = this.get_cell_at({ x, y });
+        cell.state = obstructions[x][y] == 1 ? CellStates.WALL : CellStates.EMPTY;
+        if (cell.state == CellStates.WALL) this.renderer.to_fill.enqueue(cell);
+      }
+    }
+  }
+
+  /** Clears all obstructions from the grid. */
+  public clear_obstructions(): void {
+    for (let x = 0; x < this.grid_size; x++) {
+      for (let y = 0; y < this.grid_size; y++) {
+        const cell = this.get_cell_at({ x, y });
+        if (cell.state == CellStates.WALL) {
+          this.clear_cell_state({ x, y });
+        }
+      }
     }
   }
 

@@ -6,6 +6,8 @@ import {
   register_sim_restart_button,
   register_sim_start_stop_button,
   register_switch_chart,
+  register_generate_obstructions_button,
+  register_clear_obstructions_button,
 } from "./components/Buttons";
 import {
   export_population_button,
@@ -53,3 +55,7 @@ register_export_config_button(config.config);
 register_export_environment_button(simulation);
 export_population_button(simulation);
 register_export_simulation_button(simulation, config.config);
+
+// Environment buttons
+register_generate_obstructions_button(simulation);
+register_clear_obstructions_button(simulation);
