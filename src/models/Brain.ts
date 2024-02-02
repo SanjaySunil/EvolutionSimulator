@@ -1,12 +1,12 @@
 import { cloneDeep } from "lodash";
-import Directions from "../constants/Directions";
+import { Directions } from "../constants/Directions";
 import { InputNeurons } from "../constants/InputNeurons";
 import { AllCellStates, Grid } from "../environment/Grid";
-import normalise_weight from "../utils/weight_as_float";
+import { Coordinate } from "../types/Coordinate";
 import { add_vector, euclidean_distance } from "../utils/geometry";
+import normalise_weight from "../utils/weight_as_float";
 import Gene from "./Gene";
 import { Neuron, Neurons } from "./Neurons";
-import { Coordinate } from "../types/Coordinate";
 
 type ConnectionArray = Array<Gene>;
 type HiddenNeuronMap = Map<number, HiddenNeuron>;

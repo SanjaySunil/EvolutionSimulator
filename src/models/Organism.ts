@@ -1,13 +1,13 @@
 import { DefaultSimulationConfig } from "../config/simulation.config";
-import Directions from "../constants/Directions";
+import { Directions } from "../constants/Directions";
 import { OutputNeurons } from "../constants/OutputNeurons";
 import { Grid } from "../environment/Grid";
+import { Coordinate } from "../types/Coordinate";
 import { make_vector } from "../utils/geometry";
 import probability_to_boolean from "../utils/probability_to_boolean";
 import Brain from "./Brain";
 import Gene from "./Gene";
 import Genome from "./Genome";
-import { Coordinate } from "../types/Coordinate";
 
 /** This class is used to represent an organism in the simulation. */
 export default class Organism {
