@@ -4,7 +4,7 @@ import { Grid } from "../environment/Grid";
 import { DOMElements } from "./DOMElements";
 
 /** These are the only parameters that can only be changed whilst the simulation is running. */
-const live_params = ["MUTATION_PERCENT", "ELITISM_PERCENT", "TICKS_PER_GENERATION"];
+const live_params = ["MUTATION_PERCENT", "ELITISM_PERCENT", "TICKS_PER_GENERATION", "TARGET_UPDATE_FPS", "TARGET_RENDER_FPS"];
 
 /**
  * Checks if the parameter is a live parameter and alerts the user if it is.
@@ -54,6 +54,20 @@ function check_config_changes(simulation, config, key): void {
 
     // Clear the canvas using the updated renderer.
     simulation.environment.renderer.clear_canvas();
+  } else if (key === "TARGET_UPDATE_FPS") {
+    // If the simulation is running, restart the engine to apply the changes.
+    if (simulation.is_running) {
+      simulation.restart_engine();
+    }
+    // Update the target update FPS element on the HTML page.
+    render_fps_element(DOMElements.target_update_fps, config[key]);
+  } else if (key === "TARGET_RENDER_FPS") {
+    // If the simulation is running, restart the engine to apply the changes.
+    if (simulation.is_running) {
+      simulation.restart_engine();
+    }
+    // Update the target render FPS element on the HTML page.
+    render_fps_element(DOMElements.target_render_fps, config[key]);
   }
 }
 
