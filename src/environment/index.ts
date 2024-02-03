@@ -206,7 +206,7 @@ export class Environment extends Canvas {
 
             if (organism.energy == 0) {
               this.grid.get_cell_at(new_coordinate).energy -= 1;
-              organism.energy = 1;
+              organism.energy = organism.energy + this.config.ENERGY_FROM_FOOD;
             }
 
             organism.direction = offset;

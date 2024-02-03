@@ -16,7 +16,7 @@ export default class Organism {
   public brain: Brain;
   public fitness: number | null;
   public alive: boolean;
-  public energy: number;
+  private _energy: number;
   public direction: Coordinate;
   public config: typeof DefaultSimulationConfig;
   public grid: Grid;
@@ -39,7 +39,22 @@ export default class Organism {
     this.direction = Directions.NORTH;
     this.fitness = null;
     this.alive = true;
-    this.energy = 0;
+    this._energy = 0;
+  }
+
+  /** Gets the energy of the organism. */
+  public get energy(): number {
+    return this._energy;
+  }
+
+  /**
+   * Sets the energy of the organism.
+   * @param energy - The new energy value of the organism.
+   */
+  public set energy(energy: number) {
+    if (energy >= 0 && energy <= this.config.MAX_ENERGY) {
+      this._energy = energy;
+    }
   }
 
   /**

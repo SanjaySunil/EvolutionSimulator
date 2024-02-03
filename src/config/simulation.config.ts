@@ -31,11 +31,13 @@ const DefaultSimulationConfig: Types = {
   NUMBER_OF_HIDDEN_NEURONS: 127, // 127
   // Maximum energy each organism can have.
   MAX_ENERGY: 1,
+  // Energy gained from food
+  ENERGY_FROM_FOOD: 1,
   // Total number of genes for organisms
   NUMBER_OF_GENES: 10,
   // Flags indicating whether goal is food or coordinated.
-  GOAL_FOOD: false,
-  GOAL_COORD: true,
+  GOAL_FOOD: true,
+  GOAL_COORD: false,
 
   // Determine the number of available input and output neurons based on imported constants.
   NUMBER_OF_INPUTS: Object.keys(InputNeurons).length,
