@@ -2,6 +2,7 @@ import Renderer from "../controllers/renderer.controller";
 import Simulation from "../controllers/simulation.controller";
 import { Grid } from "../environment/Grid";
 import { DOMElements } from "./DOMElements";
+import { SimulationConfigBoundaries } from "../config/simulation.config";
 
 /** These are the only parameters that can only be changed whilst the simulation is running. */
 const live_params = ["MUTATION_PERCENT", "ELITISM_PERCENT", "TICKS_PER_GENERATION", "TARGET_UPDATE_FPS", "TARGET_RENDER_FPS"];
@@ -19,6 +20,24 @@ function check_if_live_param(started: boolean, key: string): boolean {
   } else {
     return true;
   }
+}
+
+/**
+ * Checks if the input is valid based on the key and value.
+ * @param key - The key in the config object that was changed.
+ * @param value - The value of the key in the config object.
+ * @returns - Whether the input is valid.
+ */
+function check_if_valid_input(key: string, value: string): boolean {
+  if (key in SimulationConfigBoundaries) {
+    const min = SimulationConfigBoundaries[key][0];
+    const max = SimulationConfigBoundaries[key][1];
+    if (parseInt(value) < min || parseInt(value) > max) {
+      alert(`The value for ${key} must be between ${min} and ${max}.`);
+      return false;
+    }
+  }
+  return true;
 }
 
 /**
@@ -93,8 +112,8 @@ export function render_settings(simulation: Simulation, config: object): void {
     const key = target.id;
     const value = target.value;
 
-    // Check if the key is a live parameter before updating simulation config.
-    if (check_if_live_param(simulation.has_started, key)) {
+    // Check if the input is valid and is a live parameter
+    if (check_if_valid_input(key, value) && check_if_live_param(simulation.has_started, key)) {
       // Update the config object based on the input type
       if (typeof config[key] === "number") {
         config[key] = parseInt(value);

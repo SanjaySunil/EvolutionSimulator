@@ -43,4 +43,22 @@ const DefaultSimulationConfig: Types = {
   GOAL_COORD: false,
 };
 
+export const SimulationConfigBoundaries: Types = {
+  GRID_SIZE: [32, 512],
+  TARGET_UPDATE_MAX_FPS: [1, 300],
+  TARGET_UPDATE_FPS: [1, 300],
+  TARGET_RENDER_FPS: [1, 300],
+  POPULATION: [10, 10000],
+  TICKS_PER_GENERATION: [50, 1000],
+  ELITISM_PERCENT: [0, 100],
+  TOP_PERCENT_TO_REPRODUCE: [0, 100],
+  MUTATION_PERCENT: [0, 100],
+  MAX_ENERGY: [1, 100],
+  ENERGY_FROM_FOOD: [1, 100],
+  NUMBER_OF_HIDDEN_NEURONS: [0, 512],
+  NUMBER_OF_INPUTS: [1, Object.keys(InputNeurons).length],
+  NUMBER_OF_OUTPUTS: [1, Object.keys(OutputNeurons).length],
+  NUMBER_OF_GENES: [1, 512],
+};
+
 export { DefaultSimulationConfig };
