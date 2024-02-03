@@ -49,6 +49,21 @@ export function merge_sort(arr: Organism[]): Organism[] {
 }
 
 /**
+ * Calculates the fitness value of an organism based on the specified goal and parameters.
+ * @param organism - The organism for which fitness is being calculated.
+ * @param goal - The goal of the simulation.
+ * @param params - Parameters containing goal coordinates and maximum distances to goal for fitness calculation.
+ * @returns - The calculated fitness value based on the organism's proximity to the goal coordinates or energy level.
+ */
+export function calculate_fitness(organism: Organism, goal: string, params?: any): number {
+  if (goal === "food") {
+    return calculate_fitness_by_food(organism);
+  } else if (goal === "coord") {
+    return calculate_fitness_by_coord(organism, params);
+  } else throw new Error("Invalid goal type specified.");
+}
+
+/**
  * Sorts an array of organisms based on their fitness and calculates their fitness values.
  * @param population - The array of organisms to be sorted.
  * @param goal - The goal of the simulation.
@@ -57,16 +72,9 @@ export function merge_sort(arr: Organism[]): Organism[] {
  */
 export function calculate_and_sort_fitness(population: Organism[], goal: string, params?: any): Organism[] {
   // Calculate fitness values for organisms based on the specified goal.
-  if (goal === "food") {
-    for (const organism of population) {
-      organism.fitness = calculate_fitness_by_food(organism);
-    }
-  } else if (goal === "coord") {
-    for (const organism of population) {
-      organism.fitness = calculate_fitness_by_coord(organism, params);
-    }
+  for (const organism of population) {
+    organism.fitness = calculate_fitness(organism, goal, params);
   }
-
   // Sort the population based on fitness using merge sort algorithm and return the sorted population.
   return merge_sort(population);
 }

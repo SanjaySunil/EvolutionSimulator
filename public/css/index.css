@@ -317,3 +317,6 @@ input[type="file"] {
 #export_neuralnet {
   display: none;
 }
+#organism_info {
+  display: none;
+}

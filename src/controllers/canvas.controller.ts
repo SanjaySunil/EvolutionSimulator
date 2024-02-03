@@ -1,3 +1,4 @@
+import { calculate_fitness } from "../algorithms/GeneticAlgorithm";
 import { draw_neural_net_brain } from "../algorithms/NeuralNetDiagram";
 import { DOMElements } from "../components/DOMElements";
 import { DefaultSimulationConfig } from "../config/simulation.config";
@@ -73,14 +74,30 @@ export default class Canvas {
         // If the current mode is idle, check if the cell is an organism, and create its neural network diagram.
         if (cell.state == CellStates.ORGANISM && cell.owner?.brain.connections) {
           // Display selected organism's neural network diagram
-          DOMElements.organism_selected.innerHTML = "Organism selected";
-          DOMElements.organism_selected_table.style.display = "block";
+          DOMElements.select_organism_info.style.display = "none";
+          DOMElements.organism_selected_text.innerHTML = "Organism selected";
+          DOMElements.export_neuralnet_button.style.display = "block";
+          DOMElements.organism_info.style.display = "block";
 
+          // Calculate and display the fitness score of the selected organism
+          if (this.config.GOAL_COORD) {
+            DOMElements.fitness_score.innerHTML = calculate_fitness(cell.owner, "coord", {
+              goal_coordinates: this.goal_coordinates,
+              max_distances_to_goal: this.max_distances_to_goal,
+            }).toFixed(2);
+          } else if (this.config.GOAL_FOOD) {
+            DOMElements.fitness_score.innerHTML = calculate_fitness(cell.owner, "food").toFixed(2);
+          }
+
+          // Draw the neural network diagram of the selected organism
           draw_neural_net_brain(cell.owner.brain.connections);
         } else {
           // Clear organism selected message and hide neural network diagram download button.
-          DOMElements.organism_selected.innerHTML = "";
-          DOMElements.organism_selected_table.style.display = "none";
+          DOMElements.select_organism_info.style.display = "block";
+          DOMElements.organism_selected_text.innerHTML = "";
+          DOMElements.export_neuralnet_button.style.display = "none";
+          DOMElements.organism_info.style.display = "none";
+          DOMElements.fitness_score.innerHTML = "N/A";
         }
       } else if (this.mouse.mode == MouseModes.PAN) {
         // If the current mode is pan, move the canvas based on the mouse movement.

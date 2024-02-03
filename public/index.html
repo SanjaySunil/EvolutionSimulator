@@ -118,10 +118,13 @@
                       <th colspan="2">Selected Organism</th>
                     </tr>
                     <tr>
-                      <td>Select an organism to view its brain diagram.</td>
-                    </tr>
-                    <tr>
-                      <td colspan="2"><button class="button" id="export_neuralnet">Download Brain Diagram</button></td>
+                      <td>
+                        <p id="select_organism_info">Select an organism to view its brain diagram and calculate its fitness score.</p>
+                        <div id="organism_info">
+                          Fitness: <span id="fitness_score"></span>
+                          <button class="button" id="export_neuralnet">Download Brain Diagram</button>
+                        </div>
+                      </td>
                     </tr>
                   </table>
                   <br />
