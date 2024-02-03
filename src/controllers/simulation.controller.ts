@@ -93,6 +93,12 @@ export default class Simulation {
       return false;
     }
 
+    // Check if population size is less than 10.
+    if (this.config.POPULATION < 10) {
+      alert("Population size cannot be less than 10.");
+      return false;
+    }
+
     // Checks have passed, so return true.
     return true;
   }
