@@ -26,7 +26,6 @@ export const DOMElements = {
   fitness_score: document.getElementById("fitness_score") as HTMLSpanElement,
   organism_fitness_row: document.getElementById("organism_fitness") as HTMLSpanElement,
   target_update_fps: document.getElementById("target_update_fps") as HTMLInputElement,
-  target_render_fps: document.getElementById("target_render_fps") as HTMLInputElement,
   current_update_fps: document.getElementById("current_update_fps") as HTMLInputElement,
   current_render_fps: document.getElementById("current_render_fps") as HTMLInputElement,
   tick_count: document.getElementById("tick_count") as HTMLSpanElement,

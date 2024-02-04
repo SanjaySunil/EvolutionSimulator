@@ -13,8 +13,6 @@ const DefaultSimulationConfig: Types = {
   TARGET_UPDATE_MAX_FPS: 300,
   // Target frames per second (FPS) for updating the simulation
   TARGET_UPDATE_FPS: 300,
-  // Target frames per second (FPS) for rendering the simulation
-  TARGET_RENDER_FPS: 60,
   // Number of organisms in the population
   POPULATION: 1500,
   // Number of simulation steps before moving to next generation.

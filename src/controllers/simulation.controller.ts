@@ -12,6 +12,7 @@ export default class Simulation {
 
   // Define properties for render loop
   public current_render_fps: number;
+  public target_render_fps: number;
   public last_render_time: number;
   public last_render_dt: number;
 
@@ -40,6 +41,7 @@ export default class Simulation {
 
     // Initialize render loop properties
     this.current_render_fps = 0;
+    this.target_render_fps = 60;
     this.last_render_time = window.performance.now();
     this.last_render_dt = 0;
 
@@ -60,7 +62,6 @@ export default class Simulation {
 
     // Render target update and render FPS elements
     render_fps_element(DOMElements.target_update_fps, this.config.TARGET_UPDATE_FPS);
-    render_fps_element(DOMElements.target_render_fps, this.config.TARGET_RENDER_FPS);
   }
 
   /**
@@ -120,7 +121,7 @@ export default class Simulation {
       // Setup the render loop
       this.render_loop = setInterval(() => {
         this.render_simulation();
-      }, 1000 / this.config.TARGET_RENDER_FPS);
+      }, 1000 / this.target_render_fps);
     }
   }
 
@@ -154,13 +155,13 @@ export default class Simulation {
         DOMElements.organisms_alive.innerHTML = this.environment.alive.toString();
 
         // Check if the current update FPS is greater than or equal to the target update FPS.
-        if (this.current_update_fps >= this.config.TARGET_RENDER_FPS && this.render_loop != undefined) {
+        if (this.current_update_fps >= this.target_render_fps && this.render_loop != undefined) {
           // Stop the render loop
           clearInterval(this.render_loop);
           this.render_loop = undefined;
         } else {
           // Check if the current render FPS is less than the target render FPS and the render loop is not running.
-          if (this.current_render_fps < this.config.TARGET_RENDER_FPS && this.render_loop == undefined) {
+          if (this.current_render_fps < this.target_render_fps && this.render_loop == undefined) {
             // Start the render loop.
             this.setup_render_loop();
           }
