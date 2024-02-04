@@ -145,6 +145,7 @@ export function register_switch_chart(simulation: Simulation): void {
  */
 export function register_generate_obstructions_button(simulation: Simulation): void {
   DOMElements.generate_obstructions_button.addEventListener("click", () => {
+    simulation.environment.grid.clear_obstructions();
     simulation.environment.grid.generate_obstructions();
   });
 }
