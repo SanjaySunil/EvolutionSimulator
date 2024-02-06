@@ -5,6 +5,7 @@ import { OutputNeurons } from "./../constants/OutputNeurons";
 // Defining Types for DefaultSimulationConfig
 type Types = Record<string, any>;
 
+/** Fixed defaults for the simulation. */
 export const FixedDefaults: Types = {
   // Maximum frames per second (FPS) for rendering the simulation
   TARGET_RENDER_FPS: 60,
@@ -46,11 +47,10 @@ export const DefaultSimulationConfig: Types = {
   GOAL_COORD: false,
 };
 
+/** Boundaries for simulation configuration parameters. */
 export const SimulationConfigBoundaries: Types = {
   GRID_SIZE: [32, 512],
-  TARGET_UPDATE_MAX_FPS: [1, 300],
   TARGET_UPDATE_FPS: [1, 300],
-  TARGET_RENDER_FPS: [1, 300],
   POPULATION: [10, 10000],
   TICKS_PER_GENERATION: [50, 1000],
   ELITISM_PERCENT: [0, 100],
