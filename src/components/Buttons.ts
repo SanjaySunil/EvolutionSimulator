@@ -1,3 +1,4 @@
+import { FixedDefaults } from "../config/simulation.config";
 import Simulation from "../controllers/simulation.controller";
 import { DOMElements } from "./DOMElements";
 
@@ -102,7 +103,7 @@ export function register_show_controls(): void {
  */
 export function register_fps_slider(simulation, config): void {
   // Set the slider's min, max, and initial value.
-  DOMElements.target_update_fps_slider.max = config.TARGET_UPDATE_MAX_FPS.toString();
+  DOMElements.target_update_fps_slider.max = FixedDefaults.TARGET_UPDATE_MAX_FPS.toString();
   DOMElements.target_update_fps_slider.value = config.TARGET_UPDATE_FPS.toString();
 
   // When the slider's value is changed, the target update FPS is updated.
