@@ -1,7 +1,7 @@
-import { render_fps_element } from "../components/Settings";
-import { DefaultSimulationConfig } from "../config/simulation.config";
-import { Environment } from "../environment";
 import { DOMElements } from "../components/DOMElements";
+import { render_fps_element } from "../components/Settings";
+import { DefaultSimulationConfig, FixedDefaults } from "../config/simulation.config";
+import { Environment } from "../environment";
 
 /** This class is used to create a simulation that can be used to simulate the environment. */
 export default class Simulation {
@@ -121,7 +121,7 @@ export default class Simulation {
       // Setup the render loop
       this.render_loop = setInterval(() => {
         this.render_simulation();
-      }, 1000 / this.target_render_fps);
+      }, 1000 / FixedDefaults.TARGET_RENDER_FPS);
     }
   }
 
@@ -155,13 +155,13 @@ export default class Simulation {
         DOMElements.organisms_alive.innerHTML = this.environment.alive.toString();
 
         // Check if the current update FPS is greater than or equal to the target update FPS.
-        if (this.current_update_fps >= this.target_render_fps && this.render_loop != undefined) {
+        if (this.current_update_fps >= FixedDefaults.TARGET_RENDER_FPS && this.render_loop != undefined) {
           // Stop the render loop
           clearInterval(this.render_loop);
           this.render_loop = undefined;
         } else {
           // Check if the current render FPS is less than the target render FPS and the render loop is not running.
-          if (this.current_render_fps < this.target_render_fps && this.render_loop == undefined) {
+          if (this.current_render_fps < FixedDefaults.TARGET_RENDER_FPS && this.render_loop == undefined) {
             // Start the render loop.
             this.setup_render_loop();
           }

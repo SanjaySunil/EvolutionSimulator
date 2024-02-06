@@ -1,8 +1,8 @@
+import { SimulationConfigBoundaries } from "../config/simulation.config";
 import Renderer from "../controllers/renderer.controller";
 import Simulation from "../controllers/simulation.controller";
 import { Grid } from "../environment/Grid";
 import { DOMElements } from "./DOMElements";
-import { SimulationConfigBoundaries } from "../config/simulation.config";
 
 /** These are the only parameters that can only be changed whilst the simulation is running. */
 const live_params = ["MUTATION_PERCENT", "ELITISM_PERCENT", "TICKS_PER_GENERATION", "TARGET_UPDATE_FPS"];

@@ -1,16 +1,21 @@
 // Importing constants for output and input neurons
-import { OutputNeurons } from "./../constants/OutputNeurons";
 import { InputNeurons } from "../constants/InputNeurons";
+import { OutputNeurons } from "./../constants/OutputNeurons";
 
 // Defining Types for DefaultSimulationConfig
 type Types = Record<string, any>;
 
-/** Default simulation settings. */
-const DefaultSimulationConfig: Types = {
-  // Grid size for the simulation
-  GRID_SIZE: 128,
+export const FixedDefaults: Types = {
+  // Maximum frames per second (FPS) for rendering the simulation
+  TARGET_RENDER_FPS: 60,
   // Maximum frames per second (FPS) for updating the simulation
   TARGET_UPDATE_MAX_FPS: 300,
+};
+
+/** Default simulation settings. */
+export const DefaultSimulationConfig: Types = {
+  // Grid size for the simulation
+  GRID_SIZE: 128,
   // Target frames per second (FPS) for updating the simulation
   TARGET_UPDATE_FPS: 300,
   // Number of organisms in the population
@@ -58,5 +63,3 @@ export const SimulationConfigBoundaries: Types = {
   NUMBER_OF_OUTPUTS: [1, Object.keys(OutputNeurons).length],
   NUMBER_OF_GENES: [1, 512],
 };
-
-export { DefaultSimulationConfig };

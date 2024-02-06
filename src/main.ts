@@ -1,13 +1,13 @@
 import {
+  register_clear_obstructions_button,
   register_download_neuralnet_button,
   register_fps_slider,
+  register_generate_obstructions_button,
   register_rendering_enabled_button,
   register_show_controls,
   register_sim_restart_button,
   register_sim_start_stop_button,
   register_switch_chart,
-  register_generate_obstructions_button,
-  register_clear_obstructions_button,
 } from "./components/Buttons";
 import {
   export_population_button,
@@ -20,9 +20,9 @@ import {
   register_import_simulation_button,
 } from "./components/ImportExport";
 import { render_settings } from "./components/Settings";
-import Simulation from "./controllers/simulation.controller";
-import { ConfigController } from "./controllers/config.controller";
 import { DefaultSimulationConfig } from "./config/simulation.config";
+import { ConfigController } from "./controllers/config.controller";
+import Simulation from "./controllers/simulation.controller";
 
 const config = ConfigController.get_instance();
 
