@@ -1,4 +1,4 @@
-// Identifiers for each type of neuron.
+/** Identifiers for each type of neuron. */
 export const Neurons = {
   INPUT: 1,
   OUTPUT: 1,
@@ -7,11 +7,12 @@ export const Neurons = {
 
 /** This class is used to create a neuron that can be used to store information. */
 export class Neuron {
-  // Output value of the neuron.
+  /** Output value of the neuron. */
   public output: number;
-  // Undriven neurons have fixed output values.
+  /** Whether or not the neuron is driven. Undriven neurons have fixed output values. */
   public driven: boolean;
-  // Builds a new neuron.
+
+  /** Instantiates a new Neuron. */
   constructor() {
     this.output = 0.0;
     this.driven = false;

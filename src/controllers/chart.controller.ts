@@ -5,6 +5,11 @@ export default class ChartController {
   public chart: CanvasJS.Chart;
   public chart_id: string;
   public configs: object[];
+
+  /**
+   * Instantiates a new ChartController.
+   * @param chart_id - The ID of the chart to control.
+   */
   constructor(chart_id: string) {
     this.configs = [];
     this.chart_id = chart_id;

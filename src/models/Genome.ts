@@ -4,13 +4,21 @@ import Gene from "./Gene";
 export default class Genome {
   public colour: string | null;
   public data: Gene[] | null;
-  /** Builds a new genome from a given set of genes. */
+
+  /**
+   * Instantiates a new Genome from a given set of genes.
+   * @param genome - The genes to create the genome from.
+   */
   constructor(genome: Gene[]) {
     this.data = genome;
     this.colour = this.get_colour(genome);
   }
 
-  // Obtains a colour for the organism based on its genome.
+  /**
+   * Obtains a colour for the organism based on its genome.
+   * @param genome
+   * @returns The colour of the organism.
+   */
   private get_colour(genome): string {
     let genome_string = "";
 

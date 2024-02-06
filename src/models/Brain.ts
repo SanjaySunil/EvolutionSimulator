@@ -41,6 +41,15 @@ export default class Brain {
   public num_hidden_neurons: number;
   public num_output_neurons: number;
 
+  /**
+   * Instantiates a new Brain.
+   * @param coordinate - The coordinate of the organism.
+   * @param grid - Reference to the grid.
+   * @param genome_data - The genome data to use to create the brain.
+   * @param num_input_neurons - The number of input neurons.
+   * @param num_hidden_neurons - The number of hidden neurons.
+   * @param num_output_neurons - The number of output neurons.
+   */
   constructor(coordinate, grid, genome_data, num_input_neurons: number, num_hidden_neurons: number, num_output_neurons: number) {
     // References to the organism's coordinate and the grid.
     this.coordinate = coordinate;

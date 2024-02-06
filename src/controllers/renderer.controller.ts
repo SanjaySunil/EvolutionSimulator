@@ -10,6 +10,13 @@ export default class Renderer {
   public pixel_size;
   public to_clear: Queue;
   public to_fill: Queue;
+
+  /**
+   * Instantiates a new Renderer.
+   * @param canvas - The canvas to render on.
+   * @param ctx - The canvas context to render with.
+   * @param pixel_size - The size of the pixels on the canvas.
+   */
   constructor(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, pixel_size: number) {
     this.canvas = canvas;
     this.ctx = ctx;

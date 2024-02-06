@@ -21,7 +21,13 @@ export default class Organism {
   public config: typeof DefaultSimulationConfig;
   public grid: Grid;
 
-  // Constructs a new Organism object.
+  /**
+   * Instantiates a new Organism.
+   * @param coordinate - The coordinate of the organism.
+   * @param genome - The genome of the organism.
+   * @param grid - Reference to the grid.
+   * @param config - The configuration to use for the organism.
+   */
   constructor(coordinate, genome: Gene[], grid: Grid, config) {
     this.grid = grid;
     this._coordinate = coordinate;

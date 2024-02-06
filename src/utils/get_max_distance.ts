@@ -1,4 +1,10 @@
-// Function to calculate the maximum distance between a point and any other point in a grid of a given size.
+/**
+ * Function to calculate the maximum distance between a point and any other point in a grid of a given size.
+ * @param size - The size of the grid.
+ * @param x_coord - The x-coordinate of the point.
+ * @param y_coord - The y-coordinate of the point.
+ * @returns - The maximum distance between the point and any other point in the grid.
+ */
 export function max_distance_to_point(size, x_coord, y_coord): number {
   let max_distance = 0;
 

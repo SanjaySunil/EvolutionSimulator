@@ -25,6 +25,12 @@ export default class Canvas {
   public renderer: Renderer;
   public zoom_level: number;
   public zoom_speed: number;
+
+  /**
+   * Instantiates a new Canvas.
+   * @param canvas_id - The ID of the canvas to render the environment on.
+   * @param config - The configuration to use for the environment.
+   */
   constructor(canvas_id: string, config: typeof DefaultSimulationConfig) {
     this.config = config;
     // Get the canvas element and its 2D rendering context

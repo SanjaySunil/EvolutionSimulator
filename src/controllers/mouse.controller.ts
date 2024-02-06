@@ -26,6 +26,12 @@ export class Mouse {
   public pixel_size: number;
   public prev_grid_coord: Coordinate;
   public right_click: boolean;
+
+  /**
+   * Instantiates a new Mouse.
+   * @param pixel_size - The size of the pixels on the canvas.
+   * @param grid_size - The size of the grid on the canvas.
+   */
   constructor(pixel_size: number, grid_size: number) {
     this.grid_size = grid_size;
     this.grid_coord = make_vector(0, 0);

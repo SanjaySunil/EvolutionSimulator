@@ -13,7 +13,7 @@ export default class Gene {
   // The weight of the connection.
   public weight: number;
 
-  // Builds a new gene.
+  /** Instantiates a new Gene. */
   constructor() {
     this.source_type = get_random_number(0, 1);
     this.source_id = get_random_number(0, 0x7fff);

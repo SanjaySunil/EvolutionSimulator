@@ -3,7 +3,10 @@ class QueueNode {
   public value: any;
   public next: QueueNode | null;
 
-  /** Builds a new QueueNode instance. */
+  /**
+   * Instantiates a new QueueNode instance.
+   * @param value - The value to store in the node.
+   */
   constructor(value) {
     // Assign the provided value to the node.
     this.value = value;

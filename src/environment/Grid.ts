@@ -26,6 +26,21 @@ export class GridCell {
   public is_selected: boolean;
 
   /**
+   * Instantiates a new grid cell.
+   * @param x - The x-coordinate of the cell.
+   * @param y - The y-coordinate of the cell.
+   * @param state - The state of the cell.
+   */
+  constructor(x: number, y: number, state = CellStates.EMPTY) {
+    this.coordinate = { x, y };
+    this._owner = null;
+    this._state = state;
+    this.is_selected = false;
+    this.is_highlighted = false;
+    this.energy = 0;
+  }
+
+  /**
    * This method is used to get the owner of the grid cell.
    * @returns The owner of the grid cell.
    */
@@ -70,21 +85,6 @@ export class GridCell {
     this._state = state;
   }
 
-  /**
-   * Builds a new grid cell.
-   * @param x - The x-coordinate of the cell.
-   * @param y - The y-coordinate of the cell.
-   * @param state - The state of the cell.
-   */
-  constructor(x: number, y: number, state = CellStates.EMPTY) {
-    this.coordinate = { x, y };
-    this._owner = null;
-    this._state = state;
-    this.is_selected = false;
-    this.is_highlighted = false;
-    this.energy = 0;
-  }
-
   /** This method is used to clear the grid cell. */
   public clear(): void {
     // Reset the owner of the cell to null
@@ -101,6 +101,7 @@ export class Grid {
   public grid_size: number;
   public occupied: number;
   public renderer: Renderer;
+  
   /**
    * Builds a new grid.
    * @param grid_size - The size of the grid.

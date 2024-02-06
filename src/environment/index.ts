@@ -25,7 +25,12 @@ export class Environment extends Canvas {
   public species_count: number;
   public species_data_points: any;
   public ticks: number;
-  // Builds a new Environment instance.
+
+  /**
+   * Instantiates a new Environment.
+   * @param canvas_id - The ID of the canvas to render the environment on.
+   * @param config - The configuration to use for the environment.
+   */
   constructor(canvas_id: string, config: typeof DefaultSimulationConfig) {
     super(canvas_id, config);
     this.population = [];

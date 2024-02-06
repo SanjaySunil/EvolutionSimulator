@@ -29,7 +29,10 @@ export default class Simulation {
   // Define environment and population variables
   public environment: Environment;
 
-  // Constructor for the Simulation class
+  /**
+   * Instantiates a new Simulation.
+   * @param config - The configuration to use for the simulation.
+   */
   constructor(config: typeof DefaultSimulationConfig) {
     // Set the configuration
     this.config = config;
