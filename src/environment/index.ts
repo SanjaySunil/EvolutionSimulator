@@ -179,7 +179,7 @@ export class Environment extends Canvas {
 
   /** Updates the environment based on the configured goals and conditions. */
   public update(): void {
-    if (this.ticks > this.config.TICKS_PER_GENERATION) {
+    if (this.ticks == this.config.TICKS_PER_GENERATION) {
       this.next_generation();
     } else {
       this.alive = 0;
