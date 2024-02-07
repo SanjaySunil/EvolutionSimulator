@@ -10,7 +10,7 @@ import { add_vector } from "../utils/geometry";
 import get_random_vector from "../utils/get_random_vector";
 import { CellStates } from "./Grid";
 
-/** Environment class. */
+/** This class represents the environment in which the organisms exist and interact. */
 export class Environment extends Canvas {
   public alive: number;
   public best_fitness: number;
