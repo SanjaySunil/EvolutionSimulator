@@ -38,6 +38,7 @@
     "chalk": "^4.1.2",
     "chart.js": "^4.4.0",
     "lodash": "^4.17.21",
-    "perlin.js": "^1.0.0"
+    "perlin.js": "^1.0.0",
+    "uglifyjs-webpack-plugin": "^2.2.0"
   }
 }
