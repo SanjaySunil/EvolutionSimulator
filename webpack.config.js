@@ -1,6 +1,7 @@
 module.exports = {
   entry: "./src/main.ts",
-  devtool: "inline-source-map",
+  // devtool: "inline-source-map",
+  devtool: "none",
   module: {
     rules: [
       {
