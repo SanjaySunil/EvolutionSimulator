@@ -28,13 +28,16 @@ export function euclidean_distance(first_coord: Coordinate, second_coord: Coordi
  */
 export function rotate_point(point: Coordinate, pivot: Coordinate, angle: number): Coordinate {
   if (typeof point.x == "number" && typeof point.y == "number") {
+    // Convert the angle to radians.
     const radians = to_radians(angle);
+    // Calculate the new x and y coordinates of the point after rotation.
     const cos = Math.cos(radians);
     const sin = Math.sin(radians);
     const nx = Math.round(cos * (point.x - pivot.x) + sin * (point.y - pivot.y) + pivot.x);
     const ny = Math.round(cos * (point.y - pivot.y) - sin * (point.x - pivot.x) + pivot.y);
     return { x: nx, y: ny };
   } else {
+    // Throw an error if the coordinates are not of type number.
     throw Error("Cannot rotate point as coordinates are not of type number.");
   }
 }
@@ -60,15 +63,14 @@ export const make_vector = (x: number, y: number): Coordinate => {
 };
 
 /**
- * Converts a point to an angle in degrees.
+ * Converts a vector to an angle in degrees.
  * @param point - The point to convert to an angle.
  * @returns The angle in degrees.
  */
 export function to_angle(point: Coordinate): number {
-  const firstAngle = Math.atan2(1, 0);
-  const secondAngle = Math.atan2(point.y, point.x);
-
-  const angle = secondAngle - firstAngle;
+  const first_angle = Math.atan2(1, 0);
+  const second_angle = Math.atan2(point.y, point.x);
+  const angle = second_angle - first_angle;
 
   return Math.abs((angle * 180) / Math.PI);
 }

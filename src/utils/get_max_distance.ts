@@ -6,8 +6,10 @@
  * @returns - The maximum distance between the point and any other point in the grid.
  */
 export function max_distance_to_point(size, x_coord, y_coord): number {
+  // Initialize the maximum distance to 0.
   let max_distance = 0;
 
+  // Calculate the maximum distance between the point and any other point in the grid.
   for (let i = 0; i < size; i++) {
     for (let j = 0; j < size; j++) {
       const distance = Math.sqrt((i - x_coord) ** 2 + (j - y_coord) ** 2);
@@ -15,5 +17,6 @@ export function max_distance_to_point(size, x_coord, y_coord): number {
     }
   }
 
+  // Return the maximum distance.
   return max_distance;
 }

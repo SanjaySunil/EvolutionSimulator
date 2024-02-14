@@ -39,11 +39,13 @@ export default class Canvas {
     // Set the canvas dimensions based on the grid size
     this.canvas.width = this.canvas.height = this.config.GRID_SIZE * 15;
     this.grid_size = this.config.GRID_SIZE;
+    // Calculate the pixel size based on the grid size
     this.pixel_size = (this.config.GRID_SIZE * 15) / this.grid_size;
     this.zoom_level = 0.4;
     this.zoom_speed = 0.01;
     this.min_zoom = 0.1;
     this.pan_amount = 50;
+    // Create a new mouse, renderer, and grid
     this.mouse = new Mouse(this.pixel_size, this.grid_size);
     this.renderer = new Renderer(this.canvas, this.ctx, this.pixel_size);
     this.grid = new Grid(this.grid_size, this.renderer);
@@ -54,6 +56,7 @@ export default class Canvas {
     // Register mouse and keyboard events
     this.register_mouse_events();
     this.register_keyboard_events();
+    // Clear the canvas.
     this.renderer.clear_canvas();
   }
 
@@ -145,6 +148,7 @@ export default class Canvas {
     else if (event.code == "KeyA") this.canvas.style.left = canvas_left + this.pan_amount + "px";
     else if (event.code == "KeyS") this.canvas.style.top = canvas_top - this.pan_amount + "px";
     else if (event.code == "KeyW") this.canvas.style.top = canvas_top + this.pan_amount + "px";
+
     // If the 1-6 keys are pressed, change the current mode.
     else if (event.code == "Digit1") this.mouse.mode = MouseModes.IDLE;
     else if (event.code == "Digit2") this.mouse.mode = MouseModes.PAN;
@@ -170,7 +174,7 @@ export default class Canvas {
 
   /** Registers keyboard events on the window. */
   private register_keyboard_events(): void {
-    // Register keyboard events on the window
+    // When a key is pressed, handle the key down event.
     window.addEventListener("keydown", (e) => {
       this.handle_key_down(e);
     });
@@ -181,7 +185,6 @@ export default class Canvas {
    * @param event - The mouse move event.
    */
   private mouse_move(event: MouseEvent): void {
-    // Handle mouse move event
     this.mouse.mouse_move(event);
     this.handle_mouse_move();
     this.check_mouse_events();
@@ -192,7 +195,6 @@ export default class Canvas {
    * @param event - The mouse up event.
    */
   private mouse_up(event: MouseEvent): void {
-    // Handle mouse up event
     this.mouse.mouse_up(event);
   }
 
@@ -210,7 +212,6 @@ export default class Canvas {
    * @param event - The mouse enter event.
    */
   private mouse_enter(event: MouseEvent): void {
-    // Handle mouse enter event
     this.mouse.mouse_enter(event);
     this.handle_mouse_move();
   }
@@ -229,7 +230,6 @@ export default class Canvas {
    * @param event - The mouse wheel event.
    */
   private wheel(event: WheelEvent): void {
-    // Handle mouse wheel event
     this.handle_mouse_wheel(event);
   }
 

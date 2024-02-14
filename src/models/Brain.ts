@@ -8,6 +8,7 @@ import normalise_weight from "../utils/weight_as_float";
 import Gene from "./Gene";
 import { Neuron, Neurons } from "./Neurons";
 
+// Define the connection array and hidden neuron map types.
 type ConnectionArray = Array<Gene>;
 type HiddenNeuronMap = Map<number, HiddenNeuron>;
 
@@ -54,15 +55,18 @@ export default class Brain {
     // References to the organism's coordinate and the grid.
     this.coordinate = coordinate;
     this.grid = grid;
+    // Properties of the organisms brain.
     this.genome_data = genome_data;
     this.inputs = {};
     this.outputs = {};
     this.hidden = {};
     this.hidden_neurons = [];
     this.connections = [];
+    // Number of input, hidden and output neurons.
     this.num_input_neurons = num_input_neurons;
     this.num_hidden_neurons = num_hidden_neurons;
     this.num_output_neurons = num_output_neurons;
+    // Wire the neural network brain of the organism on instantiation.
     this.wire_brain();
   }
 
@@ -79,6 +83,8 @@ export default class Brain {
 
     // Create a renumbered connection array based on the node map.
     this.create_connections(connections, hidden_neuron_map);
+
+    // Create a hidden neuron array based on the node map.
     this.create_hidden_neuron_array(hidden_neuron_map);
   }
 
@@ -88,7 +94,9 @@ export default class Brain {
    * @returns The normalized state of the cell.
    */
   private observation_sensor(direction: number): number {
+    // Create a vector to store the coordinates of the cell to observe.
     let current_vector = { x: this.coordinate.x, y: this.coordinate.y };
+    // Create a vector to store the direction to observe.
     let vector: Coordinate;
 
     // Determine the vector based on the direction parameter.
@@ -97,7 +105,8 @@ export default class Brain {
     else if (direction == InputNeurons.LOOK_SOUTH) vector = Directions.SOUTH;
     else if (direction == InputNeurons.LOOK_WEST) vector = Directions.WEST;
     else {
-      throw Error("Direction not correct.");
+      // Throw an error if the direction specified is invalid.
+      throw Error("Direction specified is invalid.");
     }
 
     // Update the current vector based on the determined direction.
@@ -151,6 +160,7 @@ export default class Brain {
    * @returns - The value of the sensor.
    */
   private get_sensor(sensor_id: number): number {
+    // Check if the sensor identifier matches any predefined type and perform the appropriate action.
     if (
       [
         InputNeurons.X_COORDINATE,
@@ -196,11 +206,12 @@ export default class Brain {
             this.hidden_neurons[neuron_index].output = Math.tanh(neuron_accumulators[neuron_index]);
           }
         }
+        // Set the flag to true to indicate that the output of neurons has been computed.
         neuron_outputs_computed = true;
       }
 
       // Obtain the input value of the connection from a sensor neuron or another neuron.
-      // The values are summed and later passed through a transfer function (hyperbolic tangent function).
+      // The values are summed and later passed through the transfer function (hyperbolic tangent function).
       let input_val = 0.0;
       if (connection.source_type == Neurons.INPUT) {
         // Read the sensor data using the sensor identifier.
@@ -216,6 +227,8 @@ export default class Brain {
         neuron_accumulators[connection.sink_id] += input_val * normalise_weight(connection.weight);
       }
     }
+
+    // Return the array of output levels for all action neurons.
     return action_levels;
   }
 
@@ -306,6 +319,7 @@ export default class Brain {
         }
       }
     }
+
     // Return the created map of neurons with their input/output counts.
     return hidden_neuron_map;
   }
@@ -445,6 +459,7 @@ export default class Brain {
       // Add the newly created neuron to the hidden_neurons array.
       this.hidden_neurons.push(neuron);
     }
+
     // Return the updated hidden_neurons array.
     return this.hidden_neurons;
   }

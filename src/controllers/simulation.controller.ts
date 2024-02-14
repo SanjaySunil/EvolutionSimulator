@@ -107,9 +107,7 @@ export default class Simulation {
     return true;
   }
 
-  /**
-   * Initializes the simulation.
-   */
+  /** Method to initialize the simulation. */
   private init(): void {
     // Initialize the environment
     this.environment.init();
@@ -176,6 +174,7 @@ export default class Simulation {
 
   /** Stops the simulation engine. */
   public stop_engine(): void {
+    // Check if the simulation is running, and if so, stop it.
     if (this.is_running) {
       this.is_running = false;
       clearInterval(this.update_loop);

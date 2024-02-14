@@ -53,9 +53,13 @@ export class Mouse {
     event.preventDefault();
 
     // Identify and set flags for different mouse buttons upon click.
-    this.left_click = event.button === 0; // Left mouse button clicked
-    this.middle_click = event.button === 1; // Middle mouse button clicked
-    this.right_click = event.button === 2; // Right mouse button clicked
+
+    // Left mouse button clicked
+    this.left_click = event.button === 0;
+    // Middle mouse button clicked
+    this.middle_click = event.button === 1;
+    // Right mouse button clicked
+    this.right_click = event.button === 2;
 
     // Store the coordinates of the click.
     this.clicked_coord.x = this.canvas_coord.x;
@@ -68,9 +72,13 @@ export class Mouse {
    */
   public mouse_enter(event: MouseEvent): void {
     // Identify and set flags for different mouse buttons upon entering the canvas.
-    this.left_click = !!(event.buttons & 1); // Left mouse button clicked
-    this.right_click = !!(event.buttons & 2); // Right mouse button clicked
-    this.middle_click = !!(event.buttons & 4); // Middle mouse button clicked
+
+    // Left mouse button clicked
+    this.left_click = !!(event.buttons & 1);
+    // Right mouse button clicked
+    this.right_click = !!(event.buttons & 2);
+    // Middle mouse button clicked
+    this.middle_click = !!(event.buttons & 4);
 
     // Store the coordinates of the mouse pointer upon entering the canvas.
     this.clicked_coord.x = this.canvas_coord.x;
@@ -121,8 +129,12 @@ export class Mouse {
     event.preventDefault();
 
     // Identify and handle different mouse buttons upon release.
-    if (event.button === 0) this.left_click = false; // Left mouse button released
-    if (event.button === 1) this.middle_click = false; // Middle mouse button released
-    if (event.button === 2) this.right_click = false; // Right mouse button released
+
+    // Left mouse button released
+    if (event.button === 0) this.left_click = false;
+    // Middle mouse button released
+    if (event.button === 1) this.middle_click = false;
+    // Right mouse button released
+    if (event.button === 2) this.right_click = false;
   }
 }

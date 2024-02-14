@@ -101,7 +101,7 @@ export class Grid {
   public grid_size: number;
   public occupied: number;
   public renderer: Renderer;
-  
+
   /**
    * Builds a new grid.
    * @param grid_size - The size of the grid.
@@ -138,8 +138,10 @@ export class Grid {
 
   /** This method is used to generate obstructions in the grid. */
   public generate_obstructions(): void {
+    // Create a grid of obstructions
     const obstructions = create_obstructions(this.grid_size, this.grid_size, 0.75);
 
+    // Loop through each cell in the grid, and if the cell is an obstruction, set it as a wall, else set it as empty.
     for (let x = 0; x < this.grid_size; x++) {
       for (let y = 0; y < this.grid_size; y++) {
         const cell = this.get_cell_at({ x, y });
@@ -151,6 +153,7 @@ export class Grid {
 
   /** Clears all obstructions from the grid. */
   public clear_obstructions(): void {
+    // Loop through each cell in the grid, and if the cell is a wall, clear its state.
     for (let x = 0; x < this.grid_size; x++) {
       for (let y = 0; y < this.grid_size; y++) {
         const cell = this.get_cell_at({ x, y });

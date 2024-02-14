@@ -20,6 +20,7 @@ export default class Genome {
    * @returns The colour of the organism.
    */
   private get_colour(genome): string {
+    // Create a string to store the genome data.
     let genome_string = "";
 
     // Convert each individual gene into a genome string.
@@ -43,6 +44,7 @@ export default class Genome {
     g = Math.floor(g % 256);
     b = Math.floor(b % 256);
 
+    // Return the rgb colour.
     return `rgb(${r}, ${g}, ${b})`;
   }
 }

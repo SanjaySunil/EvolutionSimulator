@@ -11,7 +11,7 @@ export class Neuron {
   public output: number;
   /** Whether or not the neuron is driven. Undriven neurons have fixed output values. */
   public driven: boolean;
-
+  
   /** Instantiates a new Neuron. */
   constructor() {
     this.output = 0.0;

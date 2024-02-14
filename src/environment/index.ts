@@ -143,6 +143,7 @@ export class Environment extends Canvas {
       this.population = calculate_and_sort_fitness(this.population, "food");
     }
 
+    // Initialize variables to track the best individual and the fitness sum.
     let best_found = false;
     let fitness_sum = 0;
 
@@ -174,9 +175,10 @@ export class Environment extends Canvas {
     DOMElements.overall_fitness.innerHTML = this.overall_fitness.toPrecision(3).toString();
     DOMElements.number_of_species_count.innerHTML = this.species_count.toString();
 
+    // Clear the species set.
     this.species = new Set();
 
-    // If the goal is to distribute food, do so within the environment.
+    // If the fitness function goal is to obtain food, drop food in the environment.
     if (this.config.GOAL_FOOD) {
       this.drop_food();
     }
@@ -184,13 +186,17 @@ export class Environment extends Canvas {
 
   /** Updates the environment based on the configured goals and conditions. */
   public update(): void {
+    // Check if the number of ticks has reached the configured number of ticks per generation.
     if (this.ticks == this.config.TICKS_PER_GENERATION) {
+      // Proceed to the next generation if the number of ticks has reached the configured limit.
       this.next_generation();
     } else {
+      // Reset organisms alive to 0.
       this.alive = 0;
 
       // Iterate through the list of organisms and perform actions based on the environment's rules.
       for (const organism of this.population) {
+        // If the organsim is alive, increment the alive count and perform actions.
         if (organism.alive) {
           this.alive++;
           const offset = organism.action();
@@ -209,32 +215,43 @@ export class Environment extends Canvas {
             // Clear cell, consume food, and update coordinates if it's food.
             this.grid.clear_cell_state(organism.coordinate);
 
+            // If the organism's energy is 0, consume food and increment energy.
             if (organism.energy == 0) {
-              this.grid.get_cell_at(new_coordinate).energy -= 1;
+              const previous_energy = organism.energy;
               organism.energy = organism.energy + this.config.ENERGY_FROM_FOOD;
+              if (organism.energy != previous_energy) {
+                this.grid.get_cell_at(new_coordinate).energy -= 1;
+              }
             }
 
+            // Update the direction the organism is facing and the coordinate.
             organism.direction = offset;
             organism.coordinate = new_coordinate;
           }
         }
       }
     }
+
+    // Increment the tick count.
     this.ticks++;
   }
 
   /** Renders the environment on the canvas. */
   public render(): void {
-    // Clear cells that are not selected and fill others based on to_clear and to_fill lists.
+    // Clear cells that are to be cleared based on the to_clear list.
     let cell = this.renderer.to_clear.dequeue();
+
+    // Iterate through the linked list of cells to clear until a null pointer is reached.
     while (cell != null) {
       if (!cell.is_selected) this.renderer.clear_cell(cell);
       else this.renderer.render_cell(cell);
       cell = this.renderer.to_clear.dequeue();
     }
 
+    // Render cells that are to be filled based on the to_fill list.
     cell = this.renderer.to_fill.dequeue();
-    // Fill cells based on the to_fill list.
+
+    // Iterate through the linked list of cells to fill until a null pointer is reached.
     while (cell != null) {
       this.renderer.render_cell(cell);
       cell = this.renderer.to_fill.dequeue();

@@ -125,6 +125,8 @@ export default class Organism {
 
     // Create a vector representing the calculated movement based on probabilities and directions.
     const offset = make_vector(prob_x * signum_x, prob_y * signum_y);
+
+    // Return the calculated offset vector.
     return offset;
   }
 }

@@ -33,10 +33,13 @@ export default class Queue {
    * @returns The value at the front of the queue.
    */
   public dequeue(): any {
+    // If the front of the queue is null, the queue is empty.
     if (this.front === null) {
       this.rear = null;
       return null;
-    } else {
+    }
+    // If the front of the queue is not null, remove the value from the front of the queue.
+    else {
       const node = this.front;
       this.front = this.front.next;
       return node.value;
@@ -48,12 +51,16 @@ export default class Queue {
    * @param value - The value to enqueue.
    */
   public enqueue(value: any): void {
+    // Create a new node to store the value.
     const node = new QueueNode(value);
 
+    // If the rear of the queue is null, the queue is empty.
     if (this.rear === null) {
       this.front = node;
       this.rear = node;
-    } else {
+    }
+    // If the rear of the queue is not null, add the value to the rear of the queue.
+    else {
       this.rear.next = node;
       this.rear = node;
     }

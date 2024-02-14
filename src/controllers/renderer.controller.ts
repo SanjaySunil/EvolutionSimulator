@@ -92,9 +92,11 @@ export default class Renderer {
    * @param degrees_to_rotate - The rotation degrees of the organism.
    */
   private render_organism_cell(cell, degrees_to_rotate): void {
+    // Calculate the canvas coordinates of the cell.
     const cell_x = cell.coordinate.x * this.pixel_size;
     const cell_y = cell.coordinate.y * this.pixel_size;
 
+    // Save the current context state.
     this.ctx.save();
 
     // Translate to the center of the cell.
@@ -102,15 +104,14 @@ export default class Renderer {
     // Rotate the entire cell by rotationDegrees.
     this.ctx.rotate((degrees_to_rotate * Math.PI) / 180);
     // Draw a rectangle centered at (0, 0) to represent the organism.
+    this.ctx.fillRect(-this.pixel_size / 2, -this.pixel_size / 2, this.pixel_size, this.pixel_size);
 
-    this.ctx.fillRect(-this.pixel_size / 2, -this.pixel_size / 2, this.pixel_size, this.pixel_size); // Draw a rectangle centered at (0, 0)
     // Colours used for drawing shapes.
-
     const colour = cell.owner.genome.colour;
     const transparent = "#282a36";
     const black = "#000";
-    // Drawing various shapes to represent the organism.
 
+    // Drawing various shapes to represent the organism.
     this.draw_sub_shape(0, 0, 15, 15, black);
     this.draw_sub_shape(0, 0, 3, 3, transparent);
     this.draw_sub_shape(6, 0, 3, 2, transparent);
@@ -141,6 +142,8 @@ export default class Renderer {
     this.draw_sub_shape(13, 11, 2, 4, transparent);
     this.draw_sub_shape(1, 4, 1, 3, colour);
     this.draw_sub_shape(13, 4, 1, 3, colour);
+
+    // Restore the context to its previous state.
     this.ctx.restore();
   }
 

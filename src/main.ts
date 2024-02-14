@@ -24,6 +24,7 @@ import { DefaultSimulationConfig } from "./config/simulation.config";
 import { ConfigController } from "./controllers/config.controller";
 import Simulation from "./controllers/simulation.controller";
 
+// Initialize the configuration controller and get the instance.
 const config = ConfigController.get_instance();
 
 // Set the default configuration.
