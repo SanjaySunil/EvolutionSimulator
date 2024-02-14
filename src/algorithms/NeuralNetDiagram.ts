@@ -1,11 +1,9 @@
 import { DOMElements } from "../components/DOMElements";
+import { FixedDefaults } from "../config/simulation.config";
 import { InputNeuronSymbols } from "../constants/InputNeurons";
 import { OutputNeuronSymbols } from "../constants/OutputNeurons";
 import Gene from "../models/Gene";
 import { Neurons } from "../models/Neurons";
-const node_radius = 20;
-const node_spacing = 10;
-const svg = DOMElements.neural_network_svg;
 
 /**
  * Creates an SVG element with specific attributes.
@@ -80,7 +78,7 @@ function connect_nodes(source: number[], sink: number[], weight: number, is_posi
   const line = create_element_ns("line", attributes);
 
   // Append the line to the SVG canvas.
-  svg.appendChild(line);
+  DOMElements.neural_network_svg.appendChild(line);
 
   // Define properties for the circles representing the source and sink nodes.
   const circle_radius = 3;
@@ -93,8 +91,8 @@ function connect_nodes(source: number[], sink: number[], weight: number, is_posi
   const sink_node = create_circle(sink[0], sink[1], circle_radius, circle_fill);
 
   // Append the source and sink node to the SVG.
-  svg.appendChild(source_node);
-  svg.appendChild(sink_node);
+  DOMElements.neural_network_svg.appendChild(source_node);
+  DOMElements.neural_network_svg.appendChild(sink_node);
 }
 
 /**
@@ -119,8 +117,10 @@ function create_circle(x: number, y: number, r: number, fill: string, stroke = f
     fill: fill,
   };
 
+  // If the circle has a stroke, set the stroke colour and width.
   if (stroke) {
-    (attributes["stroke"] = "black"), (attributes["stroke-width"] = "5px");
+    attributes["stroke"] = "black";
+    attributes["stroke-width"] = "5px";
   }
 
   // Create a circle SVG element with the defined attributes.
@@ -133,18 +133,18 @@ function create_circle(x: number, y: number, r: number, fill: string, stroke = f
 /**
  * Finds the y-coordinate of the previous node.
  * @param object - The object containing the nodes of the current type.
- * @param previous - The previous y-coordinate.
+ * @param previous_node - The previous y-coordinate.
  * @returns - The y-coordinate of the previous node.
  */
-function find_previous_node_y_coord(object, previous): number {
+function find_previous_node_y_coord(object, previous_node): number {
   // If the object is empty, there is no previous node, so return the node spacing plus the node radius as the initial y-coordinate.
   if (Object.keys(object).length == 0) {
-    previous = node_spacing + node_radius;
+    previous_node = FixedDefaults.node_spacing + FixedDefaults.FixedDefaults.FixedDefaults.node_radius;
   } else {
     // Otherwise, find the previous y-coordinate by adding the node spacing and the node radius to the previous y-coordinate.
-    previous = previous + (node_spacing + 2 * node_radius);
+    previous_node = previous_node + (FixedDefaults.node_spacing + 2 * FixedDefaults.FixedDefaults.FixedDefaults.node_radius);
   }
-  return previous;
+  return previous_node;
 }
 
 /**
@@ -178,51 +178,55 @@ function create_node(
   const output = 350;
 
   // Initialise variables for previous y-coordinate, x-coordinate, and node text.
-  let previous_y_coord;
-  let x_coord;
+  let previous_node_y_coord;
+  let node_x_coord;
   let node_text;
 
   // Determine the y-coordinate and update neuron positions based on node type.
   if (node_type == "INPUT") {
     // Find the previous y-coordinate for the input neuron.
-    previous_y_coord = find_previous_node_y_coord(input_neurons, last_input_neuron_coord);
-    input_neurons[node_id] = [input, previous_y_coord];
-    last_input_neuron_coord = previous_y_coord;
+    previous_node_y_coord = find_previous_node_y_coord(input_neurons, last_input_neuron_coord);
+    input_neurons[node_id] = [input, previous_node_y_coord];
+    last_input_neuron_coord = previous_node_y_coord;
   } else if (node_type == "OUTPUT") {
     // Find the previous y-coordinate for the output neuron.
-    previous_y_coord = find_previous_node_y_coord(output_neurons, last_output_neuron_coord);
-    output_neurons[node_id] = [output, previous_y_coord];
-    last_output_neuron_coord = previous_y_coord;
+    previous_node_y_coord = find_previous_node_y_coord(output_neurons, last_output_neuron_coord);
+    output_neurons[node_id] = [output, previous_node_y_coord];
+    last_output_neuron_coord = previous_node_y_coord;
   } else if (node_type == "HIDDEN") {
     // Find the previous y-coordinate for the hidden neuron.
-    previous_y_coord = find_previous_node_y_coord(hidden_neurons, last_hidden_neuron_coord);
-    hidden_neurons[node_id] = [hidden, previous_y_coord];
-    last_hidden_neuron_coord = previous_y_coord;
+    previous_node_y_coord = find_previous_node_y_coord(hidden_neurons, last_hidden_neuron_coord);
+    hidden_neurons[node_id] = [hidden, previous_node_y_coord];
+    last_hidden_neuron_coord = previous_node_y_coord;
   }
 
   // Determine x-coordinate and node text based on the node type.
   if (node_type == "INPUT") {
-    x_coord = input;
+    // Set the x-coordinate and node text for the input neuron.
+    node_x_coord = input;
     node_text = InputNeuronSymbols[node_id];
   } else if (node_type == "OUTPUT") {
-    x_coord = output;
+    // Set the x-coordinate and node text for the output neuron.
+    node_x_coord = output;
     node_text = OutputNeuronSymbols[node_id];
   } else if (node_type == "HIDDEN") {
-    x_coord = hidden;
+    // Set the x-coordinate and node text for the hidden neuron.
+    node_x_coord = hidden;
     node_text = node_id.toString();
   }
 
   // Create circle and text elements for the node.
-  const circle = create_circle(x_coord, previous_y_coord, node_radius, "white", true);
-  const text_element = create_text(x_coord, previous_y_coord, node_text, "black");
+  const circle = create_circle(node_x_coord, previous_node_y_coord, FixedDefaults.FixedDefaults.FixedDefaults.node_radius, "white", true);
+  const text_element = create_text(node_x_coord, previous_node_y_coord, node_text, "black");
 
   // Append the circle and text elements to the group element.
   group.appendChild(circle);
   group.appendChild(text_element);
 
   // Append the group element to the SVG.
-  svg.appendChild(group);
+  DOMElements.neural_network_svg.appendChild(group);
 
+  // Return the updated input, hidden, and output neurons and their last coordinates.
   return [input_neurons, hidden_neurons, output_neurons, last_input_neuron_coord, last_hidden_neuron_coord, last_output_neuron_coord];
 }
 
@@ -241,23 +245,24 @@ export function draw_neural_net_brain(connections: Gene[]): void {
   let last_output_neuron_coord = 0;
   // Variable to store the updated coordinates of the input, hidden, and output neurons plus their last coordinates.
   let updated_coordinates;
-
   // Set the initial height of the SVG.
   let height = 400;
-  svg.innerHTML = `<svg width='400px' height='${height}px' id='neural-network-svg'></svg>`;
-  svg.style.height = height.toString(); // Iterate through each connection to draw lines between connected nodes.
+
+  // Clear the SVG element and set its initial height.
+  DOMElements.neural_network_svg.innerHTML = `<svg width='400px' height='${height}px' id='neural-network-svg'></svg>`;
+  DOMElements.neural_network_svg.style.height = height.toString();
 
   // Iterate through each connection to draw lines between connected nodes.
   for (const connection of connections) {
-    let source;
-    let sink;
+    let source_node;
+    let sink_node;
 
     // Determine the source node based on its type.
     if (connection.source_type == Neurons.INPUT || connection.source_type == Neurons.HIDDEN) {
       if (connection.source_type == Neurons.INPUT && input_neurons[connection.source_id]) {
-        source = input_neurons[connection.source_id];
+        source_node = input_neurons[connection.source_id];
       } else if (connection.source_type == Neurons.HIDDEN && hidden_neurons[connection.source_id]) {
-        source = hidden_neurons[connection.source_id];
+        source_node = hidden_neurons[connection.source_id];
       } else {
         // If the source node does not exist, create it.
         updated_coordinates = create_node(
@@ -272,9 +277,9 @@ export function draw_neural_net_brain(connections: Gene[]): void {
         );
 
         if (connection.source_type == Neurons.INPUT) {
-          source = input_neurons[connection.source_id];
+          source_node = input_neurons[connection.source_id];
         } else if (connection.source_type == Neurons.HIDDEN) {
-          source = hidden_neurons[connection.source_id];
+          source_node = hidden_neurons[connection.source_id];
         }
       }
     }
@@ -290,9 +295,9 @@ export function draw_neural_net_brain(connections: Gene[]): void {
     // Determine the sink node based on its type.
     if (connection.sink_type == Neurons.OUTPUT || connection.sink_type == Neurons.HIDDEN) {
       if (connection.sink_type == Neurons.OUTPUT && output_neurons[connection.sink_id]) {
-        sink = output_neurons[connection.sink_id];
+        sink_node = output_neurons[connection.sink_id];
       } else if (connection.sink_type == Neurons.HIDDEN && hidden_neurons[connection.sink_id]) {
-        sink = hidden_neurons[connection.sink_id];
+        sink_node = hidden_neurons[connection.sink_id];
       } else {
         // If the sink node does not exist, create it.
         updated_coordinates = create_node(
@@ -307,9 +312,9 @@ export function draw_neural_net_brain(connections: Gene[]): void {
         );
 
         if (connection.sink_type == Neurons.OUTPUT) {
-          sink = output_neurons[connection.sink_id];
+          sink_node = output_neurons[connection.sink_id];
         } else if (connection.sink_type == Neurons.HIDDEN) {
-          sink = hidden_neurons[connection.sink_id];
+          sink_node = hidden_neurons[connection.sink_id];
         }
       }
     }
@@ -333,7 +338,7 @@ export function draw_neural_net_brain(connections: Gene[]): void {
     );
 
     // Draw connections between nodes based on their coordinates and connection weight.
-    connect_nodes(source, sink, thickness, connection.weight >= 0);
+    connect_nodes(source_node, sink_node, thickness, connection.weight >= 0);
   }
 
   // Obtain the number of input, hidden, and output neurons.
@@ -352,5 +357,9 @@ export function draw_neural_net_brain(connections: Gene[]): void {
   }
 
   // Set the height of the SVG.
-  svg.style.height = (height + node_radius + node_spacing).toString();
+  DOMElements.neural_network_svg.style.height = (
+    height +
+    FixedDefaults.FixedDefaults.FixedDefaults.node_radius +
+    FixedDefaults.node_spacing
+  ).toString();
 }

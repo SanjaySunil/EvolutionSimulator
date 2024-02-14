@@ -6,6 +6,7 @@
  * @returns - A grid of 0s and 1s.
  */
 export default function create_obstructions(width: number, height: number, threshold): number[][] {
+  // Create a 2D array to store the obstructions.
   const obstructions: number[][] = [];
 
   // Generate a grid of obstructions.

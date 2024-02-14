@@ -11,6 +11,8 @@ export const FixedDefaults: Types = {
   TARGET_RENDER_FPS: 60,
   // Maximum frames per second (FPS) for updating the simulation
   TARGET_UPDATE_MAX_FPS: 300,
+  nn_diagram_node_radius: 20,
+  nn_diagram_node_spacing: 10,
 };
 
 /** Default simulation settings. */

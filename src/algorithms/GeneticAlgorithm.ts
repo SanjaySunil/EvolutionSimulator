@@ -10,23 +10,26 @@ import { euclidean_distance } from "../utils/geometry";
  * @returns - A single sorted array of organisms.
  */
 export function merge(left: Organism[], right: Organism[]): Organism[] {
-  const result: Organism[] = [];
+  // Create an empty array to store the merged result.
+  const array_of_organisms: Organism[] = [];
+  // Define indices for the left and right of the arrays.
   let left_index = 0;
   let right_index = 0;
 
   // Iterate through both arrays and merge them while maintaining sorting.
   while (left_index < left.length && right_index < right.length) {
+    // Compare the fitness of the organisms.
     if (left[left_index].fitness! < right[right_index].fitness!) {
-      result.push(left[left_index]);
+      array_of_organisms.push(left[left_index]);
       left_index++;
     } else {
-      result.push(right[right_index]);
+      array_of_organisms.push(right[right_index]);
       right_index++;
     }
   }
 
   // Concatenate remaining elements from both arrays into the result.
-  return result.concat(left.slice(left_index)).concat(right.slice(right_index));
+  return array_of_organisms.concat(left.slice(left_index)).concat(right.slice(right_index));
 }
 
 /**
@@ -35,6 +38,7 @@ export function merge(left: Organism[], right: Organism[]): Organism[] {
  * @returns - A sorted array of organisms.
  */
 export function merge_sort(arr: Organism[]): Organism[] {
+  // Return the array if it contains only one element or is empty.
   if (arr.length <= 1) return arr;
 
   // Calculate the middle index of the array.
@@ -56,11 +60,17 @@ export function merge_sort(arr: Organism[]): Organism[] {
  * @returns - The calculated fitness value based on the organism's proximity to the goal coordinates or energy level.
  */
 export function calculate_fitness(organism: Organism, goal: string, params?: any): number {
+  // Use the specified goal to calculate the fitness value for the organism.
   if (goal === "food") {
+    // Calculate fitness based on the organism's energy level.
     return calculate_fitness_by_food(organism);
   } else if (goal === "coord") {
+    // Calculate fitness based on the organism's proximity to the goal coordinates.
     return calculate_fitness_by_coord(organism, params);
-  } else throw new Error("Invalid goal type specified.");
+  } else {
+    // Throw an error if an invalid goal type is specified.
+    throw new Error("Invalid goal type specified.");
+  }
 }
 
 /**
@@ -85,6 +95,7 @@ export function calculate_and_sort_fitness(population: Organism[], goal: string,
  * @returns - The calculated fitness value based on the organism's energy level.
  */
 export function calculate_fitness_by_food(organism: any): number {
+  // Normalize fitness score by dividing the energy level by the maximum energy.
   return 1 - organism.energy / organism.config.MAX_ENERGY;
 }
 
@@ -95,16 +106,18 @@ export function calculate_fitness_by_food(organism: any): number {
  * @returns - The calculated fitness value based on the organism's proximity to the goal coordinates.
  */
 export function calculate_fitness_by_coord(organism: any, params: any): number {
-  const results: number[] = [];
+  // Create an array to store distances between the organism's coordinate and each goal coordinate.
+  const distances_to_goal_coordinates: number[] = [];
 
-  // Calculate distances between the organism's coordinate and each goal coordinate
+  // Calculate euclidean distance between the organism's coordinate and each goal coordinate.
   for (const coordinate of params.goal_coordinates) {
-    results.push(euclidean_distance(organism.coordinate, coordinate));
+    distances_to_goal_coordinates.push(euclidean_distance(organism.coordinate, coordinate));
   }
 
   // Find the minimum distance index to determine the maximum distance to normalize fitness
-  const min_index = results.indexOf(Math.min(...results));
-  const distance = results[min_index];
+  const min_index = distances_to_goal_coordinates.indexOf(Math.min(...distances_to_goal_coordinates));
+  const distance = distances_to_goal_coordinates[min_index];
+  // Get the maximum distance to normalize fitness.
   const max_distance = params.max_distances_to_goal[min_index];
 
   // Normalize fitness score by dividing the distance by the maximum distance
@@ -118,7 +131,9 @@ export function calculate_fitness_by_coord(organism: any, params: any): number {
  * @returns - A new generation of organisms created through crossover and reproduction.
  */
 export function select_and_crossover(population: Organism[], config: typeof DefaultSimulationConfig): Organism[] {
+  // Create an array to store the new generation of organisms
   const new_generation: Organism[] = [];
+  // Calculate the number of organisms to be selected for elitism
   const elitism_size: number = Math.floor((config.ELITISM_PERCENT * population.length) / 100);
 
   // Perform elitism by selecting the top organisms from the current population
@@ -130,16 +145,20 @@ export function select_and_crossover(population: Organism[], config: typeof Defa
     organism.coordinate = random_coord;
   }
 
+  // Calculate the number of organisms to be selected for mating
   const mating_size: number = Math.floor(((100 - config.ELITISM_PERCENT) * population.length) / 100);
 
   // Perform crossover by randomly selecting parents and creating offspring
   for (let i = 0; i < mating_size; i++) {
+    // Select two random parents from the top organisms in the population and mate them.
     const parent1: Organism = population[Math.floor(Math.random() * ((config.TOP_PERCENT_TO_REPRODUCE / 100) * population.length))];
     const parent2: Organism = population[Math.floor(Math.random() * ((config.TOP_PERCENT_TO_REPRODUCE / 100) * population.length))];
     const child: Organism = mate(parent1, parent2);
+    // Add the child organism to the new generation.
     new_generation.push(child);
   }
 
+  // Return the new generation of organisms created through crossover and reproduction.
   return new_generation;
 }
 

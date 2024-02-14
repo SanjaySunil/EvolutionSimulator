@@ -59,6 +59,3 @@ register_export_simulation_button(simulation, config.config);
 // Environment buttons
 register_generate_obstructions_button(simulation);
 register_clear_obstructions_button(simulation);
-
-// Remove when evolution simulator is complete.
-console.log("All files loaded.");
