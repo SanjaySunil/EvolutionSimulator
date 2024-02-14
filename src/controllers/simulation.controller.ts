@@ -153,9 +153,9 @@ export default class Simulation {
         this.update_simulation();
 
         // Update HTML elements with simulation data
-        DOMElements.generation.innerHTML = this.environment.generation.toString();
+        DOMElements.generation_count.innerHTML = this.environment.generation.toString();
         DOMElements.tick_count.innerHTML = this.environment.ticks.toString();
-        DOMElements.organisms_alive.innerHTML = this.environment.alive.toString();
+        DOMElements.organisms_alive_count.innerHTML = this.environment.alive.toString();
 
         // Check if the current update FPS is greater than or equal to the target update FPS.
         if (this.current_update_fps >= FixedDefaults.TARGET_RENDER_FPS && this.render_loop != undefined) {

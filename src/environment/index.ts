@@ -172,7 +172,7 @@ export class Environment extends Canvas {
     // Update HTML elements with simulation data.
     DOMElements.best_fitness.innerHTML = this.best_fitness.toPrecision(3).toString();
     DOMElements.overall_fitness.innerHTML = this.overall_fitness.toPrecision(3).toString();
-    DOMElements.number_of_species.innerHTML = this.species_count.toString();
+    DOMElements.number_of_species_count.innerHTML = this.species_count.toString();
 
     this.species = new Set();
 

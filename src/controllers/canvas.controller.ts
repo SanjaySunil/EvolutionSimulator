@@ -154,7 +154,7 @@ export default class Canvas {
     else if (event.code == "Digit6") this.mouse.mode = MouseModes.REMOVE;
 
     // Display the current mode on the DOM
-    DOMElements.mode.innerHTML = MouseModeSymbols[this.mouse.mode];
+    DOMElements.current_mode.innerHTML = MouseModeSymbols[this.mouse.mode];
   }
 
   /** Registers mouse events on the canvas. */

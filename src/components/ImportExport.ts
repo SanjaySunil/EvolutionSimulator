@@ -65,7 +65,7 @@ export function export_environment(grid: Grid): number[][] {
  */
 export function export_population_button(simulation: Simulation): void {
   // Register an event listener for the export population button.
-  DOMElements.export_population.addEventListener("click", () => {
+  DOMElements.export_population_button.addEventListener("click", () => {
     // Get the population from the simulation.
     const organisms = simulation.environment.population;
     // If the population exists, export it.
@@ -86,7 +86,7 @@ export function export_population_button(simulation: Simulation): void {
  */
 export function register_export_config_button(config: typeof DefaultSimulationConfig): void {
   // Register an event listener for the export config button.
-  DOMElements.export_config.addEventListener("click", () => {
+  DOMElements.export_config_button.addEventListener("click", () => {
     // Export the simulation config.
     export_object({ file_type: "config_export", config: config }, "config");
   });
@@ -99,7 +99,7 @@ export function register_export_config_button(config: typeof DefaultSimulationCo
  */
 export function register_export_simulation_button(simulation: Simulation, config: typeof DefaultSimulationConfig): void {
   // Register an event listener for the export simulation button.
-  DOMElements.export_simulation.addEventListener("click", () => {
+  DOMElements.export_simulation_button.addEventListener("click", () => {
     // Create an object to store the export.
     const simulation_export: any = {};
 
@@ -135,7 +135,7 @@ export function register_export_simulation_button(simulation: Simulation, config
  */
 export function register_export_environment_button(simulation: Simulation): void {
   // Register an event listener for the export environment button.
-  DOMElements.export_environment.addEventListener("click", () => {
+  DOMElements.export_environment_button.addEventListener("click", () => {
     // Exports the environment.
     const obstacles = export_environment(simulation.environment.grid);
 
@@ -150,7 +150,7 @@ export function register_export_environment_button(simulation: Simulation): void
  */
 export function register_import_config_button(simulation: Simulation): void {
   // Register an event listener for the import config button.
-  DOMElements.import_config.addEventListener("change", (event: Event) => {
+  DOMElements.import_config_button.addEventListener("change", (event: Event) => {
     // Read and parse the json file, then update the simulation config.
     read_file(event).then((data) => {
       // If the file is valid, update the simulation config.
@@ -165,7 +165,7 @@ export function register_import_config_button(simulation: Simulation): void {
       }
 
       // Reset the file input element.
-      DOMElements.import_config.value = "";
+      DOMElements.import_config_button.value = "";
     });
   });
 }
@@ -176,7 +176,7 @@ export function register_import_config_button(simulation: Simulation): void {
  */
 export function register_import_organisms_button(simulation: Simulation): void {
   // Register an event listener for the import organisms button.
-  DOMElements.import_organisms.addEventListener("change", (event: Event) => {
+  DOMElements.import_organisms_button.addEventListener("change", (event: Event) => {
     // Read and parse the json file, then add the organisms to the simulation.
     read_file(event).then((data) => {
       // If the file is valid, add the organisms to the simulation.
@@ -199,7 +199,7 @@ export function register_import_organisms_button(simulation: Simulation): void {
       }
 
       // Reset the file input element.
-      DOMElements.import_organisms.value = "";
+      DOMElements.import_organisms_button.value = "";
     });
   });
 }
@@ -210,7 +210,7 @@ export function register_import_organisms_button(simulation: Simulation): void {
  */
 export function register_import_simulation_button(simulation: Simulation): void {
   // Register an event listener for the import simulation button.
-  DOMElements.import_simulation.addEventListener("change", (event: Event) => {
+  DOMElements.import_simulation_button.addEventListener("change", (event: Event) => {
     // Read and parse the JSON file.
     read_file(event).then((data) => {
       // If the file is valid, import the simulation.
@@ -272,7 +272,7 @@ export function register_import_simulation_button(simulation: Simulation): void 
       }
 
       // Reset the file input element.
-      DOMElements.import_simulation.value = "";
+      DOMElements.import_simulation_button.value = "";
     });
   });
 }
@@ -283,7 +283,7 @@ export function register_import_simulation_button(simulation: Simulation): void 
  */
 export function register_import_environment_button(simulation): void {
   // Event listener for import environment button.
-  DOMElements.import_environment.addEventListener("change", (event: Event) => {
+  DOMElements.import_environment_button.addEventListener("change", (event: Event) => {
     // Read and parse the JSON file.
     read_file(event).then((data) => {
       // Check if obstacles data exists and the file type is obstacles.
@@ -301,7 +301,7 @@ export function register_import_environment_button(simulation): void {
       }
 
       // Reset the file input element.
-      DOMElements.import_environment.value = "";
+      DOMElements.import_environment_button.value = "";
     });
   });
 }

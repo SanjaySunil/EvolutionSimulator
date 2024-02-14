@@ -48,7 +48,7 @@ export function register_rendering_enabled_button(simulation: Simulation): void 
  * Registers an event listener for the restart button.
  */
 export function register_sim_restart_button(): void {
-  DOMElements.sim_restart.addEventListener("click", () => {
+  DOMElements.sim_restart_button.addEventListener("click", () => {
     // Creates a confirmation dialog box asking the user whether they want to restart the simulation.
     const restart_confirmed = confirm("Are you sure you would like to restart the simulator?");
     // If the user confirms, reload the page.
@@ -64,16 +64,16 @@ export function register_sim_restart_button(): void {
  */
 export function register_sim_start_stop_button(simulation: Simulation): void {
   // When the button is clicked, the simulation is either started or stopped.
-  DOMElements.sim_start_stop.addEventListener("click", () => {
+  DOMElements.sim_start_stop_button.addEventListener("click", () => {
     // If the simulation is running, stop the engine and update the button text.
     if (simulation.is_running) {
       simulation.stop_engine();
-      DOMElements.sim_start_stop.innerHTML = "START";
+      DOMElements.sim_start_stop_button.innerHTML = "START";
     } else {
       // If the simulation is not running, start the engine and update the button text.
       const engine_started = simulation.start_engine();
       if (engine_started) {
-        DOMElements.sim_start_stop.innerHTML = "STOP";
+        DOMElements.sim_start_stop_button.innerHTML = "STOP";
       }
     }
   });
@@ -85,7 +85,7 @@ export function register_show_controls(): void {
   let control_window_shown = false;
 
   // When the button is clicked, the control window is either shown or hidden.
-  DOMElements.button.addEventListener("click", () => {
+  DOMElements.open_sidebar_button.addEventListener("click", () => {
     // Toggle the control window's visibility.
     control_window_shown = !control_window_shown;
     // If the control window is shown, display the sidebar, else hide it.
@@ -136,9 +136,9 @@ export function register_fps_slider(simulation, config): void {
  */
 export function register_switch_chart(simulation: Simulation): void {
   // When the chart switcher's value is changed, the chart is switched.
-  DOMElements.switch_chart.addEventListener("change", () => {
+  DOMElements.switch_chart_button.addEventListener("change", () => {
     // Get the index of the selected chart from the switcher.
-    const index = parseInt(DOMElements.switch_chart.value);
+    const index = parseInt(DOMElements.switch_chart_button.value);
     // Switch the chart to the selected index.
     simulation.environment.chart.switch_chart(index);
   });
