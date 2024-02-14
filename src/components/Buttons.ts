@@ -6,7 +6,7 @@ import { DOMElements } from "./DOMElements";
  * Registers an event listener for the download neural network button.
  */
 export function register_download_neuralnet_button(): void {
-  DOMElements.export_neuralnet.addEventListener("click", () => {
+  DOMElements.export_neuralnet_button.addEventListener("click", () => {
     // Get the SVG element from the Document Object Model (DOM)
     const neural_net_svg = document.querySelector("svg");
     if (neural_net_svg) {
