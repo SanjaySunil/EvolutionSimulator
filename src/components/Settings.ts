@@ -14,6 +14,7 @@ const live_params = ["MUTATION_PERCENT", "ELITISM_PERCENT", "TICKS_PER_GENERATIO
  * @returns - Whether the parameter is a live parameter.
  */
 function check_if_live_param(started: boolean, key: string): boolean {
+  // If the simulation has started and the key is not a live parameter, alert the user that the parameter cannot be changed.
   if (started && !live_params.includes(key)) {
     alert(`The ${key} parameter cannot be changed when the simulation has already started.`);
     return false;
@@ -29,9 +30,11 @@ function check_if_live_param(started: boolean, key: string): boolean {
  * @returns - Whether the input is valid.
  */
 function check_if_valid_input(key: string, value: string): boolean {
+  // If the key is in the SimulationConfigBoundaries object, check if the value is within the boundaries.
   if (key in SimulationConfigBoundaries) {
     const min = SimulationConfigBoundaries[key][0];
     const max = SimulationConfigBoundaries[key][1];
+    // If the value is not within the boundaries, alert the user and return false.
     if (parseInt(value) < min || parseInt(value) > max) {
       alert(`The value for ${key} must be between ${min} and ${max}.`);
       return false;
@@ -100,8 +103,10 @@ export function render_fps_element(element: HTMLElement, fps: number): void {
  */
 export function render_settings(simulation: Simulation, config: object): void {
   // Function to handle changes in the input
-  function handle_change(e: Event): void {
-    const target = e.target as HTMLInputElement;
+  function handle_change(event: Event): void {
+    // Get the target element of the event.
+    const target = event.target as HTMLInputElement;
+    // Get the key and value of the target element.
     const key = target.id;
     const value = target.value;
 
@@ -130,6 +135,7 @@ export function render_settings(simulation: Simulation, config: object): void {
 
   // Iterate through each key in the config object
   for (let i = 0; i < keys.length; i++) {
+    // Get the key and value from the config object
     const key = keys[i];
     const value = config[key];
 

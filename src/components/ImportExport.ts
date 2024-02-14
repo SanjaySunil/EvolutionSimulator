@@ -22,6 +22,7 @@ export function export_population(population: Organism[], with_coordinates: bool
     if (with_coordinates) {
       // Create an object to store the organism's genome and coordinates.
       const organism_export: any = {};
+      // Assign the genome and coordinates to the organism export object.
       organism_export["genome"] = organism.genome.data;
       organism_export["coordinates"] = [organism.coordinate.x, organism.coordinate.y];
       population_export.push(organism_export);
@@ -56,6 +57,7 @@ export function export_environment(grid: Grid): number[][] {
     }
   }
 
+  // Return the obstacles.
   return obstacles;
 }
 
