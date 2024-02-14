@@ -8,12 +8,12 @@ import { DOMElements } from "./DOMElements";
 export function register_download_neuralnet_button(): void {
   DOMElements.export_neuralnet.addEventListener("click", () => {
     // Get the SVG element from the Document Object Model (DOM)
-    const svg = document.querySelector("svg");
-    if (svg) {
+    const neural_net_svg = document.querySelector("svg");
+    if (neural_net_svg) {
       // Serialize the SVG element to a string
-      const as_text = new XMLSerializer().serializeToString(svg);
+      const svg_as_text = new XMLSerializer().serializeToString(neural_net_svg);
       // Create a Blob object from the serialized SVG string
-      const blob = new Blob([as_text], { type: "image/svg+xml" });
+      const blob = new Blob([svg_as_text], { type: "image/svg+xml" });
       // Create a URL object from the Blob object
       const url = URL.createObjectURL(blob);
       // Create a link element and set its attributes
@@ -50,7 +50,7 @@ export function register_rendering_enabled_button(simulation: Simulation): void 
 export function register_sim_restart_button(): void {
   DOMElements.sim_restart.addEventListener("click", () => {
     // Creates a confirmation dialog box asking the user whether they want to restart the simulation.
-    const restart_confirmed = confirm("Are you sure you would like to restart?");
+    const restart_confirmed = confirm("Are you sure you would like to restart the simulator?");
     // If the user confirms, reload the page.
     if (restart_confirmed) {
       window.location.reload();
@@ -81,6 +81,7 @@ export function register_sim_start_stop_button(simulation: Simulation): void {
 
 /** Registers an event listener for the show controls button. */
 export function register_show_controls(): void {
+  // Set the initial state of the control window to hidden.
   let control_window_shown = false;
 
   // When the button is clicked, the control window is either shown or hidden.
@@ -134,8 +135,11 @@ export function register_fps_slider(simulation, config): void {
  * @param simulation - The simulation object.
  */
 export function register_switch_chart(simulation: Simulation): void {
+  // When the chart switcher's value is changed, the chart is switched.
   DOMElements.switch_chart.addEventListener("change", () => {
+    // Get the index of the selected chart from the switcher.
     const index = parseInt(DOMElements.switch_chart.value);
+    // Switch the chart to the selected index.
     simulation.environment.chart.switch_chart(index);
   });
 }
@@ -145,7 +149,9 @@ export function register_switch_chart(simulation: Simulation): void {
  * @param simulation - The simulation object.
  */
 export function register_generate_obstructions_button(simulation: Simulation): void {
+  // When the button is clicked, the grid is cleared and new obstructions are generated.
   DOMElements.generate_obstructions_button.addEventListener("click", () => {
+    // Clear the grid and generate new obstructions.
     simulation.environment.grid.clear_obstructions();
     simulation.environment.grid.generate_obstructions();
   });
@@ -156,7 +162,9 @@ export function register_generate_obstructions_button(simulation: Simulation): v
  * @param simulation - The simulation object.
  */
 export function register_clear_obstructions_button(simulation: Simulation): void {
+  // When the button is clicked, the grid's obstructions are cleared.
   DOMElements.clear_obstructions_button.addEventListener("click", () => {
+    // Clear the grid's obstructions.
     simulation.environment.grid.clear_obstructions();
   });
 }
