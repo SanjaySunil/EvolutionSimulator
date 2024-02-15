@@ -197,6 +197,12 @@ body {
   background: var(--bg-light);
   width: 100%;
 }
+#sidebar > div > section > div.tab {
+  background: transparent;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  z-index: 999;
+}
 #tab1:checked ~ nav .tab1 label,
 #tab2:checked ~ nav .tab2 label,
 #tab3:checked ~ nav .tab3 label,
