@@ -187,7 +187,7 @@ export default class Brain {
    */
   public feed_forward(): number[] {
     // This array stores the output levels for all of the action neurons.
-    const action_levels = new Array(this.num_output_neurons).fill(0.0);
+    const output_action_levels = new Array(this.num_output_neurons).fill(0.0);
 
     // The weighted inputs to each neuron are accumulated in neuron_accumulators.
     const neuron_accumulators = new Array(this.hidden_neurons.length).fill(0.0);
@@ -222,14 +222,14 @@ export default class Brain {
 
       // Weight the connection's value and add it to the accumulator of the corresponding neuron or action.
       if (connection.sink_type == Neurons.OUTPUT) {
-        action_levels[connection.sink_id] += input_val * normalise_weight(connection.weight);
+        output_action_levels[connection.sink_id] += input_val * normalise_weight(connection.weight);
       } else {
         neuron_accumulators[connection.sink_id] += input_val * normalise_weight(connection.weight);
       }
     }
 
     // Return the array of output levels for all action neurons.
-    return action_levels;
+    return output_action_levels;
   }
 
   /**

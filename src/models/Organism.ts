@@ -119,7 +119,7 @@ export default class Organism {
     const prob_x = +probability_to_boolean(Math.abs(move_x));
     const prob_y = +probability_to_boolean(Math.abs(move_y));
 
-    // Determine direction of movement based on the sign of the values. (signum function)
+    // Determine direction of movement based on the sign of the values using signum function.
     const signum_x = move_x < 0.0 ? -1 : 1;
     const signum_y = move_y < 0.0 ? -1 : 1;
 
