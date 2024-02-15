@@ -8,7 +8,6 @@
   --bg: #282a36;
   --border: #4c5067;
   --canvas: #111;
-  --label: #6272a4;
   --foreground: #f8f8f2;
   --red: #ff5555;
 }
@@ -54,7 +53,7 @@ body {
   padding: 10px;
 }
 .main #canvas {
-  background: #000;
+  background: var(--canvas);
   cursor: pointer;
   image-rendering: pixelated;
   left: -300px;
@@ -130,8 +129,8 @@ body {
   transform: translate(-50%, -50%) scale(0);
   transition: transform 0s;
 }
-.pc-tab > input,
-.pc-tab section > div {
+.tabs > input,
+.tabs section > div {
   display: none;
 }
 #tab1:checked ~ section .tab1,
@@ -147,11 +146,11 @@ body {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
-.pc-tab {
+.tabs {
   margin: 0 auto;
   width: 100%;
 }
-.pc-tab ul {
+.tabs ul {
   display: flex;
   list-style: none;
   margin: 0;
@@ -161,12 +160,12 @@ body {
   text-align: center;
   width: 100%;
 }
-.pc-tab li {
+.tabs li {
   border-bottom: 1px solid var(--border);
   flex-grow: 1;
   width: 100%;
 }
-.pc-tab ul li label {
+.tabs ul li label {
   background: var(--bg-dark);
   border-bottom: 0;
   border: 1px solid var(--border);
@@ -176,15 +175,15 @@ body {
   transition: 0.1s;
   width: 100%;
 }
-.pc-tab ul li label:hover,
-.pc-tab ul li label:active {
+.tabs ul li label:hover,
+.tabs ul li label:active {
   background: var(--bg-light);
   transition: 0.25s;
 }
-.pc-tab ul li:not(:last-child) label {
+.tabs ul li:not(:last-child) label {
   border-right-width: 0;
 }
-.pc-tab section {
+.tabs section {
   clear: both;
 }
 .tab {
@@ -194,7 +193,7 @@ body {
   overflow-y: scroll;
   padding: 15px;
 }
-.pc-tab section div {
+.tabs section div {
   background: var(--bg-light);
   width: 100%;
 }
@@ -285,7 +284,7 @@ th:last-child {
 th {
   background-color: var(--bg-lighter);
 }
-#floating-gui {
+#floating_gui {
   border-radius: 5px;
   bottom: 10px;
   max-height: 100vh;

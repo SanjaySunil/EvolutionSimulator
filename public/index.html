@@ -6,12 +6,11 @@
     <title>Evolution Simulator</title>
     <link rel="stylesheet" href="./css/index.css" />
   </head>
-
   <body>
     <div class="container">
       <div class="main">
         <canvas id="canvas"></canvas>
-        <div id="floating-gui">
+        <div id="floating_gui">
           <div class="box">
             <p style="text-align: center">MODE: <span id="mode">IDLE</span></p>
             <p style="text-align: center" id="organism_selected"></p>
@@ -28,8 +27,8 @@
               <button class="button" id="render_on_off">RENDERING ON</button>
             </div>
           </div>
-          <div class="aside aside-right" id="sidebar">
-            <div class="pc-tab">
+          <div class="aside" id="sidebar">
+            <div class="tabs">
               <input checked="checked" id="tab1" type="radio" name="pct" />
               <input id="tab2" type="radio" name="pct" />
               <input id="tab3" type="radio" name="pct" />
@@ -44,7 +43,7 @@
                 </ul>
               </nav>
               <section>
-                <!--Simulation Page-->
+                <!-- Simulation -->
                 <div class="tab tab1">
                   <table>
                     <tr>
@@ -170,7 +169,7 @@
                     <div id="chart"></div>
                   </div>
                 </div>
-                <!--Settings-->
+                <!-- Settings -->
                 <div class="tab tab2">
                   <table id="settings">
                     <tr>
@@ -184,7 +183,9 @@
         </div>
       </div>
     </div>
+    <!-- Neural Network Diagram SVG -->
     <svg width="100%" height="100%" preserveAspectRatio="none" id="neural_network_svg"></svg>
   </body>
+  <!-- Scripts -->
   <script src="js/main.js"></script>
 </html>
