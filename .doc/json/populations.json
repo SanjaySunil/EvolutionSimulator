@@ -1,0 +1,14 @@
+{
+  "file_type": "organism_export",
+  "population": [
+    [
+      {
+        "source_type": 1,
+        "source_id": 4,
+        "sink_type": 1,
+        "sink_id": 0,
+        "weight": 30282
+      }
+    ]
+  ]
+}

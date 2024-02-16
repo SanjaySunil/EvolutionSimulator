@@ -1,0 +1,21 @@
+{
+  "file_type": "config_export",
+  "config": {
+    "GRID_SIZE": 128,
+    "TARGET_UPDATE_MAX_FPS": 300,
+    "TARGET_UPDATE_FPS": 300,
+    "TARGET_RENDER_FPS": 60,
+    "POPULATION": 3,
+    "TICKS_PER_GENERATION": 300,
+    "ELITISM_PERCENT": 10,
+    "TOP_PERCENT_TO_REPRODUCE": 3,
+    "MUTATION_PERCENT": 0,
+    "NUMBER_OF_HIDDEN_NEURONS": 127,
+    "MAX_ENERGY": 1,
+    "NUMBER_OF_GENES": 10,
+    "GOAL_FOOD": false,
+    "GOAL_COORD": true,
+    "NUMBER_OF_INPUTS": 10,
+    "NUMBER_OF_OUTPUTS": 6
+  }
+}

@@ -73,7 +73,7 @@ export default class Brain {
   /** This method is used to convert an organism's genome into a neural network brain. */
   private wire_brain(): void {
     // List to store neural network connections.
-    const connections: ConnectionArray = this.obtain_connections();
+    const connections: ConnectionArray = this.create_connections();
 
     // Map of the hidden neurons and their number of inputs and outputs.
     const hidden_neuron_map: HiddenNeuronMap = this.create_hidden_neuron_map(connections);
@@ -82,7 +82,7 @@ export default class Brain {
     this.prune_connections(connections, hidden_neuron_map);
 
     // Create a renumbered connection array based on the node map.
-    this.create_connections(connections, hidden_neuron_map);
+    this.update_connections(connections, hidden_neuron_map);
 
     // Create a hidden neuron array based on the node map.
     this.create_hidden_neuron_array(hidden_neuron_map);
@@ -233,10 +233,10 @@ export default class Brain {
   }
 
   /**
-   * Obtains a list of connections from the genome.
+   * Creates a list of connections from the genome.
    * @returns A list of connections from the genome.
    */
-  private obtain_connections(): any[] {
+  private create_connections(): any[] {
     // Initialize an array to store connections.
     const connection_array: ConnectionArray = [];
 
@@ -263,7 +263,7 @@ export default class Brain {
       }
     }
 
-    // Return the obtained list of connections.
+    // Return the created list of connections.
     return connection_array;
   }
 
@@ -390,7 +390,7 @@ export default class Brain {
    * @param connection_array - The connection array to process.
    * @param hidden_neuron_map - The hidden neuron map to update.
    */
-  private create_connections(connection_array: ConnectionArray, hidden_neuron_map: HiddenNeuronMap): void {
+  private update_connections(connection_array: ConnectionArray, hidden_neuron_map: HiddenNeuronMap): void {
     let new_number = 0;
 
     // Renumber neurons in the hidden_neuron_map.

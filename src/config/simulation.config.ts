@@ -31,8 +31,6 @@ export const DefaultSimulationConfig: Types = {
   TOP_PERCENT_TO_REPRODUCE: 3,
   // Percentage of mutation rate
   MUTATION_PERCENT: 0,
-  // Flag for enabling sexual reproduction
-  SEXUAL_REPRODUCTION: true,
   // Maximum energy each organism can have.
   MAX_ENERGY: 1,
   // Energy gained from food

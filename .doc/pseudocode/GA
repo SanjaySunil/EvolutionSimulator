@@ -1,0 +1,37 @@
+/*
+  Parameters
+    PopulationSize: Number of organisms to use in simulation
+    MutationProbability: The probability of a mutation occuring on a genome
+    MaxGenerations: Max number of generations before termination
+    MaxFitness: Max best fitness value from optimised fitness function
+*/
+SUBROUTINE GeneticAlgorithm(PopulationSize, MutationProbability, MaxGenerations, MaxFitness)
+    // Define GenerationCount Variable to keep track of the number of generations
+    GenerationCount = 0
+    // Generate a new population using PopulationSize argument
+    Population = GeneratePopulation(PopulationSize)
+    // Calculate the fitness value for each individual in the population
+    Population = FitnessCalculation(Population)
+    // Identify the BestFitness value in the population
+    BestFitness = FindBest(Population)
+
+    // Repeat until the Termination condition has been reached (see 1.11.10)
+    REPEAT
+        // Perform natural selection on the population, and create a parent population
+        ParentPopulation = ParentSelection(Population)
+        // Create a new population of children through crossover operations
+        ChildrenPopulation = Crossover(ParentPopulation)
+        // Perform mutation probabilities on each child
+        ChildrenPopulation = Mutation(ChildrenPopulation, MutationProbability)
+        // Calculate the fitness value for each individual in the population
+        ChildrenPopulation = FitnessCalculation(ChildrenPopulation)
+        # Find the survivors in the children population
+        Population = SurvivorSelection(ChildrenPopulation)
+        // Calculate the best fitness value from the population
+        BestFitness = FindBest(Population)
+        // Increment Generation Count by 1
+        GenerationCount = GenerationCount + 1
+    UNTIL Termination(BestFitness)
+
+    RETURN BestFitness
+ENDSUBROUTINE
