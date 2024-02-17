@@ -3,23 +3,24 @@ SUBROUTINE get_colour(genome)
     genome_string = ""
 
     // Concatenate each property in every gene to the genome string.
-    FOR EACH gene IN genome DO
+    FOR gene IN genome
         genome_string = genome_string +
         gene.source_type + "," +
         gene.source_id + "," +
         gene.sink_type + "," +
         gene.sink_id + "," +
         gene.weight
-    END FOR
+    ENDFOR
 
     // Creates a unique hash from the genome string.
     hash = 0
-    FOR i FROM 0 TO LENGTH(genome_string) - 1 DO
+
+    FOR i = 0 TO LEN(genome_string) - 1
         /* This is a typical hashing operation. It involves left shifting the current hash value by 5 bits,
         subtracting the hash's original value, and then adding the ASCII representation of the i-th character
         in the genome_string to the hash. */
         hash = (hash << 5) - hash + ASC(genome_string[i])
-    END FOR
+    ENDFOR
 
     // Using the hash, a bitwise AND operation is performed on the hash with each hexadecimal value.
     // The hexadecimal values isolate the bits that are responsible for each colour component.
@@ -40,3 +41,4 @@ SUBROUTINE get_colour(genome)
     // Combine the red, green and blue components into the RGB string.
     RETURN "rgb(" + r + ", " + g + ", " + b + ")"
 ENDSUBROUTINE
+

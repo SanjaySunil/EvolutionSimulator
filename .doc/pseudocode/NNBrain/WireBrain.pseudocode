@@ -1,0 +1,242 @@
+// This method is used to convert an organism's genome into a neural network brain.
+SUBROUTINE wire_brain(genome)
+    // List to store neural network connections.
+    connections ← create_connections();
+
+    // Map of the hidden neurons and their number of inputs and outputs.
+    hidden_neuron_map ← create_hidden_neuron_map(connections);
+
+    // Remove connections to neurons with no outputs or neurons that feed themselves.
+    prune_connections(connections, hidden_neuron_map);
+
+    // Create a renumbered connection array based on the node map.
+    update_connections(connections, hidden_neuron_map);
+
+    // Create a hidden neuron array based on the node map.
+    create_hidden_neuron_array(hidden_neuron_map);
+ENDSUBROUTINE
+
+// Creates a list of connections from the genome.
+SUBROUTINE create_connections()
+  // Initialize an array to store connections.
+  connection_array ← []
+
+  // Check if the genome data exists.
+  IF genome_data THEN
+    // Iterate through the genome data to process each gene.
+    FOR gene IN genome_data
+      // Renumber the source neuron or sensor using modulo operator based on the total number of input or hidden neurons.
+      IF gene.source_type = Neurons.HIDDEN THEN
+        gene.source_id ← gene.source_id MOD num_hidden_neurons
+      ELSE
+        gene.source_id ← gene.source_id MOD num_input_neurons
+      ENDIF
+
+      // Renumber the sink neuron or action using modulo operator based on the total number of output or hidden neurons.
+      IF gene.sink_type = Neurons.HIDDEN THEN
+        gene.sink_id ← gene.sink_id MOD num_hidden_neurons
+      ELSE
+        gene.sink_id ← gene.sink_id MOD num_output_neurons
+      ENDIF
+
+      // Add the renumbered gene to the connection list.
+      connection_array.ADD(gene)
+    ENDFOR
+  ENDIF
+
+  // Return the created list of connections.
+  RETURN connection_array
+ENDSUBROUTINE
+
+// Creates a map of hidden neurons and their corresponding input and output counts.
+SUBROUTINE create_hidden_neuron_map(connection_array)
+  // Initialize a map to store hidden neurons and their input/output counts.
+  hidden_neuron_map ← new Map()
+
+  // Iterate through the connection array to process each connection.
+  FOR connection IN connection_array
+    // Check if the sink type is a hidden neuron.
+    IF connection.sink_type = Neurons.HIDDEN THEN
+      // Check if the connection is a self-input to the hidden neuron.
+      self_input ← connection.source_type = Neurons.HIDDEN AND connection.source_id = connection.sink_id
+
+      // Check if the hidden neuron already exists in the map.
+      IF hidden_neuron_map.has(connection.sink_id) THEN
+        node ← hidden_neuron_map.get(connection.sink_id)
+        // Update the input/output counts for the existing hidden neuron.
+        IF self_input THEN
+          node.self_inputs ← node.self_inputs + 1
+        ELSE
+          node.inputs ← node.inputs + 1
+        ENDIF
+      ELSE
+        // If the neuron is not in the node map, add it with the appropriate input/output values.
+        hidden_neuron_map.set(connection.sink_id, {
+          identifer: 0,
+          outputs: 0,
+          self_inputs: IF self_input THEN 1 ELSE 0,
+          inputs: IF self_input THEN 0 ELSE 1
+        })
+      ENDIF
+    ENDIF
+
+    // Check if the source type is a hidden neuron.
+    IF connection.source_type = Neurons.HIDDEN THEN
+      // Check if the hidden neuron already exists in the map.
+      IF hidden_neuron_map.has(connection.source_id) THEN
+        node ← hidden_neuron_map.get(connection.source_id)
+        node.outputs ← node.outputs + 1
+      ELSE
+        // If the neuron is not in the node map, add it with the appropriate input/output values.
+        hidden_neuron_map.set(connection.source_id, {
+          identifer: 0,
+          outputs: 1,
+          self_inputs: 0,
+          inputs: 0
+        })
+      ENDIF
+    ENDIF
+  ENDFOR
+
+  // Return the created map of neurons with their input/output counts.
+  RETURN hidden_neuron_map
+ENDSUBROUTINE
+
+// Removes connections to a specific neuron from the connection list and updates the node map accordingly.
+SUBROUTINE remove_connections_to_neuron(connection_array, hidden_neuron_map, neuron_number)
+  // Loop through the connection array.
+  i ← 0
+  WHILE i < connection_array.length
+    neuron ← connection_array[i]
+    // Check if the current connection's sink is the specified neuron.
+    IF neuron.sink_type = Neurons.HIDDEN AND neuron.sink_id = neuron_number THEN
+      // If the connection's sink is the specified neuron, handle the removal process.
+
+      // Check if the source of the connection is also a hidden neuron.
+      IF neuron.source_type = Neurons.HIDDEN THEN
+        // If the source is a hidden neuron, decrement the outputs of that neuron in the map.
+        node ← hidden_neuron_map.get(neuron.source_id)
+        IF node THEN
+          node.outputs ← node.outputs - 1
+        ENDIF
+      ENDIF
+
+      // Remove the connection from the connection list.
+      connection_array.splice(i, 1)
+    ELSE
+      // Move to the next connection in the list.
+      i ← i + 1
+    ENDIF
+  ENDWHILE
+ENDSUBROUTINE
+
+// Removes useless connections from the connection list and updates the node map accordingly.
+SUBROUTINE prune_connections(connections, hidden_neuron_map)
+  // Flag to track if connections are pruned.
+  connections_pruned ← false
+
+  // Loop until no more connections are pruned.
+  WHILE NOT connections_pruned
+    connections_pruned ← true
+
+    // Iterate through hidden neurons in the map.
+    FOR node_number IN hidden_neuron_map.keys()
+      // Retrieve the details of the current node from the map.
+      node ← hidden_neuron_map.get(node_number)
+
+      // Look for neurons with zero outputs or neurons that feed themselves.
+      IF node AND node.outputs = node.self_inputs THEN
+        // If found, set the flag to false to continue pruning.
+        connections_pruned ← false
+
+        // Remove connections leading to the identified neuron and delete it from the map.
+        remove_connections_to_neuron(connections, hidden_neuron_map, node_number)
+        hidden_neuron_map.delete(node_number)
+      ENDIF
+    ENDFOR
+  ENDWHILE
+ENDSUBROUTINE
+
+// Creates a renumbered connection list based on the node map.
+SUBROUTINE update_connections(connection_array, hidden_neuron_map)
+  new_number ← 0
+
+  // Renumber neurons in the hidden_neuron_map.
+  FOR node IN hidden_neuron_map.values()
+    node.identifer ← new_number
+    new_number ← new_number + 1
+  ENDFOR
+
+  // Iterate through connection_array to update connections with renumbered neuron IDs.
+  FOR connection IN connection_array
+    IF connection.sink_type = Neurons.HIDDEN THEN
+      new_connection ← clone(connection)
+
+      // Fix the destination neuron number using the updated node map.
+      node ← hidden_neuron_map.get(new_connection.sink_id)
+      IF node THEN
+        new_connection.sink_id ← node.identifer
+      ENDIF
+
+      // If the source is a neuron, fix its number too using the updated node map.
+      IF new_connection.source_type = Neurons.HIDDEN THEN
+        node ← hidden_neuron_map.get(new_connection.source_id)
+        IF node THEN
+          new_connection.source_id ← node.identifer
+        ENDIF
+      ENDIF
+
+      // Add the modified connection to the updated connections array.
+      connections.append(new_connection)
+    ENDIF
+  ENDFOR
+
+  // Process connections from sensor/neuron to an action.
+  FOR connection IN connection_array
+    IF connection.sink_type = Neurons.OUTPUT THEN
+      new_connection ← clone(connection)
+
+      // If the source is a hidden neuron, fix its number using the updated node map.
+      IF new_connection.source_type = Neurons.HIDDEN THEN
+        node ← hidden_neuron_map.get(new_connection.source_id)
+        IF node THEN
+          new_connection.source_id ← node.identifer
+        ENDIF
+      ENDIF
+
+      // Add the modified connection to the updated connections array.
+      connections.append(new_connection)
+    ENDIF
+
+    // Group input neurons, hidden neurons, and output neurons into their respective sets.
+    IF connection.source_type = Neurons.INPUT THEN
+      inputs[connection.source_id] ← undefined
+    ELSE
+      hidden[connection.source_id] ← undefined
+    ENDIF
+
+    IF connection.sink_type = Neurons.OUTPUT THEN
+      outputs[connection.sink_id] ← undefined
+    ELSE
+      hidden[connection.sink_id] ← undefined
+    ENDIF
+  ENDFOR
+ENDSUBROUTINE
+
+// Creates a hidden neuron array based on the node map.
+SUBROUTINE create_hidden_neuron_array(hidden_neuron_map)
+  // Loop through each node in the hidden_neuron_map.
+  FOR node IN hidden_neuron_map.values()
+    // Create a new Neuron instance.
+    neuron ← new Neuron()
+    // Set the initial output to 0.5.
+    neuron.output ← 0.5
+    // Check if the neuron has inputs to drive its output.
+    neuron.driven ← node.inputs ≠ 0
+    // Add the newly created neuron to the hidden_neurons array.
+    hidden_neurons.append(neuron)
+  ENDFOR
+
+  // Return the updated hidden_neurons array.
+  RETURN hidden_neurons
+ENDSUBROUTINE
