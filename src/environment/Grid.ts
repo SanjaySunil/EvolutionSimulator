@@ -99,7 +99,6 @@ export class GridCell {
 export class Grid {
   private _data: GridCell[][];
   public grid_size: number;
-  public occupied: number;
   public renderer: Renderer;
 
   /**
@@ -111,7 +110,6 @@ export class Grid {
     this._data = new Array(grid_size);
     this.renderer = renderer;
     this.grid_size = grid_size;
-    this.occupied = 0;
     this.init();
   }
 
@@ -188,9 +186,6 @@ export class Grid {
         this.renderer.to_clear.enqueue(cell);
         this.renderer.to_fill.enqueue(cell);
       }
-
-      // Reduce the count of occupied cells
-      this.occupied -= 1;
     }
   }
 
@@ -199,12 +194,6 @@ export class Grid {
    * @returns A random empty cell from the grid.
    */
   public fetch_empty_cell(): Coordinate {
-    // Check if the grid is fully occupied, throw an error if no empty cells are available
-    if (this.occupied === this.grid_size ** 2) {
-      alert("No empty cells left!");
-      throw Error("No empty cells left!");
-    }
-
     // Generate a random coordinate within the grid
     let random_coord = get_random_vector(0, 0, this.grid_size - 1, this.grid_size - 1);
 
@@ -293,9 +282,6 @@ export class Grid {
 
       // Add the cell to the 'to_fill' set in the renderer
       this.renderer.to_fill.enqueue(cell);
-
-      // Increment the count of occupied cells
-      this.occupied += 1;
     }
   }
 
@@ -342,9 +328,6 @@ export class Grid {
 
       // Add the cell to the 'to_fill' set in the renderer
       this.renderer.to_fill.enqueue(cell);
-
-      // Increment the count of occupied cells
-      this.occupied += 1;
     }
   }
 }
