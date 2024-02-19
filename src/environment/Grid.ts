@@ -1,4 +1,3 @@
-import create_obstructions from "../algorithms/EnvironmentGenerator";
 import Renderer from "../controllers/renderer.controller";
 import Organism from "../models/Organism";
 import { Coordinate } from "../types/Coordinate";
@@ -137,13 +136,13 @@ export class Grid {
   /** This method is used to generate obstructions in the grid. */
   public generate_obstructions(): void {
     // Create a grid of obstructions
-    const obstructions = create_obstructions(this.grid_size, this.grid_size, 0.75);
+    const threshold = 0.75;
 
     // Loop through each cell in the grid, and if the cell is an obstruction, set it as a wall, else set it as empty.
     for (let x = 0; x < this.grid_size; x++) {
       for (let y = 0; y < this.grid_size; y++) {
         const cell = this.get_cell_at({ x, y });
-        cell.state = obstructions[x][y] == 1 ? CellStates.WALL : CellStates.EMPTY;
+        cell.state = Math.random() > threshold ? CellStates.WALL : CellStates.EMPTY;
         if (cell.state == CellStates.WALL) this.renderer.to_fill.enqueue(cell);
       }
     }
