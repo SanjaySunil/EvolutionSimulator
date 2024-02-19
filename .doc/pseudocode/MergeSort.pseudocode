@@ -1,0 +1,42 @@
+// Merges two sorted arrays of organisms into a single sorted array.
+SUBROUTINE merge(left, right)
+  // Create an empty array to store the merged result.
+  array_of_organisms ← []
+
+  // Define indices for the left and right of the arrays.
+  left_index ← 0
+  right_index ← 0
+
+  // Iterate through both arrays and merge them while maintaining sorting.
+  WHILE left_index < LEN(left) AND right_index < LEN(right)
+    // Compare the fitness of the organisms.
+    IF left[left_index].fitness < right[right_index].fitness THEN
+      array_of_organisms.append(left[left_index])
+      left_index ← left_index + 1
+    ELSE
+      array_of_organisms.append(right[right_index])
+      right_index ← right_index + 1
+    ENDIF
+  ENDWHILE
+
+  // Concatenate remaining elements from both arrays into the result.
+  RETURN array_of_organisms.concat(left.slice(left_index)).concat(right.slice(right_index))
+ENDSUBROUTINE
+
+// Performs merge sort on an array of organisms.
+SUBROUTINE merge_sort(arr)
+  // Return the array if it contains only one element or is empty.
+  IF LEN(arr) <= 1 THEN
+    RETURN arr
+  ENDIF
+
+  // Calculate the middle index of the array.
+  middle ← FLOOR(length(arr) / 2)
+
+  // Recursively divide the array into two halves and perform merge sort on each half.
+  left ← merge_sort(arr.slice(0, middle))
+  right ← merge_sort(arr.slice(middle))
+
+  // Merge the sorted halves using the 'merge' function and return the result.
+  RETURN merge(left, right)
+ENDSUBROUTINE
