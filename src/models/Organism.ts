@@ -12,11 +12,11 @@ import Genome from "./Genome";
 /** This class is used to represent an organism in the simulation. */
 export default class Organism {
   private _coordinate: Coordinate;
+  private _energy: number;
   public genome: Genome;
   public brain: Brain;
   public fitness: number | null;
   public alive: boolean;
-  private _energy: number;
   public direction: Coordinate;
   public config: typeof DefaultSimulationConfig;
   public grid: Grid;

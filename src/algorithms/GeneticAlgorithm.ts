@@ -1,7 +1,14 @@
 import { DefaultSimulationConfig } from "../config/simulation.config";
 import Gene from "../models/Gene";
 import Organism from "../models/Organism";
+import { Coordinate } from "../types/Coordinate";
 import { euclidean_distance } from "../utils/geometry";
+
+// Define the type for coordinate parameters used in fitness calculation.
+type CoordinateParameters = {
+  goal_coordinates: Coordinate[];
+  max_distances_to_goal: number[];
+};
 
 /**
  * Merges two sorted arrays of organisms into a single sorted array.
@@ -56,17 +63,17 @@ export function merge_sort(arr: Organism[]): Organism[] {
  * Calculates the fitness value of an organism based on the specified goal and parameters.
  * @param organism - The organism for which fitness is being calculated.
  * @param goal - The goal of the simulation.
- * @param params - Parameters containing goal coordinates and maximum distances to goal for fitness calculation.
+ * @param coordinate_parameters - Parameters containing goal coordinates and maximum distances to goal for fitness calculation.
  * @returns - The calculated fitness value based on the organism's proximity to the goal coordinates or energy level.
  */
-export function calculate_fitness(organism: Organism, goal: string, params?: any): number {
+export function calculate_fitness(organism: Organism, goal: string, coordinate_parameters?: CoordinateParameters): number {
   // Use the specified goal to calculate the fitness value for the organism.
   if (goal === "food") {
     // Calculate fitness based on the organism's energy level.
     return calculate_fitness_by_food(organism);
-  } else if (goal === "coord") {
+  } else if (goal === "coord" && coordinate_parameters) {
     // Calculate fitness based on the organism's proximity to the goal coordinates.
-    return calculate_fitness_by_coord(organism, params);
+    return calculate_fitness_by_coord(organism, coordinate_parameters);
   } else {
     // Throw an error if an invalid goal type is specified.
     throw new Error("Invalid goal type specified.");
@@ -77,13 +84,13 @@ export function calculate_fitness(organism: Organism, goal: string, params?: any
  * Sorts an array of organisms based on their fitness and calculates their fitness values.
  * @param population - The array of organisms to be sorted.
  * @param goal - The goal of the simulation.
- * @param params - Parameters containing goal coordinates and maximum distances to goal for fitness calculation.
+ * @param coordinate_parameters - Parameters containing goal coordinates and maximum distances to goal for fitness calculation.
  * @returns - A sorted array of organisms.
  */
-export function calculate_and_sort_fitness(population: Organism[], goal: string, params?: any): Organism[] {
+export function calculate_and_sort_fitness(population: Organism[], goal: string, coordinate_parameters?: CoordinateParameters): Organism[] {
   // Calculate fitness values for organisms based on the specified goal.
   for (const organism of population) {
-    organism.fitness = calculate_fitness(organism, goal, params);
+    organism.fitness = calculate_fitness(organism, goal, coordinate_parameters);
   }
   // Sort the population based on fitness using merge sort algorithm and return the sorted population.
   return merge_sort(population);
@@ -94,7 +101,7 @@ export function calculate_and_sort_fitness(population: Organism[], goal: string,
  * @param organism - The organism for which fitness is being calculated.
  * @returns - The calculated fitness value based on the organism's energy level.
  */
-export function calculate_fitness_by_food(organism: any): number {
+export function calculate_fitness_by_food(organism: Organism): number {
   // Normalize fitness score by dividing the energy level by the maximum energy.
   return 1 - organism.energy / organism.config.MAX_ENERGY;
 }
@@ -102,15 +109,15 @@ export function calculate_fitness_by_food(organism: any): number {
 /**
  * Calculates the fitness value of an organism based on its proximity to specified coordinates.
  * @param organism - The organism for which fitness is being calculated.
- * @param params - Parameters containing goal coordinates and maximum distances to goal for fitness calculation.
+ * @param coordinate_parameters - Parameters containing goal coordinates and maximum distances to goal for fitness calculation.
  * @returns - The calculated fitness value based on the organism's proximity to the goal coordinates.
  */
-export function calculate_fitness_by_coord(organism: any, params: any): number {
+export function calculate_fitness_by_coord(organism: Organism, coordinate_parameters: CoordinateParameters): number {
   // Create an array to store distances between the organism's coordinate and each goal coordinate.
   const distances_to_goal_coordinates: number[] = [];
 
   // Calculate euclidean distance between the organism's coordinate and each goal coordinate.
-  for (const coordinate of params.goal_coordinates) {
+  for (const coordinate of coordinate_parameters.goal_coordinates) {
     distances_to_goal_coordinates.push(euclidean_distance(organism.coordinate, coordinate));
   }
 
@@ -118,7 +125,7 @@ export function calculate_fitness_by_coord(organism: any, params: any): number {
   const min_index = distances_to_goal_coordinates.indexOf(Math.min(...distances_to_goal_coordinates));
   const distance = distances_to_goal_coordinates[min_index];
   // Get the maximum distance to normalize fitness.
-  const max_distance = params.max_distances_to_goal[min_index];
+  const max_distance = coordinate_parameters.max_distances_to_goal[min_index];
 
   // Normalize fitness score by dividing the distance by the maximum distance
   return distance / max_distance;

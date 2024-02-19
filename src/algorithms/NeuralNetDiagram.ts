@@ -139,10 +139,10 @@ function create_circle(x: number, y: number, r: number, fill: string, stroke = f
 function find_previous_node_y_coord(object, previous_node): number {
   // If the object is empty, there is no previous node, so return the node spacing plus the node radius as the initial y-coordinate.
   if (Object.keys(object).length == 0) {
-    previous_node = FixedDefaults.node_spacing + FixedDefaults.FixedDefaults.FixedDefaults.node_radius;
+    previous_node = FixedDefaults.NN_DIAGRAM_NODE_SPACING + FixedDefaults.NN_DIAGRAM_NODE_RADIUS;
   } else {
     // Otherwise, find the previous y-coordinate by adding the node spacing and the node radius to the previous y-coordinate.
-    previous_node = previous_node + (FixedDefaults.node_spacing + 2 * FixedDefaults.FixedDefaults.FixedDefaults.node_radius);
+    previous_node = previous_node + (FixedDefaults.NN_DIAGRAM_NODE_SPACING + 2 * FixedDefaults.NN_DIAGRAM_NODE_RADIUS);
   }
   return previous_node;
 }
@@ -216,7 +216,7 @@ function create_node(
   }
 
   // Create circle and text elements for the node.
-  const circle = create_circle(node_x_coord, previous_node_y_coord, FixedDefaults.FixedDefaults.FixedDefaults.node_radius, "white", true);
+  const circle = create_circle(node_x_coord, previous_node_y_coord, FixedDefaults.NN_DIAGRAM_NODE_RADIUS, "white", true);
   const text_element = create_text(node_x_coord, previous_node_y_coord, node_text, "black");
 
   // Append the circle and text elements to the group element.
@@ -359,7 +359,7 @@ export function draw_neural_net_brain(connections: Gene[]): void {
   // Set the height of the SVG.
   DOMElements.neural_network_svg.style.height = (
     height +
-    FixedDefaults.FixedDefaults.FixedDefaults.node_radius +
-    FixedDefaults.node_spacing
+    FixedDefaults.NN_DIAGRAM_NODE_RADIUS +
+    FixedDefaults.NN_DIAGRAM_NODE_SPACING
   ).toString();
 }
