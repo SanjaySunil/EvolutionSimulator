@@ -29,10 +29,6 @@ export default class Brain {
   public coordinate: Coordinate;
   public grid: Grid;
   public genome_data: Gene[];
-  // Used temporarily to store the neural network's inputs, outputs, and hidden neurons.
-  public inputs: object;
-  public outputs: object;
-  public hidden: object;
   // Complete list of hidden neurons.
   public hidden_neurons: Neuron[];
   // All neural network connections.
@@ -57,9 +53,6 @@ export default class Brain {
     this.grid = grid;
     // Properties of the organisms brain.
     this.genome_data = genome_data;
-    this.inputs = {};
-    this.outputs = {};
-    this.hidden = {};
     this.hidden_neurons = [];
     this.connections = [];
     // Number of input, hidden and output neurons.
@@ -443,13 +436,6 @@ export default class Brain {
         // Add the modified connection to the updated connections array.
         this.connections.push(new_connection);
       }
-
-      // Group input neurons, hidden neurons, and output neurons into their respective sets.
-      if (connection.source_type == Neurons.INPUT) this.inputs[connection.source_id] = undefined;
-      else this.hidden[connection.source_id] = undefined;
-
-      if (connection.sink_type == Neurons.OUTPUT) this.outputs[connection.sink_id] = undefined;
-      else this.hidden[connection.sink_id] = undefined;
     }
   }
 
