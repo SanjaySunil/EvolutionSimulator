@@ -45,6 +45,7 @@ export const DefaultSimulationConfig: Types = {
   // Flags indicating whether goal is food or coordinated.
   GOAL_FOOD: true,
   GOAL_COORD: false,
+  OBSTRUCTION_PROBABILITY: 95,
 };
 
 /** Boundaries for simulation configuration parameters. */
@@ -62,4 +63,5 @@ export const SimulationConfigBoundaries: Types = {
   NUMBER_OF_INPUTS: [1, Object.keys(InputNeurons).length],
   NUMBER_OF_OUTPUTS: [1, Object.keys(OutputNeurons).length],
   NUMBER_OF_GENES: [1, 512],
+  OBSTRUCTION_PROBABILITY: [0, 100],
 };

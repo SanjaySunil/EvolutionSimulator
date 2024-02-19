@@ -153,7 +153,7 @@ export function register_generate_obstructions_button(simulation: Simulation): v
   DOMElements.generate_obstructions_button.addEventListener("click", () => {
     // Clear the grid and generate new obstructions.
     simulation.environment.grid.clear_obstructions();
-    simulation.environment.grid.generate_obstructions();
+    simulation.environment.grid.generate_obstructions(simulation.config.OBSTRUCTION_PROBABILITY);
   });
 }
 
