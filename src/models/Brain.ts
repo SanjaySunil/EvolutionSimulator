@@ -86,8 +86,6 @@ export default class Brain {
 
     // Create a hidden neuron array based on the node map.
     this.create_hidden_neuron_array(hidden_neuron_map);
-
-    console.log(this.connections)
   }
 
   /**
@@ -278,9 +276,13 @@ export default class Brain {
     // Initialize a map to store hidden neurons and their input/output counts.
     const hidden_neuron_map: HiddenNeuronMap = new Map();
 
+    // Iterate through the connection array to process each connection.
     for (const connection of connection_array) {
+      // Check if the sink type is a hidden neuron.
       if (connection.sink_type == Neurons.HIDDEN) {
+        // Check if the hidden neuron already exists in the map.
         if (!hidden_neuron_map.has(connection.sink_id)) {
+          // If the neuron is not in the node map, add it with the appropriate input/output values.
           hidden_neuron_map.set(connection.sink_id, {
             identifer: 0,
             outputs: 0,
@@ -289,10 +291,13 @@ export default class Brain {
           });
         }
 
+        // Retrieve the details of the connection from the map.
         const node = hidden_neuron_map.get(connection.sink_id);
         if (node) {
+          // Check if the connection is a hidden neuron connecting to itself.
           const self_input = connection.source_type == Neurons.HIDDEN && connection.source_id == connection.sink_id;
 
+          // Update the input/output counts for this hidden neuron.
           if (self_input) {
             node.self_inputs++;
           } else {
@@ -301,8 +306,11 @@ export default class Brain {
         }
       }
 
+      // Check if the source type is a hidden neuron.
       if (connection.source_type == Neurons.HIDDEN) {
+        // Check if the hidden neuron already exists in the map.
         if (!hidden_neuron_map.has(connection.source_id)) {
+          // If the neuron is not in the node map, add it with the appropriate input/output values.
           hidden_neuron_map.set(connection.source_id, {
             identifer: 0,
             outputs: 0,
@@ -312,61 +320,16 @@ export default class Brain {
         }
       }
 
+      // Retrieve the details of the connection from the map.
       const node = hidden_neuron_map.get(connection.source_id);
       if (node) {
+        // Update the output count for the existing hidden neuron.
         node.outputs++;
       }
     }
 
     // Return the created map of neurons with their input/output counts.
     return hidden_neuron_map;
-
-    // // Iterate through the connection array to process each connection.
-    // for (const connection of connection_array) {
-    //   // Check if the sink type is a hidden neuron.
-    //   if (connection.sink_type === Neurons.HIDDEN) {
-    //     // Check if the connection is a self-input to the hidden neuron.
-    //     const self_input = connection.source_type == Neurons.HIDDEN && connection.source_id == connection.sink_id;
-
-    //     // Check if the hidden neuron already exists in the map.
-    //     if (hidden_neuron_map.has(connection.sink_id)) {
-    //       const node = hidden_neuron_map.get(connection.sink_id);
-    //       if (node) {
-    //         // Update the input/output counts for the existing hidden neuron.
-    //         if (self_input) node.self_inputs++;
-    //         else node.inputs++;
-    //       } else {
-    //         // If the neuron is not in the node map, add it with the appropriate input/output values.
-    //         hidden_neuron_map.set(connection.sink_id, {
-    //           identifer: 0,
-    //           outputs: 0,
-    //           self_inputs: self_input ? 1 : 0,
-    //           inputs: self_input ? 0 : 1,
-    //         });
-    //       }
-    //     }
-    //   }
-
-    //   // Check if the source type is a hidden neuron.
-    //   if (connection.source_type === Neurons.HIDDEN) {
-    //     // Check if the hidden neuron already exists in the map.
-    //     if (hidden_neuron_map.has(connection.source_id)) {
-    //       const node = hidden_neuron_map.get(connection.source_id);
-    //       if (node) node.outputs++;
-    //     } else {
-    //       // If the neuron is not in the node map, add it with the appropriate input/output values.
-    //       hidden_neuron_map.set(connection.source_id, {
-    //         identifer: 0,
-    //         outputs: 1,
-    //         self_inputs: 0,
-    //         inputs: 0,
-    //       });
-    //     }
-    //   }
-    // }
-
-    // // Return the created map of neurons with their input/output counts.
-    // return hidden_neuron_map;
   }
 
   /**
