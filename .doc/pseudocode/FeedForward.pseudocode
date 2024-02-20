@@ -45,3 +45,34 @@ SUBROUTINE feed_forward(output_neurons, hidden_neurons, connections)
   // Return the array of output levels for all action neurons.
   RETURN output_action_levels
 ENDSUBROUTINE
+
+// Computes the action based on the action levels.
+SUBROUTINE compute_movement_offset(action_levels)
+  // 'move_x' and 'move_y' represent the urge to move in the X and Y direction respectively.
+  move_x ← action_levels[OutputNeurons.MOVE_X]
+  move_y ← action_levels[OutputNeurons.MOVE_Y]
+
+  // Accumulate the urge to move based on specific output neurons representing directions.
+  move_x += action_levels[OutputNeurons.MOVE_EAST]
+  move_x -= action_levels[OutputNeurons.MOVE_WEST]
+  move_y += action_levels[OutputNeurons.MOVE_NORTH]
+  move_y -= action_levels[OutputNeurons.MOVE_SOUTH]
+
+  // The hyperbolic tangent function confines movement values between -1.0 and 1.0.
+  move_x ← TANH(move_x)
+  move_y ← TANH(move_y)
+
+  // Calculate probabilities based on absolute values.
+  prob_x ← ABS(move_x) > 0.0 ? 1 : 0
+  prob_y ← ABS(move_y) > 0.0 ? 1 : 0
+
+  // Determine direction of movement based on the sign of the values using signum function.
+  signum_x ← move_x < 0.0 ? -1 : 1
+  signum_y ← move_y < 0.0 ? -1 : 1
+
+  // Create a vector representing the calculated movement based on probabilities and directions.
+  offset ← make_vector(prob_x * signum_x, prob_y * signum_y)
+
+  // Return the calculated offset vector.
+  RETURN offset
+ENDSUBROUTINE
