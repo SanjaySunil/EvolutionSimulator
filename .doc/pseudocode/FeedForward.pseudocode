@@ -1,0 +1,47 @@
+// Performs feed-forward computation in the neural network.
+SUBROUTINE feed_forward(output_neurons, hidden_neurons, connections)
+  // This array stores the output levels for all of the action neurons.
+  output_action_levels ← new Array(num_output_neurons) filled with 0.0
+  // The weighted inputs to each neuron are accumulated in neuron_accumulators.
+  neuron_accumulators ← new Array(LEN(hidden_neurons)) filled with 0.0
+  // Flag to track if the output of neurons has been computed.
+  neuron_outputs_computed ← false
+
+  // Iterate through each connection in the connection list.
+  FOR connection IN connections
+    // Check if sink type is an output neuron and whether the neuron outputs have been computed.
+    IF connection.sink_type = Neurons.OUTPUT AND NOT neuron_outputs_computed THEN
+      // Compute the output for each driven hidden neuron using the tanh function.
+      FOR neuron_index = 0 TO LEN(hidden_neurons) - 1
+        // Check if the neuron is driven by any input.
+        IF hidden_neurons[neuron_index].driven THEN
+          // Compute the output of neurons in the range (-1.0..1.0) using the hyperbolic tangent function.
+          hidden_neurons[neuron_index].output ← TANH(neuron_accumulators[neuron_index])
+        ENDIF
+      ENDFOR
+      // Set the flag to true to indicate that the output of neurons has been computed.
+      neuron_outputs_computed ← true
+    ENDIF
+
+    // Obtain the input value of the connection from a sensor neuron or another neuron.
+    // The values are summed and later passed through the transfer function (hyperbolic tangent function).
+    input_val ← 0.0
+
+    IF connection.source_type = Neurons.INPUT THEN
+      // Read the sensor data using the sensor identifier.
+      input_val ← get_sensor(connection.source_id)
+    ELSE
+      input_val ← hidden_neurons[connection.source_id].output
+    ENDIF
+
+    // Weight the connection's value and add it to the accumulator of the corresponding neuron or action.
+    IF connection.sink_type = Neurons.OUTPUT THEN
+      output_action_levels[connection.sink_id] += input_val * normalise_weight(connection.weight)
+    ELSE
+      neuron_accumulators[connection.sink_id] += input_val * normalise_weight(connection.weight)
+    ENDIF
+  ENDFOR
+
+  // Return the array of output levels for all action neurons.
+  RETURN output_action_levels
+ENDSUBROUTINE
