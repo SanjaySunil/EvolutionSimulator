@@ -5,6 +5,15 @@ import { OutputNeuronSymbols } from "../constants/OutputNeurons";
 import Gene from "../models/Gene";
 import { Neurons } from "../models/Neurons";
 
+type NodeCoordinates = {
+  input_neurons: Record<number, number[]>;
+  hidden_neurons: Record<number, number[]>;
+  output_neurons: Record<number, number[]>;
+  last_input_neuron_coord: number;
+  last_hidden_neuron_coord: number;
+  last_output_neuron_coord: number;
+};
+
 /**
  * Creates an SVG element with specific attributes.
  * @param element_type - The type of SVG element to be created.
@@ -151,24 +160,15 @@ function find_previous_node_y_coord(object, previous_node): number {
  * Creates a node for the neural network diagram.
  * @param node_type - The type of node.
  * @param node_id - The ID of the node.
- * @param input_neurons - The input neurons.
- * @param hidden_neurons - The hidden neurons.
- * @param output_neurons - The output neurons.
- * @param last_input_neuron_coord - The last y-coordinate of the input neuron.
- * @param last_hidden_neuron_coord - The last y-coordinate of the hidden neuron.
- * @param last_output_neuron_coord - The last y-coordinate of the output neuron.
+ * @param node_coordinates.input_neurons - The input neurons.
+ * @param node_coordinates.hidden_neurons - The hidden neurons.
+ * @param node_coordinates.output_neurons - The output neurons.
+ * @param node_coordinates.last_input_neuron_coord - The last y-coordinate of the input neuron.
+ * @param node_coordinates.last_hidden_neuron_coord - The last y-coordinate of the hidden neuron.
+ * @param node_coordinates.last_output_neuron_coord - The last y-coordinate of the output neuron.
  * @returns - The updated input, hidden, and output neurons and their last coordinates.
  */
-function create_node(
-  node_type: string,
-  node_id: number,
-  input_neurons,
-  hidden_neurons,
-  output_neurons,
-  last_input_neuron_coord,
-  last_hidden_neuron_coord,
-  last_output_neuron_coord
-): [[], [], [], number, number, number] {
+function create_node(node_type: string, node_id: number, node_coordinates: NodeCoordinates): NodeCoordinates {
   // Create a new SVG group element.
   const group = create_element_ns("g", {});
 
@@ -185,19 +185,19 @@ function create_node(
   // Determine the y-coordinate and update neuron positions based on node type.
   if (node_type == "INPUT") {
     // Find the previous y-coordinate for the input neuron.
-    previous_node_y_coord = find_previous_node_y_coord(input_neurons, last_input_neuron_coord);
-    input_neurons[node_id] = [input, previous_node_y_coord];
-    last_input_neuron_coord = previous_node_y_coord;
+    previous_node_y_coord = find_previous_node_y_coord(node_coordinates.input_neurons, node_coordinates.last_input_neuron_coord);
+    node_coordinates.input_neurons[node_id] = [input, previous_node_y_coord];
+    node_coordinates.last_input_neuron_coord = previous_node_y_coord;
   } else if (node_type == "OUTPUT") {
     // Find the previous y-coordinate for the output neuron.
-    previous_node_y_coord = find_previous_node_y_coord(output_neurons, last_output_neuron_coord);
-    output_neurons[node_id] = [output, previous_node_y_coord];
-    last_output_neuron_coord = previous_node_y_coord;
+    previous_node_y_coord = find_previous_node_y_coord(node_coordinates.output_neurons, node_coordinates.last_output_neuron_coord);
+    node_coordinates.output_neurons[node_id] = [output, previous_node_y_coord];
+    node_coordinates.last_output_neuron_coord = previous_node_y_coord;
   } else if (node_type == "HIDDEN") {
     // Find the previous y-coordinate for the hidden neuron.
-    previous_node_y_coord = find_previous_node_y_coord(hidden_neurons, last_hidden_neuron_coord);
-    hidden_neurons[node_id] = [hidden, previous_node_y_coord];
-    last_hidden_neuron_coord = previous_node_y_coord;
+    previous_node_y_coord = find_previous_node_y_coord(node_coordinates.hidden_neurons, node_coordinates.last_hidden_neuron_coord);
+    node_coordinates.hidden_neurons[node_id] = [hidden, previous_node_y_coord];
+    node_coordinates.last_hidden_neuron_coord = previous_node_y_coord;
   }
 
   // Determine x-coordinate and node text based on the node type.
@@ -227,7 +227,7 @@ function create_node(
   DOMElements.neural_network_svg.appendChild(group);
 
   // Return the updated input, hidden, and output neurons and their last coordinates.
-  return [input_neurons, hidden_neurons, output_neurons, last_input_neuron_coord, last_hidden_neuron_coord, last_output_neuron_coord];
+  return node_coordinates;
 }
 
 /**
@@ -235,16 +235,15 @@ function create_node(
  * @param connections - The connections between nodes in the neural network.
  */
 export function draw_neural_net_brain(connections: Gene[]): void {
-  // Lists to store the input, hidden, and output neurons.
-  let input_neurons = [];
-  let hidden_neurons = [];
-  let output_neurons = [];
-  // Variables to store the last y coordinates of the input, hidden, and output neurons.
-  let last_input_neuron_coord = 0;
-  let last_hidden_neuron_coord = 0;
-  let last_output_neuron_coord = 0;
   // Variable to store the updated coordinates of the input, hidden, and output neurons plus their last coordinates.
-  let updated_coordinates;
+  let node_coordinates: NodeCoordinates = {
+    input_neurons: {},
+    hidden_neurons: {},
+    output_neurons: {},
+    last_input_neuron_coord: 0,
+    last_hidden_neuron_coord: 0,
+    last_output_neuron_coord: 0,
+  };
   // Set the initial height of the SVG.
   let height = 400;
 
@@ -259,73 +258,39 @@ export function draw_neural_net_brain(connections: Gene[]): void {
 
     // Determine the source node based on its type.
     if (connection.source_type == Neurons.INPUT || connection.source_type == Neurons.HIDDEN) {
-      if (connection.source_type == Neurons.INPUT && input_neurons[connection.source_id]) {
-        source_node = input_neurons[connection.source_id];
-      } else if (connection.source_type == Neurons.HIDDEN && hidden_neurons[connection.source_id]) {
-        source_node = hidden_neurons[connection.source_id];
+      if (connection.source_type == Neurons.INPUT && node_coordinates.input_neurons[connection.source_id]) {
+        source_node = node_coordinates.input_neurons[connection.source_id];
+      } else if (connection.source_type == Neurons.HIDDEN && node_coordinates.hidden_neurons[connection.source_id]) {
+        source_node = node_coordinates.hidden_neurons[connection.source_id];
       } else {
         // If the source node does not exist, create it.
-        updated_coordinates = create_node(
-          connection.source_type == 0 ? "HIDDEN" : "INPUT",
-          connection.source_id,
-          input_neurons,
-          hidden_neurons,
-          output_neurons,
-          last_input_neuron_coord,
-          last_hidden_neuron_coord,
-          last_output_neuron_coord
-        );
+        node_coordinates = create_node(connection.source_type == 0 ? "HIDDEN" : "INPUT", connection.source_id, node_coordinates);
 
         if (connection.source_type == Neurons.INPUT) {
-          source_node = input_neurons[connection.source_id];
+          source_node = node_coordinates.input_neurons[connection.source_id];
         } else if (connection.source_type == Neurons.HIDDEN) {
-          source_node = hidden_neurons[connection.source_id];
+          source_node = node_coordinates.hidden_neurons[connection.source_id];
         }
       }
     }
-
-    // Update the input, hidden, and output neurons and their last coordinates.
-    input_neurons = updated_coordinates[0];
-    hidden_neurons = updated_coordinates[1];
-    output_neurons = updated_coordinates[2];
-    last_input_neuron_coord = updated_coordinates[3];
-    last_hidden_neuron_coord = updated_coordinates[4];
-    last_output_neuron_coord = updated_coordinates[5];
 
     // Determine the sink node based on its type.
     if (connection.sink_type == Neurons.OUTPUT || connection.sink_type == Neurons.HIDDEN) {
-      if (connection.sink_type == Neurons.OUTPUT && output_neurons[connection.sink_id]) {
-        sink_node = output_neurons[connection.sink_id];
-      } else if (connection.sink_type == Neurons.HIDDEN && hidden_neurons[connection.sink_id]) {
-        sink_node = hidden_neurons[connection.sink_id];
+      if (connection.sink_type == Neurons.OUTPUT && node_coordinates.output_neurons[connection.sink_id]) {
+        sink_node = node_coordinates.output_neurons[connection.sink_id];
+      } else if (connection.sink_type == Neurons.HIDDEN && node_coordinates.hidden_neurons[connection.sink_id]) {
+        sink_node = node_coordinates.hidden_neurons[connection.sink_id];
       } else {
         // If the sink node does not exist, create it.
-        updated_coordinates = create_node(
-          connection.sink_type == 0 ? "HIDDEN" : "OUTPUT",
-          connection.sink_id,
-          input_neurons,
-          hidden_neurons,
-          output_neurons,
-          last_input_neuron_coord,
-          last_hidden_neuron_coord,
-          last_output_neuron_coord
-        );
+        node_coordinates = create_node(connection.sink_type == 0 ? "HIDDEN" : "OUTPUT", connection.sink_id, node_coordinates);
 
         if (connection.sink_type == Neurons.OUTPUT) {
-          sink_node = output_neurons[connection.sink_id];
+          sink_node = node_coordinates.output_neurons[connection.sink_id];
         } else if (connection.sink_type == Neurons.HIDDEN) {
-          sink_node = hidden_neurons[connection.sink_id];
+          sink_node = node_coordinates.hidden_neurons[connection.sink_id];
         }
       }
     }
-
-    // Update the input, hidden, and output neurons and their last coordinates.
-    input_neurons = updated_coordinates[0];
-    hidden_neurons = updated_coordinates[1];
-    output_neurons = updated_coordinates[2];
-    last_input_neuron_coord = updated_coordinates[3];
-    last_hidden_neuron_coord = updated_coordinates[4];
-    last_output_neuron_coord = updated_coordinates[5];
 
     // Define constants for line thickness calculation based on the weight of the connection.
     const max_thickness = 2.5;
@@ -342,18 +307,18 @@ export function draw_neural_net_brain(connections: Gene[]): void {
   }
 
   // Obtain the number of input, hidden, and output neurons.
-  const input_neurons_size = Object.keys(input_neurons).length;
-  const output_neurons_size = Object.keys(output_neurons).length;
-  const hidden_neurons_size = Object.keys(hidden_neurons).length;
+  const input_neurons_size = Object.keys(node_coordinates.input_neurons).length;
+  const output_neurons_size = Object.keys(node_coordinates.output_neurons).length;
+  const hidden_neurons_size = Object.keys(node_coordinates.hidden_neurons).length;
 
   // Determine the height of the SVG based on the number of input, hidden, and output neurons.
   // The maximum of the three is used to determine the height of the SVG.
   if (Math.max(input_neurons_size, output_neurons_size, hidden_neurons_size) == input_neurons_size) {
-    height = last_input_neuron_coord;
+    height = node_coordinates.last_input_neuron_coord;
   } else if (Math.max(input_neurons_size, output_neurons_size, hidden_neurons_size) == output_neurons_size) {
-    height = last_output_neuron_coord;
+    height = node_coordinates.last_output_neuron_coord;
   } else if (Math.max(input_neurons_size, output_neurons_size, hidden_neurons_size) == hidden_neurons_size) {
-    height = last_hidden_neuron_coord;
+    height = node_coordinates.last_hidden_neuron_coord;
   }
 
   // Set the height of the SVG.

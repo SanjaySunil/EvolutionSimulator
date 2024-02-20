@@ -1,0 +1,15 @@
+// This method is used to generate obstructions in the grid.
+SUBROUTINE generate_obstructions(threshold, grid_size)
+  // Loop through each cell in the grid, and if the cell is an obstruction, set it as a wall, else set it as empty.
+  FOR x ← 0 TO grid_size - 1
+    FOR y ← 0 TO grid_size - 1
+      cell ← get_cell_at({ x, y })
+      // Generate a random probability and set the cell as a wall if the probability is greater than the probability threshold.
+      IF RANDOM() > (100 - threshold) / 100 THEN
+        cell.state ← CellStates.WALL
+      ELSE
+        cell.state ← CellStates.EMPTY
+      ENDIF
+    ENDFOR
+  ENDFOR
+ENDSUBROUTINE

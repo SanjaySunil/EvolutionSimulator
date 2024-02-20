@@ -1,0 +1,92 @@
+// Draws the neural network diagram based on the given connections.
+SUBROUTINE draw_neural_net_brain(connections, svg, node_radius, node_spacing)
+  // Variable to store the updated coordinates of the input, hidden, and output neurons plus their last coordinates.
+  node_coordinates ← {
+    input_neurons: {},
+    hidden_neurons: {},
+    output_neurons: {},
+    last_input_neuron_coord: 0,
+    last_hidden_neuron_coord: 0,
+    last_output_neuron_coord: 0,
+  }
+
+  // Set the initial height of the SVG.
+  height ← 400
+
+  // Clear the SVG element and set its initial height.
+  svg.innerHTML ← "<svg width='400px' height='" + height + "px' id='neural-network-svg'></svg>"
+  svg.style.height ← height.toString()
+
+  // Iterate through each connection to draw lines between connected nodes.
+  FOR connection IN connections
+    source_node ← UNDEFINED
+    sink_node ← UNDEFINED
+
+    // Determine the source node based on its type.
+    IF connection.source_type = Neurons.INPUT OR connection.source_type = Neurons.HIDDEN THEN
+      IF connection.source_type = Neurons.INPUT AND node_coordinates.input_neurons[connection.source_id] THEN
+        source_node ← node_coordinates.input_neurons[connection.source_id]
+      ELSE IF connection.source_type = Neurons.HIDDEN AND node_coordinates.hidden_neurons[connection.source_id] THEN
+        source_node ← node_coordinates.hidden_neurons[connection.source_id]
+      ELSE
+        // If the source node does not exist, create it.
+        node_coordinates ← create_node(IF connection.source_type = 0 THEN "HIDDEN" ELSE "INPUT", connection.source_id, node_coordinates)
+
+        IF connection.source_type = Neurons.INPUT THEN
+          source_node ← node_coordinates.input_neurons[connection.source_id]
+        ELSE IF connection.source_type = Neurons.HIDDEN THEN
+          source_node ← node_coordinates.hidden_neurons[connection.source_id]
+        ENDIF
+      ENDIF
+    ENDIF
+
+    // Determine the sink node based on its type.
+    IF connection.sink_type = Neurons.OUTPUT OR connection.sink_type = Neurons.HIDDEN THEN
+      IF connection.sink_type = Neurons.OUTPUT AND node_coordinates.output_neurons[connection.sink_id] THEN
+        sink_node ← node_coordinates.output_neurons[connection.sink_id]
+      ELSE IF connection.sink_type = Neurons.HIDDEN AND node_coordinates.hidden_neurons[connection.sink_id] THEN
+        sink_node ← node_coordinates.hidden_neurons[connection.sink_id]
+      ELSE
+        // If the sink node does not exist, create it.
+        node_coordinates ← create_node(IF connection.sink_type = 0 THEN "HIDDEN" ELSE "OUTPUT", connection.sink_id, node_coordinates)
+
+        IF connection.sink_type = Neurons.OUTPUT THEN
+          sink_node ← node_coordinates.output_neurons[connection.sink_id]
+        ELSE IF connection.sink_type = Neurons.HIDDEN THEN
+          sink_node ← node_coordinates.hidden_neurons[connection.sink_id]
+        ENDIF
+      ENDIF
+    ENDIF
+
+    // Define constants for line thickness calculation based on the weight of the connection.
+    max_thickness ← 2.5
+    min_thickness ← 0.5
+
+    // The thickness is calculated by calculating the ratio of the weight to the maximum/minimum possible weight and multiplying it by the maximum/minimum thickness.
+    thickness ← MAX(
+      IF connection.weight >= 0 THEN (connection.weight / 0x7fff) * max_thickness ELSE (ABS(connection.weight) / 0x8000) * max_thickness,
+      min_thickness
+    )
+
+    // Draw connections between nodes based on their coordinates and connection weight.
+    connect_nodes(source_node, sink_node, thickness, connection.weight >= 0)
+  ENDFOR
+
+  // Obtain the number of input, hidden, and output neurons.
+  input_neurons_size ← LEN(node_coordinates.input_neurons)
+  output_neurons_size ← LEN(node_coordinates.output_neurons)
+  hidden_neurons_size ← LEN(node_coordinates.hidden_neurons)
+
+  // Determine the height of the SVG based on the number of input, hidden, and output neurons.
+  // The maximum of the three is used to determine the height of the SVG.
+  IF MAX(input_neurons_size, output_neurons_size, hidden_neurons_size) = input_neurons_size THEN
+    height ← node_coordinates.last_input_neuron_coord
+  ELSE IF MAX(input_neurons_size, output_neurons_size, hidden_neurons_size) = output_neurons_size THEN
+    height ← node_coordinates.last_output_neuron_coord
+  ELSE IF MAX(input_neurons_size, output_neurons_size, hidden_neurons_size) = hidden_neurons_size THEN
+    height ← node_coordinates.last_hidden_neuron_coord
+  ENDIF
+
+  // Set the height of the SVG.
+  svg.style.height ← (height + node_radius + node_spacing).toString()
+ENDSUBROUTINE

@@ -139,6 +139,7 @@ export class Grid {
     for (let x = 0; x < this.grid_size; x++) {
       for (let y = 0; y < this.grid_size; y++) {
         const cell = this.get_cell_at({ x, y });
+        // Generate a random probability and set the cell as a wall if the probability is greater than the probability threshold.
         cell.state = Math.random() > (100 - threshold) / 100 ? CellStates.WALL : CellStates.EMPTY;
         if (cell.state == CellStates.WALL) this.renderer.to_fill.enqueue(cell);
       }
