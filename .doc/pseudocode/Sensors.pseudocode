@@ -1,0 +1,61 @@
+// Allows the organism to look in a specific direction and return the state of the cell.
+SUBROUTINE observation_sensor(coordinate, direction, number_of_cell_states, InputNeurons)
+  // Create a vector to store the coordinates of the cell to observe.
+  current_vector ← { x: coordinate.x, y: coordinate.y }
+  // Create a vector to store the direction to observe.
+  vector ← { x: 0, y: 0 }
+
+  // Determine the vector based on the direction parameter.
+  IF direction = InputNeurons.LOOK_NORTH THEN
+    vector ← { x: 0, y: 1}
+  ELSE IF direction = InputNeurons.LOOK_EAST THEN
+    vector ← { x: 1, y: 0}
+  ELSE IF direction = InputNeurons.LOOK_SOUTH THEN
+    vector ← { x: 0, y: -1}
+  ELSE IF direction = InputNeurons.LOOK_WEST THEN
+    vector ← { x: -1, y: 0}
+  ELSE
+    // Throw an error if the direction specified is invalid.
+    THROW Error("Direction specified is invalid.")
+  ENDIF
+
+  // Update the current vector based on the determined direction.
+  current_vector ← add_vector(current_vector, vector)
+
+  // Check if the updated vector represents a valid cell in the grid.
+  IF is_valid_cell_at(current_vector) THEN
+    // Retrieve the cell at the updated vector.
+    cell ← get_cell_at(current_vector)
+    // Return the normalized state of the cell.
+    RETURN cell.state / number_of_cell_states
+  ENDIF
+
+  // If no valid observation is found, return 0.
+  RETURN 0.0
+ENDSUBROUTINE
+
+// Allows the organism to obtain information about its current coordinates.
+SUBROUTINE coordinate_sensor(sensor, coordinate, grid, InputNeurons)
+  IF sensor = InputNeurons.X_COORDINATE AND grid.grid_size THEN
+    // Calculate and return the normalized x-coordinate.
+    RETURN coordinate.x / grid.grid_size
+  ELSE IF sensor = InputNeurons.Y_COORDINATE AND grid.grid_size THEN
+    // Calculate and return the normalized y-coordinate.
+    RETURN coordinate.y / grid.grid_size
+  ELSE IF sensor = InputNeurons.BOUNDARY_NORTH THEN
+    // Calculate and return the normalized distance to the northern boundary.
+    RETURN euclidean_distance(coordinate, { x: coordinate.x, y: 0 }) / grid.grid_size
+  ELSE IF sensor = InputNeurons.BOUNDARY_WEST THEN
+    // Calculate and return the normalized distance to the western boundary.
+    RETURN euclidean_distance(coordinate, { x: 0, y: coordinate.y }) / grid.grid_size
+  ELSE IF sensor = InputNeurons.BOUNDARY_EAST THEN
+    // Calculate and return the normalized distance to the eastern boundary.
+    RETURN euclidean_distance(coordinate, { x: grid.grid_size, y: coordinate.y }) / grid.grid_size
+  ELSE IF sensor = InputNeurons.BOUNDARY_SOUTH THEN
+    // Calculate and return the normalized distance to the southern boundary.
+    RETURN euclidean_distance(coordinate, { x: coordinate.x, y: grid.grid_size }) / grid.grid_size
+  ELSE
+    // Return 0.0 if the sensor doesn't match any predefined sensor type.
+    RETURN 0.0
+  ENDIF
+ENDSUBROUTINE
