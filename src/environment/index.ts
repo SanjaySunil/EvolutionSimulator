@@ -20,7 +20,6 @@ export class Environment extends Canvas {
   public overall_fitness_data_points: Coordinate[];
   public population: Organism[];
   public species: Set<string>;
-  public species_data_points: any;
   public ticks: number;
 
   /**
