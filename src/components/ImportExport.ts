@@ -142,7 +142,7 @@ export function register_export_environment_button(simulation: Simulation): void
     const obstacles = export_environment(simulation.environment.grid);
 
     // Export the obstacles.
-    export_object({ file_type: "obstacles", obstacles: obstacles }, "obstacles");
+    export_object({ file_type: "obstacles_export", obstacles: obstacles }, "obstacles");
   });
 }
 
@@ -289,7 +289,7 @@ export function register_import_environment_button(simulation): void {
     // Read and parse the JSON file.
     read_file(event).then((data) => {
       // Check if obstacles data exists and the file type is obstacles.
-      if (data.obstacles && data.file_type == "obstacles") {
+      if (data.obstacles && data.file_type == "obstacles_export") {
         // Iterate over all obstacles in the file.
         for (const obstacle of data.obstacles) {
           // Set the cell state of the obstacle.
