@@ -1,0 +1,43 @@
+// Mates with another organism to produce a child organism.
+SUBROUTINE mate(parent_one, parent_two)
+  // Check if the parent organisms' genomes are available
+  IF parent_one.genome.data AND parent_two.genome.data THEN
+    // Create an array to store the child organism's genome
+    child_genome ← []
+
+    // Loop through each gene in the parent organisms' genomes
+    FOR i FROM 0 TO parent_one.genome.data.length
+      // Retrieve genes from the parent organisms
+      parent_one_gene ← parent_one.genome.data[i]
+      parent_two_gene ← parent_two.genome.data[i]
+
+      // Generate a random probability value
+      random_probability ← Math.random()
+
+      // Calculate the selection probability for choosing genes from parents
+      selection_probability ← (100 - parent_one.config.MUTATION_PERCENT) / 2 / 100
+
+      // Decide which gene to select based on the random probability
+      IF random_probability < selection_probability THEN
+        // Select the gene from the first parent
+        child_genome[i] ← parent_one_gene
+      ELSE IF random_probability < selection_probability * 2 THEN
+        // Select the gene from the second parent
+        child_genome[i] ← parent_two_gene
+      ELSE
+        // If no gene is selected, create a new gene
+        child_genome[i] ← new Gene()
+      ENDIF
+    ENDFOR
+
+    // Get a random empty cell coordinate on the grid
+    random_coord ← parent_one.grid.fetch_empty_cell()
+
+    // Create and return a new organism with the generated genome and a random empty cell coordinate
+    RETURN new Organism(random_coord, child_genome, parent_one.grid, parent_one.config)
+  ELSE
+    // Throw an error if the parent organisms' genomes are missing
+    // This should never happen as the genome is always initialized when an organism is created
+    THROW Error("Failed to perform reproduction due to missing genome.")
+  ENDIF
+ENDSUBROUTINE

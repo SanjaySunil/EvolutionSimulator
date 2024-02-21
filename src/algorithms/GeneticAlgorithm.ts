@@ -171,43 +171,50 @@ export function select_and_crossover(population: Organism[], config: typeof Defa
 
 /**
  * Mates with another organism to produce a child organism.
- * @param parent - The first parent organism.
- * @param partner - The second parent organism.
+ * @param parent_one - The first parent organism.
+ * @param parent_two - The second parent organism.
  * @param id - The ID of the child organism.
  * @returns - A new child organism resulting from the mating process of the parent organisms.
  */
-function mate(parent, partner: Organism): Organism {
-  // Create an array to store the child organism's genome
-  const child_genome: Gene[] = new Array(parent.genome.data.length);
+function mate(parent_one: Organism, parent_two: Organism): Organism {
+  // Check if the parent organisms' genomes are available
+  if (parent_one.genome.data && parent_two.genome.data) {
+    // Create an array to store the child organism's genome
+    const child_genome: Gene[] = new Array(parent_one.genome.data.length);
 
-  // Loop through each gene in the parent organisms' genomes
-  for (let i = 0; i < parent.genome.data.length; i++) {
-    // Retrieve genes from the parent organisms
-    const organism_gene: Gene = parent.genome.data[i];
-    const partner_gene: Gene = partner.genome.data![i];
+    // Loop through each gene in the parent organisms' genomes
+    for (let i = 0; i < parent_one.genome.data.length; i++) {
+      // Retrieve genes from the parent organisms
+      const parent_one_gene: Gene = parent_one.genome.data[i];
+      const parent_two_gene: Gene = parent_two.genome.data![i];
 
-    // Generate a random probability value
-    const random_probability: number = Math.random();
+      // Generate a random probability value
+      const random_probability: number = Math.random();
 
-    // Calculate the selection probability for choosing genes from parents
-    const selection_probability = (100 - parent.config.MUTATION_PERCENT) / 2 / 100;
+      // Calculate the selection probability for choosing genes from parents
+      const selection_probability = (100 - parent_one.config.MUTATION_PERCENT) / 2 / 100;
 
-    // Decide which gene to select based on the random probability
-    if (random_probability < selection_probability) {
-      // Select the gene from the first parent
-      child_genome[i] = organism_gene;
-    } else if (random_probability < selection_probability * 2) {
-      // Select the gene from the second parent
-      child_genome[i] = partner_gene;
-    } else {
-      // If no gene is selected, create a new gene
-      child_genome[i] = new Gene();
+      // Decide which gene to select based on the random probability
+      if (random_probability < selection_probability) {
+        // Select the gene from the first parent
+        child_genome[i] = parent_one_gene;
+      } else if (random_probability < selection_probability * 2) {
+        // Select the gene from the second parent
+        child_genome[i] = parent_two_gene;
+      } else {
+        // If no gene is selected, create a new gene
+        child_genome[i] = new Gene();
+      }
     }
+
+    // Get a random empty cell coordinate on the grid
+    const random_coord = parent_one.grid.fetch_empty_cell();
+
+    // Create and return a new organism with the generated genome and a random empty cell coordinate
+    return new Organism(random_coord, child_genome, parent_one.grid, parent_one.config);
+  } else {
+    // Throw an error if the parent organisms' genomes are missing
+    // This should never happen as the genome is always initialized when an organism is created
+    throw Error("Failed to perform reproduction due to missing genome.");
   }
-
-  // Get a random empty cell coordinate on the grid
-  const random_coord = parent.grid.fetch_empty_cell();
-
-  // Create and return a new organism with the generated genome and a random empty cell coordinate
-  return new Organism(random_coord, child_genome, parent.grid, parent.config);
 }
