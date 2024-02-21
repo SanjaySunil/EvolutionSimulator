@@ -269,9 +269,9 @@ export default class Canvas {
   // Handle mouse leave canvas.
   private handle_mouse_leave(): void {
     // Handle mouse leave event
-    // const cell = this.grid.get_cell_at(this.mouse.grid_coord);
-    // if (cell.is_highlighted) {
-    //   this.grid.set_cell_highlighted(this.mouse.grid_coord, false);
-    // }
+    const cell = this.grid.get_cell_at(this.mouse.grid_coord);
+    if (cell.is_highlighted) {
+      this.grid.set_cell_highlighted(this.mouse.grid_coord, false);
+    }
   }
 }
