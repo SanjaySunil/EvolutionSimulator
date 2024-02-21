@@ -1,5 +1,5 @@
 /** Represents a node in a queue. */
-class QueueNode {
+export class QueueNode {
   public value: any;
   public next: QueueNode | null;
 
