@@ -40,7 +40,7 @@ export default class Organism {
       this.genome.data,
       this.config.NUMBER_OF_INPUT_NEURONS,
       this.config.NUMBER_OF_HIDDEN_NEURONS,
-      this.config.NUMBER_OF_OUTPUTS_NEURONS
+      this.config.NUMBER_OF_OUTPUT_NEURONS
     );
     this.direction = Directions.NORTH;
     this.fitness = null;

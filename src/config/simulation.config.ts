@@ -39,7 +39,7 @@ export const DefaultSimulationConfig: Types = {
   NUMBER_OF_HIDDEN_NEURONS: 127, // 127
   // Determine the number of available input and output neurons based on imported constants.
   NUMBER_OF_INPUT_NEURONS: Object.keys(InputNeurons).length,
-  NUMBER_OF_OUTPUTS_NEURONS: Object.keys(OutputNeurons).length,
+  NUMBER_OF_OUTPUT_NEURONS: Object.keys(OutputNeurons).length,
   // Total number of genes for organisms
   NUMBER_OF_GENES: 10,
   // Flags indicating whether goal is food or coordinated.
@@ -61,7 +61,7 @@ export const SimulationConfigBoundaries: Types = {
   ENERGY_FROM_FOOD: [1, 100],
   NUMBER_OF_HIDDEN_NEURONS: [0, 512],
   NUMBER_OF_INPUT_NEURONS: [1, Object.keys(InputNeurons).length],
-  NUMBER_OF_OUTPUTS_NEURONS: [1, Object.keys(OutputNeurons).length],
+  NUMBER_OF_OUTPUT_NEURONS: [1, Object.keys(OutputNeurons).length],
   NUMBER_OF_GENES: [1, 512],
   OBSTRUCTION_PROBABILITY: [0, 100],
 };
