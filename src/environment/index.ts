@@ -13,16 +13,13 @@ import { CellStates } from "./Grid";
 /** This class represents the environment in which the organisms exist and interact. */
 export class Environment extends Canvas {
   public alive: number;
-  public best_fitness: number;
   public best_fitness_data_points: Coordinate[];
   public chart: ChartController;
   public generation: number;
   public number_of_species_data_points: Coordinate[];
-  public overall_fitness: number;
   public overall_fitness_data_points: Coordinate[];
   public population: Organism[];
   public species: Set<string>;
-  public species_count: number;
   public species_data_points: any;
   public ticks: number;
 
@@ -36,9 +33,6 @@ export class Environment extends Canvas {
     this.population = [];
     this.ticks = 0;
     this.generation = 0;
-    this.best_fitness = 1;
-    this.overall_fitness = 1;
-    this.species_count = Infinity;
     this.alive = 0;
     this.best_fitness_data_points = [];
     this.overall_fitness_data_points = [];
@@ -94,19 +88,19 @@ export class Environment extends Canvas {
   }
 
   /** Updates the simulation chart. */
-  private update_charts(): void {
+  private update_charts(best_fitness: number, overall_fitness: number, species_count: number): void {
     // Adds data points to the chart.
     this.best_fitness_data_points.push({
       x: this.generation,
-      y: this.best_fitness,
+      y: best_fitness,
     });
     this.overall_fitness_data_points.push({
       x: this.generation,
-      y: this.overall_fitness,
+      y: overall_fitness,
     });
     this.number_of_species_data_points.push({
       x: this.generation,
-      y: this.species_count,
+      y: species_count,
     });
     // Updates and renders the chart.
     this.chart.chart.render();
@@ -133,6 +127,8 @@ export class Environment extends Canvas {
 
   /** Resets the environment for the next generation. */
   private next_generation(): void {
+    let best_fitness;
+
     // Calculate fitness of all individuals based on the configured goals.
     if (this.config.GOAL_COORD) {
       this.population = calculate_and_sort_fitness(this.population, "coord", {
@@ -153,27 +149,27 @@ export class Environment extends Canvas {
       if (organism.genome.colour) this.species.add(organism.genome.colour);
       if (organism.alive) fitness_sum += organism.fitness!;
       if (!best_found && organism.alive) {
-        this.best_fitness = organism.fitness!;
+        best_fitness = organism.fitness!;
         best_found = true;
       }
       this.grid.clear_cell_state(organism.coordinate);
     }
     // Calculate the overall fitness of the population.
-    this.overall_fitness = this.alive > 0 ? fitness_sum / this.alive : 0;
+    const overall_fitness = this.alive > 0 ? fitness_sum / this.alive : 0;
 
     // Select and crossover individuals based on the configured genetic algorithm.
     this.population = select_and_crossover(this.population, this.config);
 
     // Reset tick count and increment generation count.
-    this.species_count = this.species.size;
-    this.update_charts();
+    const species_count = this.species.size;
+    this.update_charts(best_fitness, overall_fitness, species_count);
     this.ticks = 0;
     this.generation++;
 
     // Update HTML elements with simulation data.
-    DOMElements.best_fitness.innerHTML = this.best_fitness.toPrecision(3).toString();
-    DOMElements.overall_fitness.innerHTML = this.overall_fitness.toPrecision(3).toString();
-    DOMElements.number_of_species_count.innerHTML = this.species_count.toString();
+    DOMElements.best_fitness.innerHTML = best_fitness.toPrecision(3).toString();
+    DOMElements.overall_fitness.innerHTML = overall_fitness.toPrecision(3).toString();
+    DOMElements.number_of_species_count.innerHTML = species_count.toString();
 
     // Clear the species set.
     this.species = new Set();
