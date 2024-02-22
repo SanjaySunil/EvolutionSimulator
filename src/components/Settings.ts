@@ -121,6 +121,9 @@ export function render_settings(simulation: Simulation, config: object): void {
 
       // Trigger function to check and apply config changes
       check_config_changes(simulation, config, key);
+
+      // Alert the user that the parameter has been updated
+      alert("The " + key + " parameter has been updated to " + value + ".");
     } else {
       // Reset the input value to the config value
       target.value = config[key].toString();
