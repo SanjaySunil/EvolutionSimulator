@@ -148,12 +148,13 @@ export default class Canvas {
     else if (event.code == "KeyA") this.canvas.style.left = canvas_left + this.pan_amount + "px";
     else if (event.code == "KeyS") this.canvas.style.top = canvas_top - this.pan_amount + "px";
     else if (event.code == "KeyW") this.canvas.style.top = canvas_top + this.pan_amount + "px";
-
     // If the 1-6 keys are pressed, change the current mode.
     else if (event.code == "Digit1") this.mouse.mode = MouseModes.IDLE;
     else if (event.code == "Digit2") this.mouse.mode = MouseModes.PAN;
-    else if (event.code == "Digit3") this.mouse.mode = MouseModes.GOAL;
-    else if (event.code == "Digit4") this.mouse.mode = MouseModes.WALL;
+    else if (event.code == "Digit3" && this.config.GOAL_COORD) this.mouse.mode = MouseModes.GOAL;
+    else if (event.code == "Digit3" && !this.config.GOAL_COORD) {
+      alert("Goal coordinates are disabled when the food goal is enabled.");
+    } else if (event.code == "Digit4") this.mouse.mode = MouseModes.WALL;
     else if (event.code == "Digit5") this.mouse.mode = MouseModes.RADIOACTIVE;
     else if (event.code == "Digit6") this.mouse.mode = MouseModes.REMOVE;
 
