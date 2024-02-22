@@ -66,4 +66,26 @@
 **Allow the user to choose the zone that optimises the coordinate fitness function to show that the organisms are evolving to the best possible fitness.**
 - The user should be able to select multiple goal coordinates by selecting a grid cell in the simulation environment with the goal mouse mode selected.
 - The user should be able to remove goal coordinates by selecting a grid cell in the simulation environment with the goal mouse mode selected.
-- The 
+- The user should be alerted if a goal coordinate has not been selected if the user tries to run the simulation with the coordinate fitness function selected.
+
+**Create sensors for each organism that allow them to obtain information about their environment and use this information to make decisions.**
+- A sensor should be created that mimics biological eyes and allows the organism to see the state of a grid cell in a specific direction.
+- A sensor should be created that allows the user to identify where the organism is in the grid relative to specific places in the grid.
+- Data returned from the sensors should be fed into the neural network brain of the organism to make decisions.
+
+**Create a genome for each organism that stores genetic information on the neural network brain of the organism.**
+- The genome should store information that can be used to build the neural network brain of the organism.
+- Random genomes should be created for the initial population of organisms.
+- The genome should be in a suitable format to be used in the genetic algorithm.
+
+**Create a neural network brain for each organism using its genome.**
+
+**Use the neural network brain for each organism to compute their decisions and actions for each iteration of the simulation.**
+- The neural network brain should compute a position vector which is used to move the organism in the simulation environment.
+- The organism should be rotated to face the direction in which it is moving, so that when the organism's biological eyes are used, the organism can see in the direction it is facing.
+
+**Allow the user to change the update/render fps rate and also be able to enable/disable the rendering engine to improve simulation performance when needed in real-time.**
+
+**Create an obstruction generation feature that allows the user to generate walls randomly in the simulation environment.**
+- The user should be able to generate walls randomly in the simulation environment by clicking the generate walls button in the controls menu.
+- The user should be able to remove all walls from the simulation environment by clicking the remove walls button in the controls menu.
