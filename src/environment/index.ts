@@ -45,17 +45,17 @@ export class Environment extends Canvas {
   }
 
   /**
-   * Adds an Organism to the environment and configures knowledge.
+   * Adds an Organism to the simulation environnment.
    * @param gene_data - The gene data to be used to create the organism.
    * @param coordinate - The coordinate to place the organism at.
-   * @returns Whether the addition was successful.
+   * @returns Whether the organism was succesfully added.
    */
   public add_organism(gene_data: Gene[], coordinate?: Coordinate): boolean {
     // Check if the population size has exceeded the configured limit.
     if (this.population.length > this.config.POPULATION) {
       // Display an alert if the population size limit is exceeded.
       alert("Population size cannot be greater than Grid size squared.");
-      // Return false as the addition is not permitted.
+      // Return false as the organism was not added.
       return false;
     }
 
@@ -71,7 +71,7 @@ export class Environment extends Canvas {
     // Add the new organism to the population array.
     this.population.push(organism);
 
-    // Return true to indicate successful addition of the organism.
+    // Return true to indicate that the organism was succesfully added.
     return true;
   }
 
