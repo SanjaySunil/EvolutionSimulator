@@ -24,6 +24,7 @@
 - If the import was successful, the imported data should be used to replace the current data in the simulation and should take effect immediately.
 
 **Create a dynamic simulation settings page in the controls menu, allowing the user to change the simulation settings in real-time.**
+- The program should store the simulation configuration so that it can be updated and accessed anywhere in the program.
 - The simulation settings page should contain input fields for the user to change the simulation settings.
 - The input fields should be bound to event listeners which call the necessary functions to change the simulation settings in real-time.
 - The program should prevent specific settings that cannot be changed in real-time from being changed and alert the user if they try to change these settings.

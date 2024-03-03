@@ -10,7 +10,7 @@ export class ConfigController {
   // Configuration object
   private _config: typeof DefaultSimulationConfig;
 
-  /** Instantiates a new ConfigController. */
+  /** Constructor for the ConfigController class. This constructor is private. */
   private constructor() {
     this._config = {};
   }
