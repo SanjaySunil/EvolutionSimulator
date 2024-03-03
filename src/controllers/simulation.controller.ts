@@ -155,7 +155,7 @@ export default class Simulation {
         DOMElements.tick_count.innerHTML = this.environment.ticks.toString();
         DOMElements.organisms_alive_count.innerHTML = this.environment.alive.toString();
 
-        // Check if the current update FPS is greater than or equal to the target update FPS.
+        // Check if the current update FPS is greater than or equal to the target render FPS.
         if (this.current_update_fps >= FixedDefaults.TARGET_RENDER_FPS && this.render_loop != undefined) {
           // Stop the render loop
           clearInterval(this.render_loop);
