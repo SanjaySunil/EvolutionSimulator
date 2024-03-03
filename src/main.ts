@@ -10,7 +10,7 @@ import {
   register_switch_chart,
 } from "./components/Buttons";
 import {
-  export_population_button,
+  register_export_population_button,
   register_export_config_button,
   register_export_environment_button,
   register_export_simulation_button,
@@ -54,7 +54,7 @@ register_import_environment_button(simulation);
 // Export Buttons
 register_export_config_button(config.config);
 register_export_environment_button(simulation);
-export_population_button(simulation);
+register_export_population_button(simulation);
 register_export_simulation_button(simulation, config.config);
 
 // Environment buttons

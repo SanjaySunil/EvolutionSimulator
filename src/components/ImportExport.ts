@@ -65,7 +65,7 @@ export function export_environment(grid: Grid): number[][] {
  * Registers an event listener for the export population button.
  * @param simulation - The simulation object.
  */
-export function export_population_button(simulation: Simulation): void {
+export function register_export_population_button(simulation: Simulation): void {
   // Register an event listener for the export population button.
   DOMElements.export_population_button.addEventListener("click", () => {
     // Get the population from the simulation.
