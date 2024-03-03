@@ -21,15 +21,3 @@ export const Directions = {
   // Vector pointing southwest
   SOUTH_WEST: make_vector(-1, -1),
 };
-
-/** Constant angles for each cardinal direction. */
-export const Angles = {
-  // Angle for facing North
-  NORTH: 0,
-  // Angle for facing East
-  EAST: 90,
-  // Angle for facing South
-  SOUTH: 180,
-  // Angle for facing West
-  WEST: 270,
-};
