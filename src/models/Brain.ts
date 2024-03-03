@@ -443,7 +443,7 @@ export default class Brain {
    * Creates a hidden neuron array based on the node map.
    * @param hidden_neuron_map - The hidden neuron map to process.
    */
-  private create_hidden_neuron_array(hidden_neuron_map: HiddenNeuronMap) {
+  private create_hidden_neuron_array(hidden_neuron_map: HiddenNeuronMap): void {
     // Loop through each node in the hidden_neuron_map.
     for (const node of hidden_neuron_map.values()) {
       // Create a new Neuron instance.
