@@ -45,7 +45,7 @@ export const DefaultSimulationConfig: Types = {
   // Flags indicating whether goal is food or coordinated.
   GOAL_FOOD: true,
   GOAL_COORD: false,
-  OBSTRUCTION_PROBABILITY: 95,
+  OBSTRUCTION_PROBABILITY: 25,
 };
 
 /** Boundaries for simulation configuration parameters. */
