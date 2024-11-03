@@ -3,6 +3,10 @@
 
 A program developed for my A-level Computer Science non-examined assessment. This simulator models the principles of evolution through natural selection, allowing users to observe the dynamics of species adaptation over generations.
 
+## Custom Project Solutions
+
+For tailored project solutions and business inquiries, please email [contact@sanjaysunil.com](mailto:contact@sanjaysunil.com) or connect with me on [LinkedIn](https://www.linkedin.com/in/sanjaysunil).
+
 ## Features
 
 - **Simulation of Evolutionary Processes**: Visualize how species evolve over time based on genetic traits.
@@ -37,10 +41,6 @@ Run the simulator using:
 npm start
 ```
 Open your browser and navigate to `http://localhost:3000` to start the simulation.
-
-## Custom Project Solutions
-
-For **tailored project solutions** and **business inquiries**, please email [contact@sanjaysunil.com](mailto:contact@sanjaysunil.com) or connect with me on [LinkedIn](https://linkedin.com/in/sanjaysunil).
 
 ## Contributing
 
